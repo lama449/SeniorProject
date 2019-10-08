@@ -20,4 +20,4 @@ mongo = PyMongo(app)
 def login():
     # login
 
-api.add_resource(Reservation, '/reservations', '/reservations:<str:id>')
+api.add_resource(Reservation, '/reservations', '/reservations/<str:id>')
