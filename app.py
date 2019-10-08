@@ -20,10 +20,4 @@ mongo = PyMongo(app)
 def login():
     # login
 
-
-@app.route('/register', methods = ['POST'])
-def register():
-    # register
-
-
 api.add_resource(Reservation, '/reservations', '/reservations:<str:id>')
