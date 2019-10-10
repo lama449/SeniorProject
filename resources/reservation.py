@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from app import getDB
 
-db = getDB()
+mongo = getDB()
 
 
 class Reservation(Resource):
