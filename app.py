@@ -1,15 +1,12 @@
 from flask import Flask, redirect, request, session, url_for
-from flask_pymongo import PyMongo
+from config import getDB
 from flask_restful import *
 import bcrypt
+from resources.reservation import Reservation
+from resources.user import User
 
 app = Flask(__name__)
 api = Api(app)
-
-def getDB():
-    app.config["MONGO_URI"] = "mongodb://localhost:27017/managementdb"
-    mongo = PyMongo(app)
-    return mongo
 
 mongo = getDB()
 
@@ -38,13 +35,9 @@ def login():
 @app.route('/register', methods=['GET'])
 def register():
     print('load register page then POST to user resource with data to create')
-    session['username'] = request.form['username']  # session retruned user
+    # session['username'] = request.json['username']  # session retruned user
 
-
-from resources.reservation import Reservation
-from resources.user import User
-
-api.add_resource(Reservation, '/reservations', '/reservations/<id>')
+api.add_resource(Reservation, '/reservations')
 api.add_resource(User, '/users', '/users/<id>')
 
 if __name__ == '__main__':

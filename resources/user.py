@@ -1,19 +1,16 @@
 from flask_restful import Resource, request
 import bcrypt
-from app import getDB
-
-mongo = getDB()
-
 
 class User(Resource):
+
     def get(self):
-        users = mongo.db.users
+        users = self.mongo.db.users
         print(users)
 
     def post(self):  # creating a new user
         data = request.json
 
-        users = mongo.db.users
+        users = self.mongo.db.users
         existing_user = users.find_one({'username': data.get('username')})  # try to find username in the db
 
         if existing_user is None:  # create user
