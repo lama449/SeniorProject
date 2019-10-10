@@ -1,14 +1,14 @@
 from flask import Flask, redirect, request, session, url_for
-from config import getDB
 from flask_restful import *
 import bcrypt
+import database
 from resources.reservation import Reservation
 from resources.user import User
 
 app = Flask(__name__)
 api = Api(app)
 
-mongo = getDB()
+db = database.conn_DB()
 
 
 @app.route('/')
@@ -20,7 +20,7 @@ def home():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
-    users = mongo.db.users
+    users = db.users
     login_user = users.find_one({'username': data.get('username')})  # find user in db
 
     if login_user:  # if login user exists check hashed pass
@@ -36,6 +36,7 @@ def login():
 def register():
     print('load register page then POST to user resource with data to create')
     # session['username'] = request.json['username']  # session retruned user
+
 
 api.add_resource(Reservation, '/reservations')
 api.add_resource(User, '/users', '/users/<id>')

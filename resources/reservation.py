@@ -1,4 +1,7 @@
 from flask_restful import Resource
+import database
+
+db = database.conn_DB()
 
 class Reservation(Resource):
     def get(self):  # returns the reservation information
