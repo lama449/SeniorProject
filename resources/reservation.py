@@ -1,5 +1,5 @@
 from flask_restful import Resource
-import database
+from SeniorProject import database
 
 db = database.conn_DB()
 

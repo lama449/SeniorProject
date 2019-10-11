@@ -1,14 +1,14 @@
 from flask import Flask, redirect, request, session, url_for
 from flask_restful import *
 import bcrypt
-import database
-from resources.reservation import Reservation
-from resources.user import User
+from SeniorProject.database import conn_DB
+from SeniorProject.resources.reservation import Reservation
+from SeniorProject.resources.user import User
 
 app = Flask(__name__)
 api = Api(app)
 
-db = database.conn_DB()
+db = conn_DB()
 
 
 @app.route('/')

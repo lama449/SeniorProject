@@ -1,6 +1,6 @@
 from flask_restful import Resource, request
 import bcrypt
-import database
+from SeniorProject import database
 
 db = database.conn_DB()
 
