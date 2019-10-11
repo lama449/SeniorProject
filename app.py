@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, session, url_for
 from flask_restful import *
+from bson.json_util import loads, dumps
 import bcrypt
 from SeniorProject.database import conn_DB
 from SeniorProject.resources.reservation import Reservation
@@ -34,8 +35,8 @@ def login():
 
 @app.route('/register', methods=['GET'])
 def register():
-    q = db.users.find()
-    return db.users.count_documents({})
+    q = db.users.find_one()
+    return dumps(q)
     # session['username'] = request.json['username']  # session retruned user
 
 
