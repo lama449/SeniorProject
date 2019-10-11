@@ -34,7 +34,8 @@ def login():
 
 @app.route('/register', methods=['GET'])
 def register():
-    print('load register page then POST to user resource with data to create')
+    q = db.users.find()
+    return db.users.count_documents({})
     # session['username'] = request.json['username']  # session retruned user
 
 
