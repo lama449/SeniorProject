@@ -42,7 +42,10 @@ def register():
     # load template, then pass info to User resource to POST new user
     # session['username'] = request.json['username']  # session retruned user
 
+@app.route('/calendar', methods=['GET'])
+def calendar():
 
+    
 api.add_resource(Reservation, '/reservations')
 api.add_resource(User, '/users', '/users/<id>')
 api.add_resource(Room, '/rooms', '/rooms/<id>')
