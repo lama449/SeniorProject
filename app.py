@@ -45,6 +45,7 @@ def register():
 
 api.add_resource(Reservation, '/reservations')
 api.add_resource(User, '/users', '/users/<id>')
+api.add_resource(Room, '/rooms', '/rooms/<id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
