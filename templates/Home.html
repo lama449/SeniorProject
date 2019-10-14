@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+</head>
+
+<body>
+	<div class="nav">
+		<ul>
+			<li><a href="{{ url_for('home') }}">Home</a></li>
+			<li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+		</ul>
+	</div>
+	<div class="login">
+		<a href="{{ url_for('login') }}">Login</a>
+	</div>
+	<div class="center-text">
+		<h1>Building Scheduler 'Prototype'</h1>
+		<p>Click the Schedule button at the top left to get started!</p>
+		<p>OR</p>
+		<p>Click the Login button at the top right to login to an account!</p>
+	</div>
+	<div class="footer">
+		Team Penguins Schedule Prototype: Oct. 2019
+	</div>
+</body>
+</html>
