@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, session, url_for
+from flask import Flask, redirect, request, session, url_for, render_template
 from flask_restful import *
 from bson.json_util import loads, dumps
 import bcrypt
@@ -18,16 +18,20 @@ def home():
     return 'This is a page. I made this :)'
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.json
-    users = db.users
-    login_user = users.find_one({'username': data.get('username')})  # find user in db
+    if request.method == 'GET':
+        return render_template('Login_Page.html')
+    else:
+        data = request.form
+        users = db.users
+        login_user = users.find_one({'username': data.get('username')})  # find user in db
 
-    if login_user:  # if login user exists check hashed pass
-        if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
-            session['username'] = data.get('username')
-            return redirect(url_for('home'))
+        if login_user:  # if login user exists check hashed pass
+            if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
+                session['username'] = data.get('username')
+                #return redirect(url_for('home'))
+                return "success"
 
         else:
             return 'Invalid username/password combination'
