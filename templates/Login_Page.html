@@ -1,0 +1,48 @@
+<!DOCTYPER html>
+<html>
+<head>
+<title> Login </title>
+    <link rel="Stylesheet" type="text/css" href="style.css"
+<body>
+    <div class = "loginbox">
+    <img src="avatar_2.png" class="avatar">
+
+        <form>
+          <h1> Login </h1>
+          <p>Username</p>
+          <input type="text" name="" placeholder="Enter Username">
+          <p>Password</p>
+          <input type="password"name="" placeholder="Enter Password">
+          <input type="submit" name="" value="Login">
+          <p class="message"><a href="#">Create an account</a></p>
+          <a href='#'>Forgot your Password?</a>
+          <br>
+          <a href='#'>Forgot your Username?</a>
+        </form>
+
+        <form class="registration_form">
+          <h2> Create an Account</h2>
+          <input type="text" placeholder="Email Address"/>
+          <input type="text" placeholder="Username"/>
+          <input type="text" placeholder="Password"/>
+          <input type="submit" name="" value="Create">
+          <p class="message"><a href="#">Already have an account? Login</a></p>
+        </form>
+    </div>
+
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
+    </script>
+    <script>
+    $('.message a').click(function(){
+      $('form').animate({height: "toggle", opacity: "toggle"}, "medium");
+    });
+    </script>
+
+
+
+
+
+
+</body>
+</head>
+</html>
