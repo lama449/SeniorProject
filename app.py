@@ -39,8 +39,7 @@ def login():
 
 @app.route('/register', methods=['GET'])
 def register():
-    q = db.users.find_one()
-    return dumps(q)
+    # load template, then pass info to User resource to POST new user
     # session['username'] = request.json['username']  # session retruned user
 
 
