@@ -1,10 +1,15 @@
 body{
     margin: 0;
     padding: 0;
-    background: url(skyscraper.jpg);
-    background-size: cover;
-    background-position: center;
-    font-family: sans-serif;
+}
+
+html {
+  background: url(skyscraper.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: sans-serif;
 }
 
 .loginbox{
