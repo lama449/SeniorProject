@@ -4,7 +4,7 @@ from SeniorProject import database
 db = database.conn_DB()
 
 class Room(Resource):
-    def get(self):
+    def get(self): # return a list of rooms for building
         pass
 
     def post(self):
