@@ -5,6 +5,7 @@ import bcrypt
 from SeniorProject.database import conn_DB
 from SeniorProject.resources.reservation import Reservation
 from SeniorProject.resources.user import User
+from SeniorProject.resources.room import Room
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,7 +16,7 @@ db = conn_DB()
 @app.route('/')
 @app.route('/home')
 def home():
-    return 'This is a page. I made this :)'
+    return render_template('Home.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -41,9 +42,11 @@ def login():
 def register():
     # load template, then pass info to User resource to POST new user
     # session['username'] = request.json['username']  # session retruned user
+    pass
 
 @app.route('/calendar', methods=['GET'])
 def calendar():
+    return render_template('Schedule.html')
 
     
 api.add_resource(Reservation, '/reservations')

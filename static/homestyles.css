@@ -6,7 +6,7 @@ body, html{
 	font-family: Arial;
 	width: 100%;
 	margin: auto;
-	background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("photos/Buildings.jpg");
+	background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("Buildings.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
