@@ -10,11 +10,10 @@ class Room(Resource):
         buildings = db.facilities
         rooms = db.rooms
         current_building = buildings.find_one({'_id': b_id, 'facilityID': f_id})
-        rooms = rooms.find({'buildingID': current_building.get('_id')})
-
+        
         if current_building:  # if building exists
+            rooms = rooms.find({'buildingID': current_building.get('_id')})
             return rooms
-
         else:
             return 'Invalid building'
 
