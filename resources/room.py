@@ -7,15 +7,20 @@ db = database.conn_DB()
 
 class Room(Resource):
     def get(self, f_id, b_id, r_id): # return a list of rooms for building
-        buildings = db.facilities
+        facilities = db.facilities
+        buildings = db.buildings
         rooms = db.rooms
-        current_building = buildings.find_one({'_id': b_id, 'facilityID': f_id})
-        
-        if current_building:  # if building exists
-            current_rooms = rooms.find({'buildingID': current_building.get('_id')})
-            return dumps(current_rooms)
+        current_facility = facilities.find_one({'name': f_id)}
+        if current_facility:
+            current_building = buildings.find_one({'name': b_id, 'facilityID': current_facility.get('_id')})
+                                               
+            if current_building:  # if building exists
+                current_rooms = rooms.find({'buildingID': current_building.get('_id')})
+                return dumps(current_rooms)
+            else:
+                return 'Invalid building'
         else:
-            return 'Invalid building'
+            return 'Invalid facility'
 
 
     def post(self):
