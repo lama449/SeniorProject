@@ -12,8 +12,8 @@ class Room(Resource):
         current_building = buildings.find_one({'_id': b_id, 'facilityID': f_id})
         
         if current_building:  # if building exists
-            rooms = rooms.find({'buildingID': current_building.get('_id')})
-            return rooms
+            current_rooms = rooms.find({'buildingID': current_building.get('_id')})
+            return dumps(current_rooms)
         else:
             return 'Invalid building'
 
