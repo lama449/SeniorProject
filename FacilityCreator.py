@@ -6,6 +6,8 @@ This is a prototype to push a facility into the database.
 
 NOTES: Input fields will be replaced with text fields from the website to run this code.
 '''
+from pymongo import MongoClient
+from pprint import pprint
 
 client = MongoClient(port=27017)
 db = client.managementdb
