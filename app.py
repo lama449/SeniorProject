@@ -29,7 +29,7 @@ def login():
         login_user = users.find_one({'username': data.get('username')})  # find user in db
 
         if login_user:  # if login user exists check hashed pass
-            if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password'].encode('utf-8')) == login_user['password'].encode('utf-8'):
+            if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
                 session['username'] = data.get('username')
                 #return redirect(url_for('home'))
                 return "success"
@@ -38,11 +38,33 @@ def login():
             return 'Invalid username/password combination'
 
 
-@app.route('/register', methods=['GET'])
+@app.route('/register', methods=['POST'])
 def register():
     # load template, then pass info to User resource to POST new user
     # session['username'] = request.json['username']  # session retruned user
-    pass
+    data = request.form
+    users = db.users
+    existing_user = users.find_one({'username': data.get('username')}) 
+    if existing_user is None:
+        email = data.get('email')
+        existing_email = users.find_one({'email': email})
+        if '@' not in email or existing_email:
+            return 'That email already exists.'
+
+        hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
+        users.insert({
+            'username': data.get('username'),
+            'password': hashed_password,
+            'email': email,
+            'first_name': '',
+            'last_name': '',
+            'groupID': []
+        })
+        session['username'] = data.get('username')
+        return redirect(url_for('calendar'))
+    else:
+        return 'That username already exists.'
+
 
 @app.route('/calendar', methods=['GET'])
 def calendar():
