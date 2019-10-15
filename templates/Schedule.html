@@ -5,6 +5,90 @@
 	<title>Building Scheduler</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	<link href="{{url_for('static', filename=='js/fullcalendar/core/main.css' rel='stylesheet')}}" />
+	<link href="{{url_for('static', filename=='js/fullcalendar/timeline/main.css' rel='stylesheet')}}" />
+	<link href="{{url_for('static', filename=='js/fullcalendar/resource-timeline/main.css' rel='stylesheet')}}" />
+
+	<script src="{{url_for('static', filename=='js/fullcalendar/core/main.js')}}"></script>
+	<script src="{{url_for('static', filename=='js/fullcalendar/timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename=='js/fullcalendar/resource-common/main.js')}}"></script>
+	<script src="{{url_for('static', fielanme=='js/fullcalendar/resource-timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename=='js/fullcalendar/interaction/main.js')}}"></script>
+	<script src="{{url_for('static', filename=='js/popper/dist/popper.min.js')}}"></script>
+	<script src="{{url_for('static', filename=='js/tooltip/dist/tooltip.min.js')}}"></script>
+
+	<script>
+
+	document.addEventListener('DOMContentLoaded', function() {
+  
+    		var calendarEl = document.getElementById('calendar');
+
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	        plugins: [ 'resourceTimeline', 'interaction' ],
+	        header: {
+		    left: 'today prev,next',
+	            center: 'title',
+	            right: ''
+        	},
+	        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+        	defaultView: 'resourceTimelineDay',
+	        selectable: true,
+	        height: 450,
+	        resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+        // [
+        //     {id:'a', title:'Study Room A'}, 
+        //     {id:'b', title:'Study Room B'},
+        //     {id: 'c', title: 'Study Room C'},
+        //     {id: 'd', title: 'Study Room D'},
+        //     {id: 'e', title: 'Study Room E'},
+        //     {id: 'f', title: 'Study Room 2A'},
+        //     {id: 'g', title: 'Study Room 2B'},
+        //     {id: 'h', title: 'Study Room 2C'},
+        //     {id: 'i', title: 'Study Room 2D'}
+        // ],
+        	titleFormat: {
+	            year: 'numeric',
+	            month: 'short',
+	            day: 'numeric',
+	            weekday: 'long'
+        	},
+	        businessHours: [
+            
+        	{
+                	daysOfWeek: [1,2,3,4,5],
+	                startTime: '7:30',
+        	        endTime: '23:30'  
+	        },
+
+	        {
+        	        daysOfWeek: [6,0],
+                	startTime: '8:00',
+	                endTime: '17:00'           
+            	}
+        	],
+
+	        slotLabelFormat: { hour:'numeric'},
+        	minTime: '6:30',
+	        maxTime: '24:30',
+        	slotMinutes: '30',
+	        selectConstraint: 'businessHours',
+	        nowIndicator: true,
+        	resourceLabelText: 'Rooms',
+	        aspectRatio: 1.5,
+       
+        // resourceRender: function(info) {
+        //     var questionMark = document.createElement('strong');
+        //     questionMark.innerText = ' (?) ';
+
+        //     info.el.querySelector('.fc-cell-text')
+        //         .appendChild(questionMark);
+        // }
+	});
+
+  		calendar.render();
+	});
+	</script>
+
 </head>
 <body>
 	<div class="nav">
@@ -21,9 +105,7 @@
 			<h1>Room Scheduler</h1>
 			<p>Use me to schedule a room!</p>
 		</div>
-	<div class="calendar">
-		<!--Insert Dylan's Calendar code here-->
-	</div>
+	<div id="calendar"></div>
 	<div class="footer">
 		Team Penguins Schedule Prototype: Oct. 2019
 	</div>
