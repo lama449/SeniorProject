@@ -1,11 +1,23 @@
-from flask_restful import Resource
+from flask import Flask, request, render_template, redirect, url_for, session
+from flask_restful import Resource, request
+import bcrypt
 from SeniorProject import database
 
 db = database.conn_DB()
 
 class Room(Resource):
-    def get(self):
-        pass
+    def get(self, f_id, b_id, r_id): # return a list of rooms for building
+        buildings = db.facilities
+        rooms = db.rooms
+        current_building = buildings.find_one({'_id': b_id, 'facilityID': f_id})
+        rooms = rooms.find({'buildingID': current_building.get('_id')})
+
+        if current_building:  # if building exists
+            return rooms
+
+        else:
+            return 'Invalid building'
+
 
     def post(self):
         pass
