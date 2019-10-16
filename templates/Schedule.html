@@ -35,17 +35,7 @@
 	        selectable: true,
 	        height: 450,
 	        resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
-        // [
-        //     {id:'a', title:'Study Room A'}, 
-        //     {id:'b', title:'Study Room B'},
-        //     {id: 'c', title: 'Study Room C'},
-        //     {id: 'd', title: 'Study Room D'},
-        //     {id: 'e', title: 'Study Room E'},
-        //     {id: 'f', title: 'Study Room 2A'},
-        //     {id: 'g', title: 'Study Room 2B'},
-        //     {id: 'h', title: 'Study Room 2C'},
-        //     {id: 'i', title: 'Study Room 2D'}
-        // ],
+        
         	titleFormat: {
 	            year: 'numeric',
 	            month: 'short',
@@ -76,13 +66,13 @@
         	resourceLabelText: 'Rooms',
 	        aspectRatio: 1.5,
        
-        // resourceRender: function(info) {
-        //     var questionMark = document.createElement('strong');
-        //     questionMark.innerText = ' (?) ';
+        resourceRender: function(info) {
+            var questionMark = document.createElement('strong');
+            questionMark.innerText = ' (?) ';
 
-        //     info.el.querySelector('.fc-cell-text')
-        //         .appendChild(questionMark);
-        // }
+            info.el.querySelector('.fc-cell-text')
+                .appendChild(questionMark);
+        }
 	});
 
   		calendar.render();
