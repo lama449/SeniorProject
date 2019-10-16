@@ -38,34 +38,6 @@ def login():
             return 'Invalid username/password combination'
 
 
-@app.route('/register', methods=['POST'])
-def register():
-    # load template, then pass info to User resource to POST new user
-    # session['username'] = request.json['username']  # session retruned user
-    data = request.form
-    users = db.users
-    existing_user = users.find_one({'username': data.get('username')}) 
-    if existing_user is None:
-        email = data.get('email')
-        existing_email = users.find_one({'email': email})
-        if '@' not in email or existing_email:
-            return 'That email already exists.'
-
-        hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
-        users.insert({
-            'username': data.get('username'),
-            'password': hashed_password,
-            'email': email,
-            'first_name': '',
-            'last_name': '',
-            'groupID': []
-        })
-        session['username'] = data.get('username')
-        return redirect(url_for('calendar'))
-    else:
-        return 'That username already exists.'
-
-
 @app.route('/calendar', methods=['GET'])
 def calendar():
     return render_template('Schedule.html')
