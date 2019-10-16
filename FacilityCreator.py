@@ -17,6 +17,13 @@ print("Welcome to the facility creator for our Senior Project!")
 print()
 facTitle = input("Enter the facility name: ")
 print("The facility's name is: " + facTitle)
+
+facilityCheck = facilities.find_one({"name": facTitle})
+
+if facilityCheck is not None:
+    print("Facility already exists")
+    sys.exit()
+
 addressLine1 = input("Enter the address Line 1: ")
 print("Address Line 1: " + addressLine1)
 addressLine2 = input("Enter the address Line 2: ")
