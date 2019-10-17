@@ -72,6 +72,13 @@
 
             info.el.querySelector('.fc-cell-text')
                 .appendChild(questionMark);
+				
+			var tooltip = new Tooltip(questionMark, {
+				title: info.resource.title + '!!!',
+				placement: 'top',
+				trigger: 'hover',
+				container: 'body',
+			});
         }
 	});
 
