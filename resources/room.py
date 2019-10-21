@@ -8,7 +8,7 @@ db = database.conn_DB()
 class Room(Resource):
     def get(self, f_id, b_id, r_id=None): # return a list of rooms for building
         rooms = db.rooms
-        if not r_id:
+        if r_id is None:
             return {'message': 'room list'}
         facilities = db.facilities
         buildings = db.buildings
