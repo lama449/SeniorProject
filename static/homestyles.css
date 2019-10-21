@@ -106,7 +106,7 @@ li a:hover{
 	padding-top: 15px;
 	font-size: 12px;
 	text-align: center;
-	position: absolute;
+	/*position: absolute;*/
 	bottom: 0%;
 	color: #EFEFEF;
 	width: 100%;

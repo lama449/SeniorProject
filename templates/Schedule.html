@@ -66,23 +66,23 @@
         	resourceLabelText: 'Rooms',
 	        aspectRatio: 1.5,
        
-        resourceRender: function(info) {
-            var questionMark = document.createElement('strong');
-            questionMark.innerText = ' (?) ';
+            resourceRender: function(info) {
+            	var questionMark = document.createElement('strong');
+	        questionMark.innerText = ' (?) ';
 
-            info.el.querySelector('.fc-cell-text')
-                .appendChild(questionMark);
+            	info.el.querySelector('.fc-cell-text')
+                   .appendChild(questionMark);
 				
-			var tooltip = new Tooltip(questionMark, {
-				title: info.resource.title + '!!!',
-				placement: 'top',
-				trigger: 'hover',
-				container: 'body',
-			});
-        }
+		//var tooltip = new Tooltip(questionMark, {
+		//   title: info.resource.title + '!!!',
+		//   placement: 'top',
+		//   trigger: 'hover',
+		//   container: 'body',
+		//});
+            }
 	});
 
-  		calendar.render();
+  	   calendar.render();
 	});
 	</script>
 
@@ -102,15 +102,15 @@
 			<h1>Room Scheduler</h1>
 			<p>Use me to schedule a room!</p>
 		</div>
-	<div>
-		<div id="calendar" style="background-color: white"></div>
-	</div>
+
+	<div id="calendar" style="background-color: white"></div>
+
 	<div class="footer">
 		Team Penguins Schedule Prototype: Oct. 2019
 	</div>
 </body>
 	
-<script>
+	<script>
 		function goBack(){
 			window.history.back()
 		}
