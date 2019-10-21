@@ -6,11 +6,13 @@ from SeniorProject import database
 db = database.conn_DB()
 
 class Room(Resource):
-    def get(self, f_id, b_id, r_id): # return a list of rooms for building
+    def get(self, f_id, b_id, r_id=None): # return a list of rooms for building
+        rooms = db.rooms
+        if not r_id:
+            return {'message': 'room list'}
         facilities = db.facilities
         buildings = db.buildings
-        rooms = db.rooms
-        current_facility = facilities.find_one({'name': f_id)}
+        current_facility = facilities.find_one({'name': f_id})
         if current_facility:
             current_building = buildings.find_one({'name': b_id, 'facilityID': current_facility.get('_id')})
                                                

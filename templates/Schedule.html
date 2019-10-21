@@ -21,7 +21,7 @@
 
 	document.addEventListener('DOMContentLoaded', function() {
   
-    		var calendarEl = document.getElementById('calendar');
+    	    var calendarEl = document.getElementById('calendar');
 
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	        plugins: [ 'resourceTimeline', 'interaction' ],
@@ -102,7 +102,9 @@
 			<h1>Room Scheduler</h1>
 			<p>Use me to schedule a room!</p>
 		</div>
-	<div id="calendar" style="background-color: white"></div>
+	<div>
+		<div id="calendar" style="background-color: white"></div>
+	</div>
 	<div class="footer">
 		Team Penguins Schedule Prototype: Oct. 2019
 	</div>

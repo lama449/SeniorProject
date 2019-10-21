@@ -45,10 +45,10 @@ def calendar():
     
 # api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
 # api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>')
-api.add_resource(Room, '/facilities/<f_id>/buildings/<b_id>/rooms', '/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>')
+api.add_resource(Room, '/facilities/<f_id>/buildings/<b_id>/rooms', '/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>', endpoint='room')
 # api.add_resource(Room, '/rooms', '/rooms/<r_id>')
-api.add_resource(Reservation, '/reservations')
-api.add_resource(User, '/users', '/users/<u_id>')
+api.add_resource(Reservation, '/reservations', endpoint='reservation')
+api.add_resource(User, '/users', '/users/<u_id>', endpoint='user')
 
 if __name__ == '__main__':
     app.run(debug=True)
