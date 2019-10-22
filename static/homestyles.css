@@ -111,7 +111,7 @@ li a:hover{
 	padding-top: 15px;
 	font-size: 12px;
 	text-align: center;
-	/*position: absolute;*/
+	position: fixed;
 	bottom: 0%;
 	color: #EFEFEF;
 	width: 100%;
@@ -145,8 +145,8 @@ li a:hover{
 .tooltip {
   position: absolute;
   z-index: 9999;
-  background: #FFC107;
-  color: black;
+  background: #6d7a87;
+  color: white;
   width: 150px;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -154,7 +154,7 @@ li a:hover{
   text-align: center;
 }
 .style5 .tooltip {
-  background: #1E252B;
+  background: #6d7a87;
   color: #FFFFFF;
   max-width: 200px;
   width: auto;
@@ -172,7 +172,7 @@ li a:hover{
 
 .tooltip .tooltip-arrow,
 .popper .popper__arrow {
-  border-color: #FFC107;
+  border-color: #6d7a87;
 }
 .style5 .tooltip .tooltip-arrow {
   border-color: #1E252B;

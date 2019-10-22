@@ -14,8 +14,8 @@
 	<script src="{{url_for('static', filename='js/fullcalendar/resource-common/main.js')}}"></script>
 	<script src="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.js')}}"></script>
 	<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
-	<script src="{{url_for('static', filename='js/popper/dist/popper.min.js')}}"></script>
-	<script src="{{url_for('static', filename='js/tooltip/dist/tooltip.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/popper/dist/umd/popper.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/tooltip/dist/umd/tooltip.min.js')}}"></script>
 
 	<script>
 
@@ -84,12 +84,12 @@
         	    	info.el.querySelector('.fc-cell-text')
                 	   .appendChild(questionMark);
 				
-		//var tooltip = new Tooltip(questionMark, {
-		//   title: info.resource.title + '!!!',
-		//   placement: 'top',
-		//   trigger: 'hover',
-		//   container: 'body',
-		//});
+		var tooltip = new Tooltip(questionMark, {
+		   title: info.resource.title + '!!!',
+		   placement: 'top',
+		   trigger: 'hover',
+		   container: 'body',
+		});
             	}
 	});
 
