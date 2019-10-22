@@ -65,13 +65,24 @@
 	        nowIndicator: true,
         	resourceLabelText: 'Rooms',
 	        aspectRatio: 1.5,
-       
-            resourceRender: function(info) {
-            	var questionMark = document.createElement('strong');
-	        questionMark.innerText = ' (?) ';
 
-            	info.el.querySelector('.fc-cell-text')
-                   .appendChild(questionMark);
+		//select: function(start, end, allDay) {
+	        //  endtime = $.fullCalendar.formatDate(end,'h:mm tt');
+        	//  starttime = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
+	        //  var mywhen = starttime + ' - ' + endtime;
+        	//	  $('#calendar #apptStartTime').val(start);
+		//          $('#calendar #apptEndTime').val(end);
+		//          $('#calendar #apptAllDay').val(allDay);
+		//          $('#calendar #when').text(mywhen);
+		//          $('#calendar').modal('show');
+	        //},
+		       
+		resourceRender: function(info) {
+            		var questionMark = document.createElement('strong');
+		        questionMark.innerText = ' (?) ';
+
+        	    	info.el.querySelector('.fc-cell-text')
+                	   .appendChild(questionMark);
 				
 		//var tooltip = new Tooltip(questionMark, {
 		//   title: info.resource.title + '!!!',
@@ -79,7 +90,7 @@
 		//   trigger: 'hover',
 		//   container: 'body',
 		//});
-            }
+            	}
 	});
 
   	   calendar.render();
@@ -103,7 +114,14 @@
 			<p>Use me to schedule a room!</p>
 		</div>
 
-	<div id="calendar" style="background-color: white"></div>
+	<div id="calendar">
+		<script type="text/javascript">
+			function submitScript(){
+
+			}
+		</script>
+		<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
+	</div>
 
 	<div class="footer">
 		Team Penguins Schedule Prototype: Oct. 2019

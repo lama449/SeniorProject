@@ -6,6 +6,7 @@ body, html{
 	font-family: Arial;
 	width: 100%;
 	margin: auto;
+	background-image: -webkit-linear-gradient(0,0,0,.25),white), url("Buildings.jpg");
 	background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("Buildings.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
@@ -15,8 +16,12 @@ body, html{
 /* Calendar Settings */
 #calendar
 {
-	max-width: 900px;
+	max-width: 950px;
 	margin: 40px auto;
+	background-color: white;
+	padding: 20px;
+	border: 1px solid transparent;
+	border-radius: 5px;
 }
 
 /*List style*/
@@ -111,6 +116,27 @@ li a:hover{
 	color: #EFEFEF;
 	width: 100%;
 	background-color: #242424;
+}
+
+/* Submit Button */
+.submitbtn {
+	display: block;
+	line-height: 1.5;
+	margin: 10px auto 5px auto; 
+	background-color: #2c3e50; 
+	color: #fff; 
+	font-family: Arial;
+	font-size: 16px; 
+	border-radius: 4px; 
+	border: 1px solid; 
+	padding: 6.4px 10.4px;
+	-webkit-transition-duration: .2s;
+	transition-duration: .2s;
+}
+
+.submitbtn:hover{
+	cursor: pointer;
+	background-color: #212529;
 }
 
 /* Tooltip for Calendar */
