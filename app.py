@@ -46,11 +46,11 @@ def room_confirmation():
     return render_template('Room_Confirmation.html')
 
 @app.route('/buildings', methods=['GET'])
-def room_confirmation():
+def buildings():
     return render_template('Buildings.html')
     
 @app.route('/building_confirmation', methods=['GET'])
-def room_confirmation():
+def building_confirmation():
     return render_template('Building_Confirmation.html')
     
 # api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
