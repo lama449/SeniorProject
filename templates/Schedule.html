@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Building Scheduler</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	<link href="{{url_for('static', filename='js/fullcalendar/core/main.css')}}" rel='stylesheet' />
+	<link href="{{url_for('static', filename='js/fullcalendar/timeline/main.css')}}" rel='stylesheet' />
+	<link href="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.css')}}" rel='stylesheet' />
+
+	<script src="{{url_for('static', filename='js/fullcalendar/core/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/resource-common/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/popper/dist/umd/popper.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/tooltip/dist/umd/tooltip.min.js')}}"></script>
+
+	<script>
+
+	document.addEventListener('DOMContentLoaded', function() {
+  
+    	    var calendarEl = document.getElementById('calendar');
+
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	        plugins: [ 'resourceTimeline', 'interaction' ],
+	        header: {
+		    left: 'today prev,next',
+	            center: 'title',
+	            right: ''
+        	},
+	        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+        	defaultView: 'resourceTimelineDay',
+	        selectable: true,
+	        height: 450,
+	        resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+        
+        	titleFormat: {
+	            year: 'numeric',
+	            month: 'short',
+	            day: 'numeric',
+	            weekday: 'long'
+        	},
+	        businessHours: [
+            
+        	{
+                	daysOfWeek: [1,2,3,4,5],
+	                startTime: '7:30',
+        	        endTime: '23:30'  
+	        },
+
+	        {
+        	        daysOfWeek: [6,0],
+                	startTime: '8:00',
+	                endTime: '17:00'           
+            	}
+        	],
+
+	        slotLabelFormat: { hour:'numeric'},
+        	minTime: '6:30',
+	        maxTime: '24:30',
+        	slotMinutes: '30',
+	        selectConstraint: 'businessHours',
+	        nowIndicator: true,
+        	resourceLabelText: 'Rooms',
+	        aspectRatio: 1.5,
+
+		//select: function(start, end, allDay) {
+	        //  endtime = $.fullCalendar.formatDate(end,'h:mm tt');
+        	//  starttime = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
+	        //  var mywhen = starttime + ' - ' + endtime;
+        	//	  $('#calendar #apptStartTime').val(start);
+		//          $('#calendar #apptEndTime').val(end);
+		//          $('#calendar #apptAllDay').val(allDay);
+		//          $('#calendar #when').text(mywhen);
+		//          $('#calendar').modal('show');
+	        //},
+		       
+		resourceRender: function(info) {
+            		var questionMark = document.createElement('strong');
+		        questionMark.innerText = ' (?) ';
+
+        	    	info.el.querySelector('.fc-cell-text')
+                	   .appendChild(questionMark);
+				
+		var tooltip = new Tooltip(questionMark, {
+		   title: info.resource.title + '!!!',
+		   placement: 'top',
+		   trigger: 'hover',
+		   container: 'body',
+		});
+            	}
+	});
+
+  	   calendar.render();
+	});
+	</script>
+
+</head>
+<body>
+	<div class="nav">
+		<ul>
+			<li><a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/">Home</a></li>
+			<li><a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/calendar">Calendar</a></li>
+		</ul>
+	</div>
+	<div class="login">
+		<a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/login">Login</a>
+	</div>
+	<button onclick="goBack()">Go Back</button>
+		<div class="center-text">
+			<h1>Room Scheduler</h1>
+			<p>Use me to schedule a room!</p>
+		</div>
+
+	<div id="calendar">
+		<script type="text/javascript">
+			function submitScript(){
+
+			}
+		</script>
+		<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
+	</div>
+
+	<div class="footer">
+		Team Penguins Schedule Prototype: Oct. 2019
+	</div>
+</body>
+	
+	<script>
+		function goBack(){
+			window.history.back()
+		}
+	</script>
+	
+</html>

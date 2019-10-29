@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Login </title>
+    <link rel="Stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"
+<body>
+    <div class = "loginbox">
+    <img src="{{ url_for('static', filename='avatar_2.png') }}" class="avatar">
+
+        <form action="{{ url_for('login') }}" method="post">
+          <h1> Login </h1>
+          <p>Username</p>
+          <input type="text" name="username" placeholder="Enter Username">
+          <p>Password</p>
+          <input type="password"name="password" placeholder="Enter Password">
+          <input type="submit" name="" value="Login">
+          <p class="message"><a href="#">Create an account</a></p>
+          <a href='#'>Forgot your Password?</a>
+          <br>
+          <a href='#'>Forgot your Username?</a>
+        </form>
+
+        <form class="registration_form" action="{{ url_for('user') }}" method="post">
+          <h2> Create an Account</h2>
+          <input type="text" name="email" placeholder="Email Address"/>
+          <input type="text" name="username" placeholder="Username"/>
+          <input type="password" name="password" placeholder="Password"/>
+          <input type="submit" name="" value="Create">
+          <p class="message"><a href="#">Already have an account? Login</a></p>
+        </form>
+    </div>
+
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'>
+    </script>
+    <script>
+    $('.message a').click(function(){
+      $('form').animate({height: "toggle", opacity: "toggle"}, "medium");
+    });
+    </script>
+
+
+
+
+
+
+</body>
+</head>
+</html>
