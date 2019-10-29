@@ -31,8 +31,7 @@ def login():
         if login_user:  # if login user exists check hashed pass
             if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
                 session['username'] = data.get('username')
-                #return redirect(url_for('home'))
-                return "success"
+                return redirect(url_for('home'))
 
         else:
             return 'Invalid username/password combination'

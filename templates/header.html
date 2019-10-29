@@ -1,0 +1,13 @@
+<div class="nav">
+	<ul>
+		<li><a href="{{ url_for('home') }}">Home</a></li>
+		<li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+	</ul>
+</div>
+<div class="login">
+{% if session.get('username') %}
+	<a href="{{ url_for('home') }}">{{ session.get('username') }}</a>
+{% else %}
+	<a href="{{ url_for('login') }}">Login</a>
+{% endif %}
+</div>

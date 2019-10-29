@@ -99,15 +99,7 @@
 
 </head>
 <body>
-	<div class="nav">
-		<ul>
-			<li><a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/">Home</a></li>
-			<li><a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/calendar">Calendar</a></li>
-		</ul>
-	</div>
-	<div class="login">
-		<a href="http://ec2-35-170-202-37.compute-1.amazonaws.com/login">Login</a>
-	</div>
+	{% include 'header.html' %}
 	<button onclick="goBack()">Go Back</button>
 		<div class="center-text">
 			<h1>Room Scheduler</h1>
@@ -123,9 +115,7 @@
 		<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
 	</div>
 
-	<div class="footer">
-		Team Penguins Schedule Prototype: Oct. 2019
-	</div>
+	{% include 'footer.html' %}
 </body>
 	
 	<script>
