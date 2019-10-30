@@ -40,7 +40,18 @@ def login():
 @app.route('/calendar', methods=['GET'])
 def calendar():
     return render_template('Schedule.html')
+    
+@app.route('/room_confirmation', methods=['GET'])
+def room_confirmation():
+    return render_template('Room_Confirmation.html')
 
+@app.route('/buildings', methods=['GET'])
+def buildings():
+    return render_template('Buildings.html')
+    
+@app.route('/building_confirmation', methods=['GET'])
+def building_confirmation():
+    return render_template('Building_Confirmation.html')
     
 # api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
 # api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>')

@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content">
+
+		<!-- Center Text -->
+		<div>
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;"> Room Confirmation Page</h1>	
+		</div>    
+
+		<!-- Confirmation Text -->
+		<div style="background:white; text-align: justify; height: auto; width:70%; margin: 50px auto 10px auto; padding: 10px;">
+			<p>
+					You're all set to go! Below is confirmation that the room has been reserved and the details of the room. If for any reason you need to cancel your reservation, please do so on the Reservations page. <br>
+
+					<br>Facility: <br>
+					
+					<br>Building: <br>
+					
+					<br>Room: <br>
+					
+					<br>Features: <br>
+					
+					<br>Address: <br>
+			</p>
+		</div>
+		
+	</div>	
+
+	{% include 'footer.html' %}
+</body>
+</html>
