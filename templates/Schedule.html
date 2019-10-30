@@ -100,21 +100,22 @@
 </head>
 <body>
 	{% include 'header.html' %}
-	<button onclick="goBack()">Go Back</button>
-		<div class="center-text">
-			<h1>Room Scheduler</h1>
-			<p>Use me to schedule a room!</p>
+	<div class="content">
+		<button onclick="goBack()">Go Back</button>
+			<div class="center-text">
+				<h1>Room Scheduler</h1>
+				<p>Use me to schedule a room!</p>
+			</div>
+
+		<div id="calendar">
+			<script type="text/javascript">
+				function submitScript(){
+
+				}
+			</script>
+			<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
 		</div>
-
-	<div id="calendar">
-		<script type="text/javascript">
-			function submitScript(){
-
-			}
-		</script>
-		<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
 	</div>
-
 	{% include 'footer.html' %}
 </body>
 	

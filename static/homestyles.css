@@ -3,28 +3,65 @@
 
 body, html{
 	height: 100%;
-	font-family: Arial;
 	width: 100%;
 	margin: auto;
-	background-image: -webkit-linear-gradient(0,0,0,.25),white), url("Buildings.jpg");
+	font-family: Arial;
+	background-image: -webkit-linear-gradient(rgba(0,0,0,.25),white), url("Buildings.jpg");
 	background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("Buildings.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 }
 
-/* Calendar Settings */
-#calendar
-{
-	max-width: 950px;
-	margin: 40px auto;
-	background-color: white;
-	padding: 20px;
-	border: 1px solid transparent;
-	border-radius: 5px;
+body {
+	display: flex;
+	flex-direction: column;
 }
 
-/*List style*/
+
+/*
+ * Header, Content Wrapper, Footer
+ */
+
+/* Header */
+.nav {
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #242424;
+}
+
+.nav--item {
+	display: inline-block;
+	padding: .5rem .5rem;
+	border-left: 1px solid white;
+
+	color: #EFEFEF;
+	text-align: center;
+	text-decoration: none;
+}
+
+
+a.nav--item:hover {
+	color: #03122D;
+	background-color: #B5B5B5;
+}
+
+.nav--item:nth-child(1) {
+	border: none;
+}
+
+.nav--welcome {
+	flex-grow: 1; /* take up the extra space */
+}
+
+.nav--login, .nav--logout {
+	margin-left: auto /* push this button all the way right */
+}
+
+/*
 ul {
 	list-style-type: none;
 	margin: 0;
@@ -68,57 +105,56 @@ li a:hover{
 	background-color: #B5B5B5;
 	text-decoration: underline;
 }
+*/
 
-/*Image for the banner*/
-.hero-image{
-	background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("photos/198663.jpg");
-	
-	height: 20%;
-	
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	position: relative;
-
-	
+/* Page Content Wrapper */
+.content {
+	flex: 1 0 auto;
 }
 
-/*Text on hero image*/
-.hero-text {
-	text-align: center;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	color: white;
-}
-
-.back{
-	text-align: center
-}
-
-.center-text {
-	text-align: center;
-	/*position: absolute;
-	top: 15%;
-	left: 50%;
-	transform: translate(-50%, -50%);*/
-}
-
+/* Footer */
 .footer {
+	flex-shrink: 0;
 	display: block;
 	padding-bottom: 15px;
 	padding-top: 15px;
 	font-size: 12px;
 	text-align: center;
-	position: fixed;
-	bottom: 0%;
-	color: #EFEFEF;
 	width: 100%;
+	color: #EFEFEF;
 	background-color: #242424;
 }
 
-/* Submit Button */
+/*
+ * Other General Styles
+ */
+
+.back{
+	/* TODO: make this button look pretty */
+	text-align: center
+}
+
+.center-text {
+	text-align: center;
+}
+
+
+/*
+ * Calendar Styles
+ */
+
+/* Calendar Settings */
+#calendar
+{
+	max-width: 950px;
+	margin: 40px auto;
+	background-color: white;
+	padding: 20px;
+	border: 1px solid transparent;
+	border-radius: 5px;
+}
+
+/* Submit Button for calendar */
 .submitbtn {
 	display: block;
 	line-height: 1.5;
@@ -140,7 +176,6 @@ li a:hover{
 }
 
 /* Tooltip for Calendar */
-
 .popper,
 .tooltip {
   position: absolute;

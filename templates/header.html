@@ -1,13 +1,15 @@
 <div class="nav">
-	<ul>
-		<li><a href="{{ url_for('home') }}">Home</a></li>
-		<li><a href="{{ url_for('calendar') }}">Calendar</a></li>
-	</ul>
+	<a class="nav--item" href="{{ url_for('home') }}">Home</a>
+	{% if session.get('username') %}
+		<a class="nav--item" href="{{ url_for('calendar') }}">Calendar</a>
+		<a class="nav--item" href="#">Profile</a>
+		<a class="nav--item" href="#">Reservations</a>
+		<a class="nav--item" href="#">Management</a>
+		<span class="nav--item nav--welcome">Welcome {{ session.get('username') }}!</span>
+		<a class="nav--item nav--logout" href="#">Log Out</a>
+	{% else %}
+		<a class="nav--item nav--login" href="{{ url_for('login') }}">Login</a>
+	{% endif %}
 </div>
-<div class="login">
-{% if session.get('username') %}
-	<a href="{{ url_for('home') }}">{{ session.get('username') }}</a>
-{% else %}
-	<a href="{{ url_for('login') }}">Login</a>
-{% endif %}
-</div>
+
+
