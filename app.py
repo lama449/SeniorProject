@@ -41,9 +41,9 @@ def login():
 def calendar():
     return render_template('Schedule.html')
     
-@app.route('/room_confirmation', methods=['GET'])
-def room_confirmation():
-    return render_template('Room_Confirmation.html')
+@app.route('/scheduling_confirmation', methods=['GET'])
+def scheduling_confirmation():
+    return render_template('Scheduling_Confirmation.html')
 
 @app.route('/buildings', methods=['GET'])
 def buildings():
