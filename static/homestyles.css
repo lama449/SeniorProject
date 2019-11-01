@@ -181,7 +181,7 @@ li a:hover{
   z-index: 9999;
   background: #6d7a87;
   color: white;
-  width: 150px;
+  width: 220px;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
   padding: 10px;
@@ -190,7 +190,7 @@ li a:hover{
 .style5 .tooltip {
   background: #6d7a87;
   color: #FFFFFF;
-  max-width: 200px;
+  max-width: 250px;
   width: auto;
   font-size: .8rem;
   padding: .5em 1em;
