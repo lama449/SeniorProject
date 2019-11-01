@@ -16,12 +16,13 @@
 	<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
 	<script src="{{url_for('static', filename='js/popper/dist/umd/popper.min.js')}}"></script>
 	<script src="{{url_for('static', filename='js/tooltip/dist/umd/tooltip.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/moment/min/moment.min.js')}}"></script>
 
 	<script>
 
 	document.addEventListener('DOMContentLoaded', function() {
   
-    	    var calendarEl = document.getElementById('calendar');
+    	var calendarEl = document.getElementById('calendar');
 
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	        plugins: [ 'resourceTimeline', 'interaction' ],
@@ -32,31 +33,30 @@
         	},
 	        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
         	defaultView: 'resourceTimelineDay',
-	        selectable: true,
-	        height: 450,
-	        resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
-        
+			selectable: true,
+			height: 450,
+			eventColor: 'green',
+	        //resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+			resources: [ {id:'a', title:'Study Room A', features:'Chair'}],
+			events: [ {id:'1', resourceId:'a', title:'Reserved', start:'2019-11-01T10:30:00', end:'2019-11-01T12:30:00', color: 'red'} ] ,
         	titleFormat: {
 	            year: 'numeric',
 	            month: 'short',
 	            day: 'numeric',
 	            weekday: 'long'
         	},
-	        businessHours: [
-            
-        	{
+	        businessHours: [            
+        		{
                 	daysOfWeek: [1,2,3,4,5],
 	                startTime: '7:30',
         	        endTime: '23:30'  
-	        },
-
-	        {
+	        	},
+	        	{
         	        daysOfWeek: [6,0],
                 	startTime: '8:00',
 	                endTime: '17:00'           
             	}
-        	],
-
+			],
 	        slotLabelFormat: { hour:'numeric'},
         	minTime: '6:30',
 	        maxTime: '24:30',
@@ -64,36 +64,37 @@
 	        selectConstraint: 'businessHours',
 	        nowIndicator: true,
         	resourceLabelText: 'Rooms',
-	        aspectRatio: 1.5,
-
-		//select: function(start, end, allDay) {
-	        //  endtime = $.fullCalendar.formatDate(end,'h:mm tt');
-        	//  starttime = $.fullCalendar.formatDate(start,'ddd, MMM d, h:mm tt');
-	        //  var mywhen = starttime + ' - ' + endtime;
-        	//	  $('#calendar #apptStartTime').val(start);
-		//          $('#calendar #apptEndTime').val(end);
-		//          $('#calendar #apptAllDay').val(allDay);
-		//          $('#calendar #when').text(mywhen);
-		//          $('#calendar').modal('show');
-	        //},
+			aspectRatio: 1.5,
+			select: function(start, end, allDay) {
+			},
 		       
-		resourceRender: function(info) {
-            		var questionMark = document.createElement('strong');
+			resourceRender: function(info) {
+            	var questionMark = document.createElement('strong');
 		        questionMark.innerText = ' (?) ';
 
-        	    	info.el.querySelector('.fc-cell-text')
-                	   .appendChild(questionMark);
+        	    info.el.querySelector('.fc-cell-text')
+                   .appendChild(questionMark);
 				
-		var tooltip = new Tooltip(questionMark, {
-		   title: info.resource.title + '!!!',
-		   placement: 'top',
-		   trigger: 'hover',
-		   container: 'body',
-		});
-            	}
-	});
+				var tooltip = new Tooltip(questionMark, {
+		   			title: info.resource.extendedProps.features,
+		   			placement: 'top',
+		   			trigger: 'hover',
+		   			container: 'body',
+				});
+			},
 
-  	   calendar.render();
+			eventRender: function(info) {
+        		var tooltip = new Tooltip(info.el, {
+          			title: "",
+          			placement: 'top',
+          			trigger: 'hover',
+          			container: 'body'
+				});
+			}
+			
+			});
+		
+  	   	calendar.render();
 	});
 	</script>
 
@@ -101,19 +102,21 @@
 <body>
 	{% include 'header.html' %}
 	<div class="content">
-		<button onclick="goBack()">Go Back</button>
-			<div class="center-text">
-				<h1>Room Scheduler</h1>
-				<p>Use me to schedule a room!</p>
-			</div>
+		<button onclick="goBack()">Go Back</button>-->
+		<div class="center-text">
+			<h1>Room Scheduler</h1>
+			<p>Use me to schedule a room!</p>
+		</div>
 
 		<div id="calendar">
 			<script type="text/javascript">
 				function submitScript(){
-
+					window.location.href="{{ url_for('scheduling_confirmation') }}";
 				}
 			</script>
-			<button class="submitbtn" onclick="submitScript"> Submit Time Slot </button>
+			
+			<button class="submitbtn" onclick="submitScript()"> Submit Time Slot </button>
+			
 		</div>
 	</div>
 	{% include 'footer.html' %}
