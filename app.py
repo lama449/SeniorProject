@@ -5,6 +5,7 @@ import bcrypt
 from SeniorProject.database import conn_DB
 from SeniorProject.resources.reservation import Reservation
 from SeniorProject.resources.user import User
+from SeniorProject.resources.facility import Facility
 from SeniorProject.resources.room import Room
 
 app = Flask(__name__)
@@ -53,7 +54,7 @@ def buildings():
 def building_confirmation():
     return render_template('Building_Confirmation.html')
     
-# api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
+api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
 # api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>')
 api.add_resource(Room, '/facilities/<f_id>/buildings/<b_id>/rooms', '/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>')
 # api.add_resource(Room, '/rooms', '/rooms/<r_id>')
