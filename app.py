@@ -7,10 +7,12 @@ from SeniorProject.resources.reservation import Reservation
 from SeniorProject.resources.user import User
 from SeniorProject.resources.facility import Facility
 from SeniorProject.resources.room import Room
+from SeniorProject.new_json_encoder import New_JSON_Encoder
 
 app = Flask(__name__)
 api = Api(app)
 
+app.json_encoder = New_JSON_Encoder
 db = conn_DB()
 
 

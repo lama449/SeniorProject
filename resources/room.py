@@ -1,7 +1,7 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
 import bcrypt
-from bson.json_util import dumps
+#from bson.json_util import dumps
 from SeniorProject import database
 
 db = database.conn_DB()
@@ -18,11 +18,16 @@ class Room(Resource):
             if current_building:  # if building exists
                 if r_id is None:  # return list of rooms
                     current_rooms = rooms.find({'buildingID': current_building.get('_id')})
-                    return dumps(current_rooms)
+
+                    # convert the Cursor object to a dictionary so that it is JSON serializable
+                    current_rooms = [room for room in current_rooms]
+                    return jsonify(current_rooms)
+                    #return dumps(current_rooms)
                 else:  # specific room
                     current_room = rooms.find_one({'number': int(r_id), 'buildingID': current_building.get('_id')})
                     if current_room:
-                        return dumps(current_room)
+                        return jsonify(current_room)
+                        #return dumps(current_room)
                     else:
                         return 'Invalid room'
             else:
