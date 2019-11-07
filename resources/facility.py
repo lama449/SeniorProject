@@ -9,7 +9,7 @@ db = database.conn_DB()
 class Facility(Resource):
     def get(self, f_id):
         facilities = db.facilities
-        current_facility = facilities.find_one({'name': f_id})
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             return jsonify(current_facility)
             #return dumps(current_facility)
