@@ -27,6 +27,22 @@ class Facility(Resource):
             check_facility = facilities.find_one({'access_code': access_code})
             if check_facility is None:
                 break
+        if not data.get('name'):
+            return 'Missing Facility Name'
+        if not data.get('private'):
+            return 'Missing Facility Private Field'
+        if not data.get('address_L1'):
+            return 'Missing Facility Address Line'
+        if not data.get('city'):
+            return 'Missing Facility City'
+        if not data.get('state'):
+            return 'Missing Facility State'
+        if not data.get('zip'):
+            return 'Missing Facility Zip'
+        if not data.get('country'):
+            return 'Missing Facility Country'
+        if not data.get('phone'):
+            return 'Missing Facility Phone'
         takeID = facilities.insert_one({
         'name': data.get('name'),
         'private': data.get('private') == 'true',
