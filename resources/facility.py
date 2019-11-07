@@ -20,6 +20,8 @@ class Facility(Resource):
     def post(self):
         facilities = db.facilities
         data = request.form
+        if data.get('access_code'):
+            return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
         while data.get('private') == 'true':
             access_code = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
             check_facility = facilities.find_one({'access_code': access_code})
