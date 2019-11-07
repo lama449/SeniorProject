@@ -6,7 +6,7 @@
 		<a class="nav--item" href="#">Reservations</a>
 		<a class="nav--item" href="#">Management</a>
 		<span class="nav--item nav--welcome">Welcome {{ session.get('username') }}!</span>
-		<a class="nav--item nav--logout" href="#">Log Out</a>
+		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
 		<a class="nav--item nav--login" href="{{ url_for('login') }}">Login</a>
 	{% endif %}

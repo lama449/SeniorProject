@@ -7,6 +7,7 @@ from SeniorProject.resources.reservation import Reservation
 from SeniorProject.resources.user import User
 from SeniorProject.resources.facility import Facility
 from SeniorProject.resources.room import Room
+from SeniorProject.resources.building import Building
 from SeniorProject.new_json_encoder import New_JSON_Encoder
 
 app = Flask(__name__)
@@ -35,10 +36,15 @@ def login():
             if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
                 session['username'] = data.get('username')
                 return redirect(url_for('home'))
-
+            else:
+                return 'Invalid username/password combination'
         else:
             return 'Invalid username/password combination'
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    session['username'] = None
+    return redirect(url_for('home'))
 
 @app.route('/calendar', methods=['GET'])
 def calendar():
@@ -57,7 +63,7 @@ def building_confirmation():
     return render_template('Building_Confirmation.html')
     
 api.add_resource(Facility, '/facilities', '/facilities/<f_id>')
-# api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>')
+api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>')
 api.add_resource(Room, '/facilities/<f_id>/buildings/<b_id>/rooms', '/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>')
 # api.add_resource(Room, '/rooms', '/rooms/<r_id>')
 api.add_resource(Reservation, '/reservations', endpoint='reservation')
