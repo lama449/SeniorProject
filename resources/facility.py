@@ -9,13 +9,36 @@ from SeniorProject import database
 db = database.conn_DB()
 
 class Facility(Resource):
-    def get(self, f_id):
+    def get(self, f_id=None):
         facilities = db.facilities
-        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
-        if current_facility:
-            return jsonify(current_facility)
+        if (f_id):
+            # get one facility based on the facility_id
+            current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+            if current_facility:
+                return jsonify(current_facility)
+            else:
+                return 'Invalid facility'
         else:
-            return 'Invalid facility'
+            # search for facilities based on a query string (q) and zip code
+            # this is for the search on the home page
+            q = request.args.get('q')
+            zip_code = request.args.get('zip')
+            found_facilities = facilities.find({
+                '$and': [
+                    {
+                        '$or': [
+                            {'name': {'$regex': q, '$options': 'i'}},
+                            {'description': {'$regex': q, '$options': 'i'}},
+                            {'address.address_L1': {'$regex': q, '$options': 'i'}},
+                            {'address.address_L2': {'$regex': q, '$options': 'i'}},
+                            {'attributes': {'$elemMatch': {'$regex': q, '$options': 'i'}}}
+                        ]
+                    },
+                    {'address.zip': zip_code}
+                ]
+            })
+            found_facilities = [facility for facility in found_facilities]
+            return jsonify(found_facilities)
 
     def post(self):
         facilities = db.facilities
@@ -46,15 +69,15 @@ class Facility(Resource):
         takeID = facilities.insert_one({
         'name': data.get('name'),
         'private': data.get('private') == 'true',
-        'access_code': access_code if (data.get('private') == 'true') else '',              
-        'address': [{
+        'access_code': access_code if (data.get('private') == 'true') else '',
+        'address': {
             'address_L1': data.get('address_L1'),
             'address_L2': data.get('address_L2'),
             'city': data.get('city'),
             'state': data.get('state'),
             'zip': data.get('zip'),
             'country': data.get('country')
-            }],
+            },
         'phone': data.get('phone'),
         'description': data.get('description'),
         'presets': {},
