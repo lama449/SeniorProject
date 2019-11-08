@@ -34,7 +34,10 @@ def login():
 
         if login_user:  # if login user exists check hashed pass
             if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
-                session['username'] = data.get('username')
+                session['user'] = {
+                    '_id': login_user.get('_id'),
+                    'username': login_user.get('username')
+                }
                 return redirect(url_for('home'))
             else:
                 return 'Invalid username/password combination'
@@ -43,7 +46,7 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    session['username'] = None
+    session['user'] = None
     return redirect(url_for('home'))
 
 @app.route('/calendar', methods=['GET'])

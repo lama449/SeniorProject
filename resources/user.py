@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
+from bson.objectid import ObjectId
 import bcrypt
 from SeniorProject import database
 
@@ -9,33 +10,78 @@ class User(Resource):
 
     def get(self):
         users = db.users
-        print(users)
+        # response object
+        res = {
+            'msg': [],
+            'err': []
+        }
+
+        if session.get('user'):
+            print(session.get('user'))
+            logged_in_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))}, {'password': 0})
+            return jsonify(logged_in_user)
+        else:
+            res['err'].append('No user is logged in.')
+            return jsonify(res)
 
     def post(self):  # creating a new user
         # load template, then pass info to User resource to POST new user
         # session['username'] = request.json['username']  # session retruned user
         data = request.form
         users = db.users
-        existing_user = users.find_one({'username': data.get('username')})
+        #response object
+        res = {
+            'msg': [],
+            'err': []
+        }
+
+        # check if all the fields are filled out
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        password_confirm = data.get('password.confirm')
+        f_name = data.get('first_name')
+        l_name = data.get('last_name')
+
+        if not username:
+            res['err'].append('No username')
+        if '@' not in email:
+            res['err'].append('Invalid email.')
+        if not password:
+            res['err'].append('No password')
+        if password != password_confirm:
+            res['err'].append('Passwords do not match.')
+        if not f_name:
+            res['err'].append('No First Name')
+        if not l_name:
+            res['err'].append('No Last Name')
+
+        if res['err']:
+            return jsonify(res)
+
+        #check if username exists already
+        existing_user = users.find_one({'username': username})
         if existing_user is None:
-            email = data.get('email')
+            # check if email is associated with another user
             existing_email = users.find_one({'email': email})
-            if '@' not in email or existing_email:
+            if existing_email:
                 return 'That email already exists.'
+                return jsonify({'err': err})
     
-            hashed_password = bcrypt.hashpw(data.get('password').encode('utf-8'), bcrypt.gensalt())
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             users.insert({
-                'username': data.get('username'),
+                'username': username,
                 'password': hashed_password,
                 'email': email,
-                'first_name': '',
-                'last_name': '',
+                'first_name': f_name,
+                'last_name': l_name,
                 'groupID': []
             })
-            session['username'] = data.get('username')
-            return redirect(url_for('calendar'))
+            res['msg'].append('success')
+            return jsonify(res)
         else:
-            return 'That username already exists.'
+            res['err'].append('That username already exists.')
+            return jsonify(res)
 
 
     def put(self):
