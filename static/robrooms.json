@@ -1,0 +1,3 @@
+[{"_id":"5da4d6933f5e7322944ee54d","attributes":[""],"buildingID":"5da4d5c73f5e7322944ee54b","capacity":30,"groupID":["5da4d7443f5e7322944ee550"],"name":"Classroom","number":101,"reservations":[{"end_time":"","start_time":"1","userID":""},{"end_time":"","start_time":"9","userID":""},{"end_time":"","start_time":"12","userID":""},{"end_time":"","start_time":"4","userID":""}]},
+{"_id":"5da4d6933f5e7322944ee54e","attributes":[""],"buildingID":"5da4d5c73f5e7322944ee54b","capacity":30,"groupID":["5da4d7443f5e7322944ee550"],"name":"Classroom","number":102,"reservations":[{"end_time":"","start_time":"1","userID":""},{"end_time":"","start_time":"9","userID":""},{"end_time":"","start_time":"12","userID":""},{"end_time":"","start_time":"4","userID":""}]}
+]
