@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content">
+
+		<!-- Center Text -->
+		<div>
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;"> Building Creation Confirmation Page</h1>
+			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Below is the confirmation information for the creation of this building.</h4>	
+		</div>    
+
+		<!-- Confirmation Text -->
+		<div style="background:white; background:white; text-align: justify; width:60%; height:auto; margin: 50px auto 10px auto; padding: 10px;  border: 1px solid transparent; border-radius: 5px;">
+			
+				<h4 style="padding-left: 20px; padding-right: 20px;">Below is confirmation that the building has been created and the details of the building. <br> If you would like to modify or delete this building please go to the Management page and click on the View Buildings button.</h4>
+
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Date Created: </h4>
+					
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Facility: </h4>
+					
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Building: </h4>
+					
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Building Type: </h4>
+					
+                <h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Address: </h4>
+
+                <h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Phone Number: </h4>
+			
+				<button class="submitbtn"> Management Page </button>
+		</div>
+		
+	</div>	
+
+	{% include 'footer.html' %}
+</body>
+</html>

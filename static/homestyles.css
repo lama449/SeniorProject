@@ -176,6 +176,25 @@ li a:hover{
 	background-color: #212529;
 }
 
+.gobackbtn {
+	display: block;
+	line-height: 1.5;
+	margin: -10px auto auto 0px; 
+	background-color: #2c3e50; 
+	color: #fff; 
+	font-family: Arial;
+	font-size: 16px; 
+	border-radius: 4px; 
+	border: 1px solid; 
+	padding: 6.4px 10.4px;
+	-webkit-transition-duration: .2s;
+	transition-duration: .2s;
+}
+
+.gobackbtn:hover{
+	cursor: pointer;
+	background-color: #212529;
+}
 /* Tooltip for Calendar */
 .popper,
 .tooltip {

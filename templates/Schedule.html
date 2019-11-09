@@ -20,6 +20,8 @@
 
 	<script>
 
+
+
 	document.addEventListener('DOMContentLoaded', function() {
   
     	var calendarEl = document.getElementById('calendar');
@@ -35,11 +37,12 @@
         	defaultView: 'resourceTimelineDay',
 			selectable: true,
 			height: 450,
-			eventColor: 'green',
-			resources: '/static/resources.json',
-	        //resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
-			//resources: [ {id:'a', title:'Study Room A', features:'Chair'}],
-			events: [ {id:'1', resourceId:'a', title:'Reserved', start:'2019-11-01T10:30:00', end:'2019-11-01T12:30:00', color: 'red'} ] ,
+			refetchResourcesOnNavigate: true,
+			resources: { url: '/static/resources.json'},
+			//resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+			events:{ url:'/static/events.json',
+					backgroundColor: 'red'
+			},
         	titleFormat: {
 	            year: 'numeric',
 	            month: 'short',
@@ -66,7 +69,14 @@
 	        nowIndicator: true,
         	resourceLabelText: 'Rooms',
 			aspectRatio: 1.5,
-			select: function(start, end, allDay) {
+			select: function(start, end) {
+				var title = $("#resource:selected").val();
+				var eventData;
+				if(title){
+					eventData = {title:title, start: start, end: end};
+					var calendar_datetime = $('#calendar').fullCalender('renderEvent', eventData, true);
+					alert(calendar_datetime);
+				}
 			},
 		       
 			resourceRender: function(info) {
@@ -102,11 +112,10 @@
 </head>
 <body>
 	{% include 'header.html' %}
-	<div class="content">
-		<!-- <button onclick="goBack()">Go Back</button> -->
+	<div class="content">		
 		<div class="center-text">
-			<h1>Room Scheduler</h1>
-			<p>Use me to schesdule a room!</p>
+			<h1 style="background:lightgrey; width:80%; margin: 50px auto auto auto;">Room Scheduler</h1>
+			<h4 style="background:lightgrey; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select a time slot below by clicking it or clicking and dragging the cursor to select more than one slot. <br> Click the Submit button when you have selected your requesting time slot. <br> Click the Go Back button to return to the Buildings Page.</h4>
 		</div>
 
 		<div id="calendar">
@@ -117,6 +126,7 @@
 			</script>
 			
 			<button class="submitbtn" onclick="submitScript()"> Submit Time Slot </button>
+			<button class="gobackbtn" onclick="goBack()">Go Back</button>
 			
 		</div>
 	</div>
