@@ -145,8 +145,10 @@ li a:hover{
 /* Calendar Settings */
 #calendar
 {
-	max-width: 950px;
-	margin: 10px auto;
+	/*max-width: 950px;*/
+	width: 80%;
+	max-height: 900px;
+	margin: 25px auto;
 	background-color: white;
 	padding: 20px;
 	border: 1px solid transparent;
