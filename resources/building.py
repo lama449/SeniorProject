@@ -7,6 +7,7 @@ from flask_restful import Resource, request
 import bcrypt
 # from bson.json_util import dumps
 from SeniorProject import database
+from bson.objectid import ObjectId
 
 db = database.conn_DB()
 
@@ -25,7 +26,6 @@ class Building(Resource):
                 current_building = buildings.find_one({'facilityID': current_facility.get('_id'), '_id': ObjectId(b_id)})
                 if current_building:
                     return jsonify(current_building)
-                    # return dumps(current_room)
                 else:
                     return 'Invalid building'
         else:
@@ -34,45 +34,42 @@ class Building(Resource):
     def post(self, f_id):
         facilities = db.facilities
         buildings = db.buildings
-        data = request.form
-        if not data.get('name'):
-            return 'Missing Building Name'
-        if not data.get('address_L1'):
-            return 'Missing Building Address Line'
-        if not data.get('city'):
-            return 'Missing Building City'
-        if not data.get('state'):
-            return 'Missing Building State'
-        if not data.get('zip'):
-            return 'Missing Building Zip'
-        if not data.get('country'):
-            return 'Missing Building Country'
-        if not data.get('phone'):
-            return 'Missing Building Phone'
-        if not data.get('description'):
-            return 'Missing Building Description'
-        takeID = buildings.insert_one({
-        'name': data.get('name'),
-        'address': {
-            'address_L1': data.get('address_L1'),
-            'address_L2': data.get('address_L2'),
-            'city': data.get('city'),
-            'state': data.get('state'),
-            'zip': data.get('zip'),
-            'country': data.get('country')
-            },
-        'phone': data.get('phone'),
-        'description': data.get('description'),
-#        'presets': {},
-#        'attributes': {},
-#        'maintenance': {},
-#        'groups': [{
-#            '_id': ObjectId(),
-#            'name': 'admin'
-#            }]
-        })
-        return jsonify({'_id': takeID.inserted_id})
-
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            data = request.form
+            if not data.get('name'):
+                return 'Missing Building Name'
+            if not data.get('address_L1'):
+                return 'Missing Building Address Line'
+            if not data.get('city'):
+                return 'Missing Building City'
+            if not data.get('state'):
+                return 'Missing Building State'
+            if not data.get('zip'):
+                return 'Missing Building Zip'
+            if not data.get('country'):
+                return 'Missing Building Country'
+            if not data.get('phone'):
+                return 'Missing Building Phone'
+            if not data.get('description'):
+                return 'Missing Building Description'
+            takeID = buildings.insert_one({
+                'name': data.get('name'),
+                'address': {
+                    'address_L1': data.get('address_L1'),
+                    'address_L2': data.get('address_L2'),
+                    'city': data.get('city'),
+                    'state': data.get('state'),
+                    'zip': data.get('zip'),
+                    'country': data.get('country')},
+                'phone': data.get('phone'),
+                'description': data.get('description'),
+                'facilityID': ObjectId(f_id)
+         })
+            return jsonify({'_id': takeID.inserted_id})
+        else:
+            return 'Invalid facility'
+    
     def put(self):
         pass
 
