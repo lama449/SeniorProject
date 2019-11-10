@@ -55,11 +55,8 @@ class Room(Resource):
         'capacity': data.get('capacity'),
         'name': data.get('name'),
         'number': data.get('number'),
-        'maintenance': {},
-        'groupID': {
-            '_id': ObjectId(),
-            'name': 'admin'
-            }
+        'groupID': {},
+        'reservations': {}
         })
         return jsonify({'_id': takeID.inserted_id})
         pass
