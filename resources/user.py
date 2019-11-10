@@ -38,10 +38,10 @@ class User(Resource):
         # check if all the fields are filled out
         username = data.get('username')
         email = data.get('email')
-        password = data.get('password')
-        password_confirm = data.get('password.confirm')
-        f_name = data.get('first_name')
-        l_name = data.get('last_name')
+        password = data.get('password1')
+        password_confirm = data.get('password2')
+        f_name = data.get('fname')
+        l_name = data.get('lname')
 
         if not username:
             res['err'].append('No username')
