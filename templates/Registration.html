@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<script> 
+          
+            // Function to check Whether both passwords 
+            // is same or not. 
+            function checkPassword(form) { 
+                password1 = form.password1.value; 
+                password2 = form.password2.value; 
+  
+                // If password not entered 
+                if (password1 == '') 
+                    alert ("Please enter Password"); 
+                      
+                // If confirm password not entered 
+                else if (password2 == '') 
+                    alert ("Please enter confirm password"); 
+                      
+                // If Not same return False.     
+                else if (password1 != password2) { 
+                    alert ("\nPassword did not match: Please try again.") 
+                    return false; 
+                } 
+  
+                // If same return True. 
+                else{ 
+                    return true; 
+                } 
+            } 
+        </script>
+	
+    <meta charset="UTF-8">
+    <title>New User Registrations</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='urpstylesheet.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+</head>
+<body>
+	{% include 'header.html' %}
+	<div class="content">
+    <div class="container">
+        <h1>Account Registration</h1>
+        <p>New user? Just fill out a quick form to create an account.</p>
+        <hr>
+
+        <form action="registration-page.php" method="post" style="font: arial;" onSubmit="return checkPassword(this)">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Create a Username" name="username" required>
+
+            <label for="fname"><b>First Name</b></label>
+            <input type="text" placeholder="First Name" name="fname" required>
+
+            <label for="lname"><b>Last Name</b></label>
+            <input type="text" placeholder="Last Name" name="lname" required>
+
+            <label for="password1"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password1" required>
+
+            <label for="password2"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="password2" required>
+			
+            <button type="submit" class="registerbtn">Register</button>
+			
+        </form>
+    </div>
+    <div class="container signin">
+         <p>Already have an account? Click here to <a href="{{ url_for('login') }}">sign in</a>.</p>
+    </div>
+</div>
+	{% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Confirmation</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content">
+		<div>
+			<h1 style="background: #072042; color: white; width: 100%;font-family: verdana; text-align: center">Building Creation Confirmation Page</h1>
+		</div>    
+		
+		<h3 style="padding-left: 1%; font-family: verdana;"><p>Congratulations! You have just created a new facility!</p></h3>
+			
+		<h5 style="padding-left: 5%; font-family: verdana;">Here is a quick summary of the facility you have just created:</h5>
+
+		<div style="text-align: justify; width:60%; height:auto; border: 3px solid transparent; border-radius: 5px;">
+			
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Date Created: </h4>
+					
+				<h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Facility: </h4>
+					
+                <h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Address: </h4>
+
+                <h4 style="padding-left: 20px; padding-right: 20px; padding-top: 15px;">Phone Number: </h4>
+		</div>
+		
+		<div style="text-align: center; font-family: verdana; margin: 5% 15% 2%">
+				If you need to adjust this facility, you can make any adjustments by going to the Management page and then clicking on the View Facilities button.
+		</div>
+		
+		<div align="center">
+			<!--Needs to direct to management page-->
+				<button class="submitbtn"> Management Page </button>
+		</div>
+	</div>
+
+	{% include 'footer.html' %}
+</body>
+</html>
