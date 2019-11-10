@@ -58,7 +58,7 @@ class Room(Resource):
         'groupID': {},
         'reservations': {}
         })
-        return jsonify({'_id': takeID.inserted_id})
+        return jsonify(takeID)
         pass
 
     def put(self):
