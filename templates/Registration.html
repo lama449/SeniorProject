@@ -45,7 +45,7 @@
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
 
-        <form action="{{ url_for('login') }}" method="post" style="font: arial;" onSubmit="return checkPassword(this)">
+        <form action="{{ url_for('user') }}" method="post" style="font: arial;" onSubmit="return checkPassword(this)">
             <label for="uname"><b>Username</b></label>
             <input type="text" placeholder="Create a Username" name="username" required>
 
