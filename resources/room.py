@@ -37,29 +37,36 @@ class Room(Resource):
 
 
     def post(self):
-        rooms = db.rooms
         data = request.form
-        if not data.get('buildingID'):
-            return 'Missing buildingID'
         if not data.get('name'):
             return 'Missing room name'
         if not data.get('capacity'):
             return 'Missing room capacity'
          if not data.get('number'):
             return 'Missing room number'
-         if not data.get('groupID'):
-            return 'Missing groupID'
-        takeID = rooms.insert_one({
-        'buildingID' : data.get('buildingID'),
-        'attributes': {},
-        'capacity': data.get('capacity'),
-        'name': data.get('name'),
-        'number': data.get('number'),
-        'groupID': {},
-        'reservations': {}
-        })
-        return jsonify(takeID)
-        pass
+        
+        rooms = db.rooms
+        facilities = db.facilities
+        buildings = db.buildings
+        
+        current_facility = facilities.find_one({'name': f_id})
+        if current_facility:
+            current_building = buildings.find_one({'name': b_id, 'facilityID': current_facility.get('_id')})                                 
+            if current_building:  # if building exists
+                takeID = rooms.insert_one({
+                'attributes': {},
+                'buildingID' : current_building,
+                'capacity': data.get('capacity'),
+                'groupID': {},
+                'name': data.get('name'),
+                'number': data.get('number'),
+                'reservations': {}
+                })
+                return jsonify(takeID)
+            else:
+                return 'Invalid building'
+        else:
+            return 'Invalid facility'
 
     def put(self):
         pass
