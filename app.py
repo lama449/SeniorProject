@@ -49,6 +49,10 @@ def logout():
     session['user'] = None
     return redirect(url_for('home'))
 
+@app.route('/register', methods=['GET'])
+def register():
+    return render_template('Registration.html')
+
 @app.route('/calendar', methods=['GET'])
 def calendar():
     return render_template('Schedule.html')
