@@ -37,6 +37,31 @@ class Room(Resource):
 
 
     def post(self):
+        rooms = db.rooms
+        data = request.form
+        if not data.get('buildingID'):
+            return 'Missing buildingID'
+        if not data.get('name'):
+            return 'Missing room name'
+        if not data.get('capacity'):
+            return 'Missing room capacity'
+         if not data.get('number'):
+            return 'Missing room number'
+         if not data.get('groupID'):
+            return 'Missing groupID'
+        takeID = rooms.insert_one({
+        'buildingID' : data.get('buildingID'),
+        'attributes': {},
+        'capacity': data.get('capacity'),
+        'name': data.get('name'),
+        'number': data.get('number'),
+        'maintenance': {},
+        'groupID': {
+            '_id': ObjectId(),
+            'name': 'admin'
+            }
+        })
+        return jsonify({'_id': takeID.inserted_id})
         pass
 
     def put(self):
