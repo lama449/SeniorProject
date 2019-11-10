@@ -36,21 +36,13 @@ class Room(Resource):
             return 'Invalid facility'
 
 
-<<<<<<< Updated upstream
-    def post(self):
-=======
     def post(self, f_id, b_id):
->>>>>>> Stashed changes
         data = request.form
         if not data.get('name'):
             return 'Missing room name'
         if not data.get('capacity'):
             return 'Missing room capacity'
-<<<<<<< Updated upstream
-         if not data.get('number'):
-=======
         if not data.get('number'):
->>>>>>> Stashed changes
             return 'Missing room number'
         
         rooms = db.rooms
@@ -63,22 +55,14 @@ class Room(Resource):
             if current_building:  # if building exists
                 takeID = rooms.insert_one({
                 'attributes': {},
-<<<<<<< Updated upstream
-                'buildingID' : current_building,
-=======
                 'buildingID' : current_building.get('_id'),
->>>>>>> Stashed changes
                 'capacity': data.get('capacity'),
                 'groupID': {},
                 'name': data.get('name'),
                 'number': data.get('number'),
                 'reservations': {}
                 })
-<<<<<<< Updated upstream
-                return jsonify(takeID)
-=======
                 return jsonify(takeID.inserted_id)
->>>>>>> Stashed changes
             else:
                 return 'Invalid building'
         else:
