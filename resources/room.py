@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
-import bcryp
-from bson.objectid import ObjectIdt
+import bcrypt
+from bson.objectid import ObjectId
 #from bson.json_util import dumps
 from SeniorProject import database
 
