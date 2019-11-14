@@ -1,0 +1,137 @@
+<html>
+    <head>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	<link href="{{url_for('static', filename='js/fullcalendar/core/main.css')}}" rel='stylesheet' />
+	<link href="{{url_for('static', filename='js/fullcalendar/timeline/main.css')}}" rel='stylesheet' />
+	<link href="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.css')}}" rel='stylesheet' />
+
+	<script src="{{url_for('static', filename='js/fullcalendar/core/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/resource-common/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
+	<script src="{{url_for('static', filename='js/popper/dist/umd/popper.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/tooltip/dist/umd/tooltip.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/moment/min/moment.min.js')}}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: [ 'resourceTimeline', 'interaction' ],
+                header: {
+                left: 'today prev,next',
+                center: 'title',
+                right: ''
+                },
+            schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+            defaultView: 'resourceTimelineDay',
+            selectable: true,
+            height: 450,
+            refetchResourcesOnNavigate: true,
+            resources: function(successCallback){
+                $.ajax({
+                    url: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/facilities/5d9a7446bc65c324386edcd6/buildings/5da4d5c73f5e7322944ee54b/rooms',
+                    data: {
+                        id: $('_id').val()
+                    }
+                }).done(function(response) {
+                    callback(response);
+                });
+            }, 
+            //resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+            events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
+              {"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
+              {"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
+              {"id":"4", "resourceId":"c", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
+              {"id":"5", "resourceId":"d", "title":"Reserved", "start":"2019-11-09T11:30:00", "end":"2019-11-01T12:30:00"}
+           ], 
+            //url:'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/events.json',
+            eventBackgroundColor: 'red',
+      
+            titleFormat: {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'long'
+            },
+            businessHours: [            
+            {
+                daysOfWeek: [1,2,3,4,5],
+                startTime: '7:30',
+                endTime: '23:30'  
+            },
+            {
+                daysOfWeek: [6,0],
+                startTime: '8:00',
+                endTime: '17:00'           
+            }
+            ],
+            slotLabelFormat: { hour:'numeric'},
+            minTime: '6:30',
+            maxTime: '24:30',
+            slotMinutes: '30',
+            selectConstraint: 'businessHours',
+            nowIndicator: true,
+            resourceLabelText: 'Rooms',
+            aspectRatio: 1.5,
+            // select: function(start, end) {
+            //     var title = $("#resource:selected").val();
+            //     var eventData;
+            //     if(title){
+            //         eventData = {title:title, start: start, end: end};
+            //         var calendar_datetime = $('#calendar').fullCalender('renderEvent', eventData, true);
+            //         alert(calendar_datetime);
+            //     }
+            // },
+         
+            resourceRender: function(info) {
+                var questionMark = document.createElement('strong');
+                questionMark.innerText = ' (?) ';
+
+                info.el.querySelector('.fc-cell-text')
+                .appendChild(questionMark);
+          
+                var tooltip = new Tooltip(questionMark, {
+                     title: info.resource.extendedProps.features,
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body',
+            });
+            },
+
+            eventRender: function(info) {
+                var tooltip = new Tooltip(info.el, {
+                    title: "",
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                });
+            }
+      
+        });
+  
+       calendar.render();
+    });
+    </script>
+    
+    </head>
+
+    <body>
+            <div id="calendar">
+                <script type="text/javascript">
+                    function submitScript(){
+                        window.location.href="{{ url_for('scheduling_confirmation') }}";
+                    }
+                </script>
+                    
+                <button class="submitbtn" onclick="submitScript()"> Submit Time Slot </button>
+                <button class="gobackbtn" onclick="goBack()">Go Back</button>
+                    
+            </div>
+    </body>
+    
+</html>
