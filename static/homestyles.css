@@ -194,37 +194,37 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
  * Table Styles
  */
 
- table, th, td {
+ .table, .table th, .table td {
     border-collapse: collapse;
     border: 1px solid #03122D;
 }
 
-table {
+.table {
     margin: 1rem auto;
     max-width: 900px;
     width: 80%;
 }
 
-tr {
+.table tr {
     background-color: #EFEFEF;
     color: #03122D;
 }
 
 /* header row */
-tr:nth-child(1) {
+.table tr:nth-child(1) {
     background-color: #03122D;
     color: #EFEFEF;
 }
 
-th, td {
+.table th, .table td {
     padding: .4rem;
 }
 
-th {
+.table th {
 
 }
 
-td {
+.table td {
 
 }
 
