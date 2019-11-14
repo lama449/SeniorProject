@@ -65,9 +65,9 @@ class User(Resource):
             # check if email is associated with another user
             existing_email = users.find_one({'email': email})
             if existing_email:
-                return 'That email already exists.'
-                return jsonify({'err': err})
-    
+                res['err'].append('That email already exists.')
+                return jsonify(res)
+
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             users.insert({
                 'username': username,
