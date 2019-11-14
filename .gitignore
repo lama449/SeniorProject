@@ -6,3 +6,5 @@ __pycache__/
 # Flask stuff:
 instance/
 .webassets-cache
+
+local.wsgi
