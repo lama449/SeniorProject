@@ -55,19 +55,11 @@ def register():
 
 @app.route('/calendar', methods=['GET'])
 def calendar():
-    return render_template('Schedule.html')
-    
-@app.route('/scheduling_confirmation', methods=['GET'])
-def scheduling_confirmation():
-    return render_template('Scheduling_Confirmation.html')
+    return render_template('calendar.html')
 
 @app.route('/buildings', methods=['GET'])
 def buildings():
-    return render_template('Buildings.html')
-    
-@app.route('/building_confirmation', methods=['GET'])
-def building_confirmation():
-    return render_template('BuildingCreation_Confirmation.html')
+    return render_template('Schedule.html')
 
 @app.route('/building_creation', methods=['GET'])
 def building_creation():
