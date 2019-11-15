@@ -71,7 +71,32 @@ class Building(Resource):
         else:
             return 'Invalid facility'
 
-    def put(self):
+    def put(self, f_id, b_id):
+        data = request.form
+        facilities = db.facilities
+        buildings = db.buildings
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            current_building = buildings.find_one({'_id': ObjectId(b_id)})
+            if current_building:
+                updated_building = buildings.update_one({'_id': ObjectId(b_id)},
+                {'$set':
+                     {'name': data.get('name'),
+                      'address': {
+                          'address_L1': data.get('address_L1'),
+                          'address_L2': data.get('address_L2'),
+                          'city': data.get('city'),
+                          'state': data.get('state'),
+                          'zip': data.get('zip'),
+                          'country': data.get('country')},
+                      'phone': data.get('phone'),
+                      'description': data.get('description'),
+                      'facilityID': ObjectId(f_id)}
+                 })
+            else:
+                return 'Invalid building'
+        else:
+            return 'Invalid facility'
         pass
 
     def delete(self, f_id, b_id):
