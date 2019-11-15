@@ -8,11 +8,12 @@
 		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
-		<a class="nav--item nav--login" href="">Login</a>
+		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'" style="width:150px; margin-top: 200px; margin-left: 160px;">Login</a>
 		<div id = "modal-wrapper" class = "modal">
 			<form class="modal-content animate">
 			<div class="imgcontainer" style="background-color: white">
 				<span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+				<h1 style="text-align: center; background-color: white; padding-top: 25px">Login</h1>
 			</div>
 
 			<div class="container" style="background-color: white">
