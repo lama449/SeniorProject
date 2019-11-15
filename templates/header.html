@@ -8,7 +8,7 @@
 		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
-		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'" style="width:150px; margin-top: 200px; margin-left: 160px;">Login</a>
+		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'"">Login</a>
 		<div id = "modal-wrapper" class = "modal">
 			<form class="modal-content animate">
 			<div class="imgcontainer" style="background-color: white">
@@ -19,7 +19,7 @@
 			<div class="container" style="background-color: white">
 				<input type="email" placeholder="Enter Email" name = "email">
 				<input type="password" placeholder="Enter Password" name = "psw">
-				<button type="submit">Login</button>
+				<button type="submit" class="button">Login</button>
 				<a href="#" style="text-decoration: none; margin: 13px 26px; text-align:center; margin-top: 26px; position: relative; color: black; background-color: white">Forgot Password? Click here.</a>
 			</div>
 			</form>
