@@ -73,6 +73,7 @@ hr {
 a.nav--item:hover {
     color: #03122D;
     background-color: #B5B5B5;
+    cursor: pointer;
 }
 
 .nav--welcome {
