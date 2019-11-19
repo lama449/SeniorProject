@@ -152,10 +152,6 @@ input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
     box-sizing: border-box;
     width: 100%;
 }
-.not-full-width {
-    box-sizing: border-box;
-    width: 90%;
-}
 
 .form-group {
     display: inline-block;
