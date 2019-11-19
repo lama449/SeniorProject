@@ -55,29 +55,22 @@ class User(Resource):
         if res['err']:
             return jsonify(res)
 
-        #check if username exists already
-        existing_user = users.find_one({'username': username})
-        if existing_user is None:
-            # check if email is associated with another user
-            existing_email = users.find_one({'email': email})
-            if existing_email:
-                res['err'].append('That email already exists.')
-                return jsonify(res)
+        # check if email is associated with another user
+        existing_email = users.find_one({'email': email})
+        if existing_email:
+            res['err'].append('That email already exists.')
+            return jsonify(res)
 
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            users.insert({
-                'username': username,
-                'password': hashed_password,
-                'email': email,
-                'first_name': f_name,
-                'last_name': l_name,
-                'groupID': []
-            })
-            res['msg'].append('success')
-            return jsonify(res)
-        else:
-            res['err'].append('That username already exists.')
-            return jsonify(res)
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        users.insert({
+            'password': hashed_password,
+            'email': email,
+            'first_name': f_name,
+            'last_name': l_name,
+            'groupID': []
+        })
+        res['msg'].append('success')
+        return jsonify(res)
 
 
     def put(self):
