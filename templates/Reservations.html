@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+    
+    <script>
+
+	    var vm = new Vue({
+			el: "#app",
+			data: {
+				query: "",
+				zip_code: "",
+				access_code: "",
+				facilities: []
+			},
+			delimiters: ["[[", "]]"],
+			methods: {
+				getBuildingList: function() {
+					axios
+						.get("{{ url_for('building') }}", {
+							params: {
+								q: this.query,
+								zip: this.zip_code
+							}
+						})
+						.then(res => { this.buildings = res.data })
+						.catch(error => console.log(error))
+				},
+				getBuildingURL: function(building_id) {
+					return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+				}
+			}
+		})
+
+    </script>
+
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content" id="app">
+
+		<!-- Center Text -->
+		<div>
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page</h1>	
+			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a mantenance request please click the icon next to the building of the reservation.</h4>
+		</div>    
+
+        <!-- Table -->
+        <div v-if="buildings.length" class="secondary-content container">
+			<table class="table">
+                    <tr>
+                        <th>Building</th>
+                        <th>Location</th>
+                        <th>Maintanence Request</th>
+                    </tr>
+                    <tr v-for="building in buildings">
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td><a v-bind:href=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                    </tr>
+                </table>
+            </div>		
+	</div>	
+
+    {% include 'footer.html' %}
+    
+</body>
+</html>
