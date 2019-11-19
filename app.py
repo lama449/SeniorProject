@@ -24,31 +24,36 @@ def home():
     return render_template('Home.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'GET':
-        return render_template('Login_Page.html')
-    else:
-        data = request.form
-        users = db.users
-        login_user = users.find_one({'username': data.get('username')})  # find user in db
+    data = request.form
+    users = db.users
+    login_user = users.find_one({'email': data.get('email')})  # find user in db
 
-        if login_user:  # if login user exists check hashed pass
-            if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
-                session['user'] = {
-                    '_id': login_user.get('_id'),
-                    'username': login_user.get('username')
-                }
-                return redirect(url_for('home'))
-            else:
-                return 'Invalid username/password combination'
+    # response object
+    res = {
+        'msg': [],
+        'err': []
+    }
+
+    if login_user:  # if login user exists check hashed pass
+        if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
+            session['user'] = {
+                '_id': login_user.get('_id')
+            }
+            res['msg'].append('success')
         else:
-            return 'Invalid username/password combination'
+            res['err'].append('Invalid username/password combination')
+    else:
+        res['err'].append('Invalid username/password combination')
 
 @app.route('/logout', methods=['GET'])
 def logout():
     session['user'] = None
     return redirect(url_for('home'))
+
+def forgot_password():
+    return render_template('Forgot_Password.html')
 
 @app.route('/reservations', methods=['GET'])
 def reservations():
@@ -70,12 +75,12 @@ def calendar():
 def building_creation():
     return render_template('Building_Creation_Page.html')
 
-api.add_resource(Facility, '/facilities', '/facilities/<f_id>', endpoint='facility')
-api.add_resource(Building, '/facilities/<f_id>/buildings', '/facilities/<f_id>/buildings/<b_id>', endpoint='building')
-api.add_resource(Room, '/facilities/<f_id>/buildings/<b_id>/rooms', '/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>', endpoint='room')
-api.add_resource(Reservation, '/reservations', endpoint='reservation')
-api.add_resource(User, '/users', '/users/<u_id>', endpoint='user')
-api.add_resource(Maintenance, '/facilities/<f_id>/maintenance', '/facilities/<f_id>/maintenance/<r_id>', endpoint='maintenance')
+api.add_resource(Facility, '/api/facilities', '/api/facilities/<f_id>', endpoint='facility')
+api.add_resource(Building, '/api/facilities/<f_id>/buildings', '/api/facilities/<f_id>/buildings/<b_id>', endpoint='building')
+api.add_resource(Room, '/api/facilities/<f_id>/buildings/<b_id>/rooms', '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>', endpoint='room')
+api.add_resource(Reservation, '/api/reservations', endpoint='reservation')
+api.add_resource(User, '/api/users', '/api/users/<u_id>', endpoint='user')
+api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<r_id>', endpoint='maintenance')
 
 if __name__ == '__main__':
     app.run(debug=True)
