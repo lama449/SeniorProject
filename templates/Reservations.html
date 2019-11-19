@@ -51,20 +51,15 @@
                 },
                 mounted(){
                     axios
-                        .get("/static/buildings.json")
-                        .then(response => { this.data = response.data.buildings;
-                        });
+                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                            .then(res => { this.buildings = res.data })
+                            .catch(error => console.log(error))
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
                     getBuildingList: function() {
                         axios
-                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}", {
-                                params: {
-                                    name: this.name,
-                                    location: this.location
-                                }
-                            })
+                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
                             .then(res => { this.buildings = res.data })
                             .catch(error => console.log(error))
                     },
