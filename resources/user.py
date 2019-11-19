@@ -17,7 +17,6 @@ class User(Resource):
         }
 
         if session.get('user'):
-            print(session.get('user'))
             logged_in_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))}, {'password': 0})
             return jsonify(logged_in_user)
         else:
@@ -36,15 +35,12 @@ class User(Resource):
         }
 
         # check if all the fields are filled out
-        username = data.get('username')
         email = data.get('email')
         password = data.get('password1')
         password_confirm = data.get('password2')
         f_name = data.get('fname')
         l_name = data.get('lname')
 
-        if not username:
-            res['err'].append('No username')
         if '@' not in email:
             res['err'].append('Invalid email.')
         if not password:
