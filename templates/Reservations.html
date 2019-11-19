@@ -17,9 +17,10 @@
 				buildings:[]                
             },
             mounted(){
-                axios.get("http://ec2-35-170-202-37.compute-1.amazonaws.com/api/facilities/5d9a7446bc65c324386edcd6/buildings").then(response => {
-                    this.result = response.data
-                })
+                axios
+                    .get("/static/buildings.json")
+                    .then(response => { this.data = response.data.buildings;
+                    });
             },
 			delimiters: ["[[", "]]"],
 			methods: {
@@ -51,7 +52,7 @@
 	<div class="content" id="app">
 
 		<!-- Center Text -->
-		<div>
+		<div class="primary-content container">
 			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page</h1>	
 			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a mantenance request please click the icon next to the building of the reservation.</h4>
 		</div>    
