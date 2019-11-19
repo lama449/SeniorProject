@@ -14,19 +14,21 @@
 	    var vm = new Vue({
 			el: "#app",
 			data: {
-				query: "",
-				zip_code: "",
-				access_code: "",
-				facilities: []
-			},
+				buildings:[]                
+            },
+            mounted(){
+                axios.get("http://ec2-35-170-202-37.compute-1.amazonaws.com/api/facilities/5d9a7446bc65c324386edcd6/buildings").then(response => {
+                    this.result = response.data
+                })
+            },
 			delimiters: ["[[", "]]"],
 			methods: {
 				getBuildingList: function() {
 					axios
-						.get("{{ url_for('building') }}", {
+						.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}", {
 							params: {
-								q: this.query,
-								zip: this.zip_code
+								name: this.name,
+								location: this.location
 							}
 						})
 						.then(res => { this.buildings = res.data })
@@ -65,7 +67,7 @@
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td><a v-bind:href=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                        <td style="text-align: center"><a v-bind:href=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
                     </tr>
                 </table>
             </div>		
