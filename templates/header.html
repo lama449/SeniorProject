@@ -8,18 +8,18 @@
 		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
-		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'"">Login</a>
-		<div id = "modal-wrapper" class = "modal">
+		<a class="nav--item nav--login" onclick="document.getElementById('modalwrapper').style.display='block'">Login</a>
+		<div id = "modalwrapper" class = "modal">
 			<form class="modal-content animate">
 			<div class="imgcontainer" style="background-color: white">
-				<span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+				<span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
 				<h1 style="text-align: center; background-color: white; padding-top: 25px">Login</h1>
 			</div>
 
 			<div class="container" style="background-color: white">
 				<input type="email" class = "full-width" placeholder="Enter Email" name = "email" v-modal = "email">
 				<input type="password" class = "full-width"  placeholder="Enter Password" name = "psw" v-modal = "password">
-				<button type="submit" class = "button"  class="button" style="margin: 0 auto; display: block" @click.prevent = "submitLogin()">Login</button>
+				<button type="submit" class = "button"  class="button" style="margin: 0 auto; display: block" @click.prevent="submitLogin()">Login</button>
 				<br>
 				<a href="{{ url_for('forgot_password')}}" style="text-decoration: none; margin: 13px 26px; text-align:center; margin-top: 26px; position: relative; color: black; background-color: white">Forgot Password? Click here.</a>
 				<br>
@@ -31,7 +31,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
 	<script>
 		var vm = new Vue({
-			el: "#modal-wrapper",
+			el: "#modalwrapper",
 			data: {
 				email: "",
 				password: "",
@@ -59,7 +59,7 @@
 		})
 	</script>
 	<script>
-		var modal = document.getElementById('modal-wrapper');
+		var modal = document.getElementById('modalwrapper');
 		window.onclick= function (event) {
 			if (event.target == modal){
 				modal.style.display = "none";
