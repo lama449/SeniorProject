@@ -42,7 +42,7 @@
 				submitLogin: function() {
 					axios
 						.post("{{ url_for('login') }}", {
-							email this.email,
+							email: this.email,
 							password: this.password
 						})
 					.then(res => {
