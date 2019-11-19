@@ -23,7 +23,7 @@
 			methods: {
 				getBuildingList: function() {
 					axios
-						.get("{{ url_for('building') }}", {
+						.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}", {
 							params: {
 								q: this.query,
 								zip: this.zip_code
