@@ -8,7 +8,7 @@
 		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
-		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'"">Login</a>
+		<a class="nav--item nav--login" onclick="document.getElementById('modal-wrapper').style.display='block'">Login</a>
 		<div id = "modal-wrapper" class = "modal">
 			<form class="modal-content animate">
 			<div class="imgcontainer" style="background-color: white">
