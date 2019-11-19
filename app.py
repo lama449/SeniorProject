@@ -50,17 +50,21 @@ def logout():
     session['user'] = None
     return redirect(url_for('home'))
 
+@app.route('/reservations', methods=['GET'])
+def reservations():
+    return render_template('Reservations.html')
+
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('Registration.html')
 
+@app.route('/schedule', methods=['GET'])
+def schedule():
+    return render_template('Schedule.html')
+
 @app.route('/calendar', methods=['GET'])
 def calendar():
     return render_template('calendar.html')
-
-@app.route('/buildings', methods=['GET'])
-def buildings():
-    return render_template('Schedule.html')
 
 @app.route('/building_creation', methods=['GET'])
 def building_creation():
