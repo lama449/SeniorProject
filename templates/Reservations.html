@@ -9,40 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
     
-    <script>
-
-	    var vc = new Vue({
-			el: "#app",
-			data: {
-				buildings:[]                
-            },
-            mounted(){
-                axios
-                    .get("/static/buildings.json")
-                    .then(response => { this.data = response.data.buildings;
-                    });
-            },
-			delimiters: ["[[", "]]"],
-			methods: {
-				getBuildingList: function() {
-					axios
-						.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}", {
-							params: {
-								name: this.name,
-								location: this.location
-							}
-						})
-						.then(res => { this.buildings = res.data })
-						.catch(error => console.log(error))
-				},
-				getBuildingURL: function(building_id) {
-					return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
-				}
-			}
-		})
-
-    </script>
-
 </head>
 
 <body>
@@ -68,13 +34,48 @@
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"><a v-bind:href=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                        <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
                     </tr>
                 </table>
             </div>		
 	</div>	
 
     {% include 'footer.html' %}
+
+        <script>
+
+            var vc = new Vue({
+                el: "#app",
+                data: {
+                    buildings:[]                
+                },
+                mounted(){
+                    axios
+                        .get("/static/buildings.json")
+                        .then(response => { this.data = response.data.buildings;
+                        });
+                },
+                delimiters: ["[[", "]]"],
+                methods: {
+                    getBuildingList: function() {
+                        axios
+                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}", {
+                                params: {
+                                    name: this.name,
+                                    location: this.location
+                                }
+                            })
+                            .then(res => { this.buildings = res.data })
+                            .catch(error => console.log(error))
+                    },
+                    getBuildingURL: function(building_id) {
+                        return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+                    }
+                }
+            })
+    
+        </script>
+    
     
 </body>
 </html>
