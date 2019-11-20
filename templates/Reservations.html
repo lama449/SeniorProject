@@ -52,7 +52,7 @@
                 mounted(){
                     axios
                             .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(res => { this.buildings = res.data })
+                            .then(res => { this.buildings = res.data; console.log(res.data); })
                             .catch(error => console.log(error))
                 },
                 delimiters: ["[[", "]]"],
