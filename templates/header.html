@@ -46,11 +46,11 @@
 							password: this.password
 						})
 					.then(res => {
-						if ("msg" in res && res.msg.length){
+						if ("msg" in res.data && res.data.msg.length){
 							window.location.reload(false);
 						}
 						else {
-							this.error = res.err;
+							this.error = res.data.err;
 						}
 					})
 					.catch(error => console.log(error))
