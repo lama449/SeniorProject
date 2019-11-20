@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, session, url_for, render_template
+from flask import Flask, redirect, request, session, url_for, render_template, jsonify
 from flask_restful import *
 from bson.json_util import loads, dumps
 import bcrypt
@@ -26,9 +26,11 @@ def home():
 
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.form
+    data = request.json
     users = db.users
     login_user = users.find_one({'email': data.get('email')})  # find user in db
+    print(data.get('email'))
+    print(login_user)
 
     # response object
     res = {
@@ -42,10 +44,13 @@ def login():
                 '_id': login_user.get('_id')
             }
             res['msg'].append('success')
+            return jsonify(res)
         else:
-            res['err'].append('Invalid username/password combination')
+            res['err'].append('Invalid username/password combination1')
+            return jsonify(res)
     else:
-        res['err'].append('Invalid username/password combination')
+        res['err'].append('Invalid username/password combination2')
+        return jsonify(res)
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -56,9 +61,9 @@ def logout():
 def forgot_password():
     return render_template('Forgot_Password.html')
 
-@app.route('/reservations', methods=['GET'])
+@app.route('/facility', methods=['GET'])
 def reservations():
-    return render_template('Reservations.html')
+    return render_template('Facility.html')
 
 @app.route('/register', methods=['GET'])
 def register():

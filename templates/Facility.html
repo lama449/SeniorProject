@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content" id="app">
+
+		<!-- Center Text -->
+		<div class="primary-content container">
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page</h1>	
+			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h4>
+		</div>    
+
+        <!-- Table -->
+        <div v-if="buildings.length" class="secondary-content container">
+			<table class="table">
+                    <tr>
+                        <th>Building</th>
+                        <th>Location</th>
+                        <th>Maintanence Request</th>
+                    </tr>
+                    <tr v-for="building in buildings">
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                    </tr>
+                </table>
+            </div>		
+	</div>	
+
+    {% include 'footer.html' %}
+
+        <script>
+
+            var vc = new Vue({
+                el: "#app",
+                data: {
+                    buildings:[]                
+                },
+                mounted(){
+                    axios
+                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                            .then(res => { this.buildings = res.data; console.log(res.data); })
+                            .catch(error => console.log(error))
+                },
+                delimiters: ["[[", "]]"],
+                methods: {
+                    getBuildingList: function() {
+                        axios
+                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                            .then(res => { this.buildings = res.data })
+                            .catch(error => console.log(error))
+                    },
+                    getBuildingURL: function(building_id) {
+                        return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+                    }
+                }
+            })
+    
+        </script>
+    
+    
+</body>
+</html>
