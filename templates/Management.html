@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content" id="app">
+
+		<!-- Center Text -->
+		<div class="primary-content container">
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Management Page</h1>	
+			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h4>
+		</div>    
+
+        <!-- Table -->
+        <div v-if="facilities.length" class="secondary-content container">
+			<table class="table">
+                    <tr>
+                        <th>Facility</th>
+                        <th>Location</th>
+                        <th>Description</th> 
+                        <th>Phone Number</th>
+                    </tr>
+                    <tr v-for="facility in facilities">
+                        <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.name ]]</a></td>
+                        <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.address.city ]], [[ facility.address.state ]], [[ facility.address.zip ]] </a></td>
+                        <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.description ]] </a></td>
+                        <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.phone ]]</a></td>
+                    </tr>
+                </table>
+            <button class="submitbtn" onclick=""> Add A New Facility </button>
+            </div>		
+	</div>	
+
+    {% include 'footer.html' %}
+
+    <script>
+
+        var vc = new Vue({
+            el: "#app",
+            data: {
+                facilities:[]                
+            },
+            mounted(){
+                axios
+                        .get("{{ url_for('facilities', g_id='') }}")
+                        .then(res => { this.facilities = res.data; })
+                        .catch(error => console.log(error))
+            },
+            delimiters: ["[[", "]]"],
+            methods: {
+                getFacilitiesList: function() {
+                    axios
+                        .get("{{ url_for('facilities', g_id='') }}")
+                        .then(res => { this.facilities = res.data })
+                        .catch(error => console.log(error))
+                },
+                getFacilityURL: function(facilities_id) {
+                    return "/facilities/" + facilities_id
+                }
+            }
+        })
+    
+    </script>
+    
+    
+</body>
+</html>

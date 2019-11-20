@@ -19,7 +19,7 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page</h1>	
+            <h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page: {{ facility_name }}</h1>	
 			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h4>
 		</div>    
 
@@ -47,12 +47,15 @@
             var vc = new Vue({
                 el: "#app",
                 data: {
+                    facility_name: "",
                     buildings:[]                
                 },
                 mounted(){
-                    axios
-                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(res => { this.buildings = res.data; console.log(res.data); })
+                        axios.all
+                            axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}"), axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
+                            .then(axios.spread((bres, fres) => { 
+                                this.buildings = bres.data; 
+                                this.facility_name = fres.data.name; }))
                             .catch(error => console.log(error))
                 },
                 delimiters: ["[[", "]]"],
@@ -60,7 +63,7 @@
                     getBuildingList: function() {
                         axios
                             .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(res => { this.buildings = res.data })
+                            .then(res => { this.buildings = res.data; })
                             .catch(error => console.log(error))
                     },
                     getBuildingURL: function(building_id) {

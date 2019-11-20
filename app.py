@@ -63,6 +63,10 @@ def forgot_password():
 def reservations():
     return render_template('Facility.html')
 
+@app.route('/management', methods=['GET'])
+def management():
+    return render_template('Management.html')
+
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('Registration.html')
