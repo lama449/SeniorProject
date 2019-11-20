@@ -46,8 +46,8 @@
 							password: this.password
 						})
 					.then(res => {
-						if (res.msg){
-							window.location.reload();
+						if ("msg" in res && res.msg.length){
+							window.location.reload(false);
 						}
 						else {
 							this.error = res.err;
