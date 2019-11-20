@@ -29,8 +29,6 @@ def login():
     data = request.json
     users = db.users
     login_user = users.find_one({'email': data.get('email')})  # find user in db
-    print(data.get('email'))
-    print(login_user)
 
     # response object
     res = {
