@@ -54,7 +54,7 @@
             },
             mounted(){
                 axios
-                        .get("{{ url_for('facilities', g_id='') }}")
+                        .get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
                         .then(res => { this.facilities = res.data; })
                         .catch(error => console.log(error))
             },
@@ -62,7 +62,7 @@
             methods: {
                 getFacilitiesList: function() {
                     axios
-                        .get("{{ url_for('facilities', g_id='') }}")
+                        .get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
                         .then(res => { this.facilities = res.data })
                         .catch(error => console.log(error))
                 },
