@@ -27,9 +27,9 @@
         <div class="secondary-content container">
             <div style="text-align: center">
 
-            <h4>Facility Name: </h4>
-            <h4>Facility Address: </h4>
-            <h4>Facility Phone Number: </h4>
+            <p>Facility Name: </p>
+            <p>Facility Address: </p>
+            <p>Facility Phone Number: </p>
 
             </div>
             <div v-if="buildings.length">
@@ -60,13 +60,13 @@
                 buildings:[]                
             },
             mounted(){
-                const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(bres => { this.building = bres.data})
-                        .catch(error => console.log(error));
-                const requestFacilityName = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(fres => { this.facility_name = fres.data})
-                        .catch(error => console.log(error));                
+                const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}");
+                const requestFacilityName = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
+
                 axios.all([requestBuildingURL, requestFacilityName])
+                    .then(axios.spread((res1, res2) => {
+                        this.building = res1.data;
+                    }))
                     .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
