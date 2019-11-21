@@ -56,15 +56,18 @@
         var vc = new Vue({
             el: "#app",
             data: {
-                facility_name: "",
+                facility_name: "error",
                 buildings:[]                
             },
             mounted(){
-                    axios
-                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(bres => { 
-                            this.buildings = bres.data;  })
-                        .catch(error => console.log(error))
+                const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .then(bres => { this.building = bres.data})
+                        .catch(error => console.log(error));
+                const requestFacilityName = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .then(fres => { this.facility_name = fres.data})
+                        .catch(error => console.log(error));                
+                axios.all([requestBuildingURL, requestFacilityName])
+                    .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
             methods: {
