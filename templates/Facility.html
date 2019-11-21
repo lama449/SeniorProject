@@ -19,13 +19,21 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-            <h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page: {{ facility_name }}</h1>	
+            <h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page: {{facility_name}} </h1>	
 			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h4>
 		</div>    
 
         <!-- Table -->
-        <div v-if="buildings.length" class="secondary-content container">
-			<table class="table">
+        <div class="secondary-content container">
+            <div style="text-align: center">
+
+            <h4>Facility Name: </h4>
+            <h4>Facility Address: </h4>
+            <h4>Facility Phone Number: </h4>
+
+            </div>
+            <div v-if="buildings.length">
+			    <table class="table">
                     <tr>
                         <th>Building</th>
                         <th>Location</th>
@@ -37,42 +45,42 @@
                         <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
                     </tr>
                 </table>
-            </div>		
-	</div>	
+            </div>
+        </div>	
+    </div>
 
     {% include 'footer.html' %}
 
-        <script>
+    <script>
 
-            var vc = new Vue({
-                el: "#app",
-                data: {
-                    facility_name: "",
-                    buildings:[]                
+        var vc = new Vue({
+            el: "#app",
+            data: {
+                facility_name: "",
+                buildings:[]                
+            },
+            mounted(){
+                axios.all
+                    axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .then(axios.spread((bres) => { 
+                            this.buildings = bres.data;  }))
+                        .catch(error => console.log(error))
+            },
+            delimiters: ["[[", "]]"],
+            methods: {
+                getBuildingList: function() {
+                    axios
+                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .then(res => { this.buildings = res.data; })
+                        .catch(error => console.log(error))
                 },
-                mounted(){
-                        axios.all
-                            axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}"), axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(axios.spread((bres, fres) => { 
-                                this.buildings = bres.data; 
-                                this.facility_name = fres.data.name; }))
-                            .catch(error => console.log(error))
-                },
-                delimiters: ["[[", "]]"],
-                methods: {
-                    getBuildingList: function() {
-                        axios
-                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(res => { this.buildings = res.data; })
-                            .catch(error => console.log(error))
-                    },
-                    getBuildingURL: function(building_id) {
-                        return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
-                    }
+                getBuildingURL: function(building_id) {
+                    return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
                 }
-            })
+            }
+        })
     
-        </script>
+    </script>
     
     
 </body>
