@@ -61,7 +61,7 @@
             },
             mounted(){
                     axios
-                        .get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
                         .then(axios.spread((bres) => { 
                             this.buildings = bres.data;  }))
                         .catch(error => console.log(error))
