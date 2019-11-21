@@ -61,25 +61,20 @@
             },
             mounted(){
                 const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}");
-                const requestFacilityName = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
+                const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
 
-                axios.all([requestBuildingURL, requestFacilityName])
-	  	    .then(axios.spread((res1, res2) => {
+                axios.all([requestBuildingURL, requestFacilityURL])
+	  	            .then(axios.spread((res1, res2) => {
                         this.buildings = res1.data;
-			this.facility = res2.data;
+			            this.facility = res2.data;
                     }))
                     .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingList: function() {
-                    axios
-                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(res => { this.buildings = res.data; })
-                        .catch(error => console.log(error))
-                },
-                getBuildingURL: function(building_id) {
-                    return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+                getBuildingURL: function(b_id) {
+                    window.location.href="/api/buildings"
+                    return b_id
                 }
             }
         })
