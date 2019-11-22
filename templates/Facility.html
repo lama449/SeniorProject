@@ -37,12 +37,12 @@
                     <tr>
                         <th>Building</th>
                         <th>Location</th>
-                        <th>Maintanence Request</th>
+                        <th>Phone Number</th>
                     </tr>
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                        <td style="text-align: center"><a v-bind:href="getBuildingURL(building.id)">[[ building.phone ]]</a></td>
                     </tr>
                 </table>
             </div>

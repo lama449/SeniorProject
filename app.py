@@ -79,6 +79,10 @@ def schedule():
 def calendar():
     return render_template('calendar.html')
 
+@app.route('/reservations', methods=['GET'])
+def reservation():
+    return render_template('Reservations.html')
+
 @app.route('/building_creation', methods=['GET'])
 def building_creation():
     return render_template('Building_Creation_Page.html')
