@@ -57,7 +57,7 @@ class Room(Resource):
             'groupID': data.get('groupID'),
             'name': data.get('name'),
             'number': data.get('number'),
-            'reservations': [{}]
+            'reservations': []
             })
             return jsonify(takeID.inserted_id)
         else:

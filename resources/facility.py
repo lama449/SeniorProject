@@ -82,7 +82,7 @@ class Facility(Resource):
         'description': data.get('description'),
         'presets': {},
         'attributes': {},
-        'maintenance': {},
+        'maintenance': [],
         'groups': [{
             '_id': ObjectId(),
             'name': 'admin'
