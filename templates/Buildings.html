@@ -12,7 +12,7 @@
 
 	{% include 'header.html' %}
 
-	<div class="content">
+	<div class="content" id="app">
 
 		<!-- Center Text -->
 		<div class="primary-content container">
@@ -44,17 +44,18 @@
         var vc = new Vue({
             el: "#app",
             data: {
-                b_id: "",
-                facility: [],
-                buildings: []                
+                b_id: '',
+		f_id: '',
+                building: [],
+                rooms: []                
             },
             mounted(){
-                const requestBuildingURL = axios.get("{{ url_for('building', f_id=" + b_id + ") }}");
-                const requestRoomURL = axios.get("{{ url_for('facility', f_id=" + b_id + ") }}");
+                const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6', b_id='5da4d5c73f5e7322944ee54b') }}");
+                const requestRoomURL = axios.get("{{ url_for('room', f_id='5d9a7446bc65c324386edcd6', b_id='5da4d5c73f5e7322944ee54b') }}");
 
                 axios.all([requestBuildingURL, requestRoomURL])
 	  	            .then(axios.spread((res1, res2) => {
-                        this.buildings = res1.data;
+                        this.building = res1.data;
 			            this.rooms= res2.data;
                     }))
                     .catch(error => console.log(error))                        
