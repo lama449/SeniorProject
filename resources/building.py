@@ -97,7 +97,7 @@ class Building(Resource):
                 return 'Invalid building'
         else:
             return 'Invalid facility'
-        pass
+        
 
     def delete(self, f_id, b_id):
         facilities = db.facilities
@@ -111,4 +111,4 @@ class Building(Resource):
                 return 'Invalid building'
         else:
             return 'Invalid facility'
-    pass
+    
