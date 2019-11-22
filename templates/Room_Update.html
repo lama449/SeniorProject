@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+  <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content">
+
+        <!-- Room Creation Form -->
+        <form>
+          <h1> Update Room: </h1>
+
+          <!--Room Information -->
+          <label for="name">Room Name (Optional):</label>
+          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name">[[room.name]]</input>
+
+          <label for="roomNum">Room Number:</label>
+          <input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required>[[room.number]]</input>
+
+          <label for="roomCap">Room Capacity:</label>
+          <input type="number" name="Room Capacity" id ="roomCap" placeholder="Enter Room Capacity" required>[[room.capacity]]</input>
+
+          <p>Click the button to add an option at the end of the list.
+            <br>  Control+click (command on mac) to select multiple features.
+            <br> To remove a feature select it and press "Remove Feature"
+          </p>
+          <select id="mySelect" size="8" multiple>
+            <option v-for="roomAttributes in room.attributes" selected>[[roomAttributes]]</option>
+          </select>
+
+          <input type="text" name="newFeature" id="feature">
+
+          <button type="button" onclick="addFeature()">Add Feature</button>
+          <button type="button" id="deleteButton" onclick="removeFeature()">Remove Feature</button>
+
+          <select id="groupSelect" size="8" multiple>
+            <option v-for="roomGroups in room.groupID" selected>[[roomGroups]]</option>
+          </select>
+
+          <input type="text" name="newFeature" id="group">
+
+          <button type="button" onclick="addGroup()">Add Group</button>
+          <button type="button" id="deleteButton" onclick="removeGroup()">Remove Group</button>
+
+          <p>Description:</p>
+          <textarea rows="4" cols="50" maxlength="288"></textarea>
+
+          <input id="button1" type="submit">
+
+        </form>
+    </div>
+    {% include 'header.html' %}
+
+    <script>
+      function addFeature() {
+        var selectList = document.getElementById("mySelect");
+        var option = document.createElement("option");
+        option.text = document.getElementById('feature').value;
+        selectList.add(option);
+      }
+      function removeFeature() {
+        var selectList = document.getElementById("mySelect");
+        selectList.remove(selectList.selectedIndex);
+      }
+
+      function addGroup() {
+        var selectList = document.getElementById("groupSelect");
+        var option = document.createElement("option");
+        option.text = document.getElementById('group').value;
+        selectList.add(option);
+      }
+
+      function removeGroup() {
+        var selectList = document.getElementById("groupSelect");
+        selectList.remove(selectList.selectedIndex);
+      }
+      var vc = new Vue({
+        el: "#app",
+          data: {
+            f_id: {{ f_id | tojson }},
+            building_id: {{ b_id | tojson}},
+            room_id: {{ r_id | tojson}},
+            room: {},
+          },
+
+          mounted(){
+            axios.get("/api/facility/" + this.f_id + "/building" + this.building_id + "/room" + this.room_id);
+            .then(res => this.room = res.data)
+            .catch(error => console.log(error))
+          }
+          delimiters: ["[[", "]]"],
+        })
+    </script>
+
+</body>
+</html>
