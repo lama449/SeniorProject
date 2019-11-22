@@ -19,13 +19,13 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page</h1>	
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page:</h1>	
 			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a mantenance request please click the icon next to the building of the reservation.</h4>
 		</div>    
 
         <!-- Table -->
         <div v-if="buildings.length" class="secondary-content container">
-			<table class="table">
+		<table class="table">
                     <tr>
                         <th>Date</th>
                         <th>Building</th>
@@ -37,8 +37,8 @@
                         <td></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id"> [[ facility.name ]] </a></td>                        
-                        <td style="text-align: center"><a herf=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id)"> [[ facility.name ]] </a></td>                        
+                        <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
                     </tr>
                 </table>
             </div>		
@@ -51,26 +51,27 @@
             var vc = new Vue({
                 el: "#app",
                 data: {
-                    buildings:[]                
+                    buildings:[],
+		    facility:[]                
                 },
                 mounted(){
                     const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}");
                     const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
 
                     axios.all([requestBuildingURL, requestFacilityURL])
-	  	                .then(axios.spread((res1, res2) => {
-                            this.buildings = res1.data;
-			                this.facility = res2.data;
+  	                .then(axios.spread((res1, res2) => {
+               		        this.buildings = res1.data;
+		                this.facility = res2.data;
                         }))
                         .catch(error => console.log(error))     
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
                     getFacilityURL: function(facility_id) {
-                        return "/facilities/" + facility_id
+                        return "/api/facilities/" + facility_id
                     },
                     getBuildingURL: function(building_id) {
-                        return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+                        return "/api/facilities/5d9a7446bc65c324386edcd6/buildings/" + building_id
                     }
                 }
             })

@@ -60,7 +60,7 @@ def forgot_password():
     return render_template('Forgot_Password.html')
 
 @app.route('/facility', methods=['GET'])
-def reservations():
+def facilities():
     return render_template('Facility.html')
 
 @app.route('/management', methods=['GET'])
@@ -80,7 +80,7 @@ def calendar():
     return render_template('calendar.html')
 
 @app.route('/reservations', methods=['GET'])
-def reservation():
+def reservations():
     return render_template('Reservations.html')
 
 @app.route('/building_creation', methods=['GET'])
