@@ -128,7 +128,7 @@ api.add_resource(Building, '/api/facilities/<f_id>/buildings', '/api/facilities/
 api.add_resource(Room, '/api/facilities/<f_id>/buildings/<b_id>/rooms', '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>', endpoint='room')
 api.add_resource(Reservation, '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>/reservations', '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>/reservations/<reserv_id>', endpoint='reservation')
 api.add_resource(User, '/api/users', '/api/users/<u_id>', endpoint='user')
-api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<r_id>', endpoint='maintenance')
+api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<r_id>', '/api/facilities/<f_id>/maintenance/<r_id>/<m_id>', endpoint='maintenance')
 
 if __name__ == '__main__':
     app.run()
