@@ -38,8 +38,44 @@ class Maintenance(Resource):
             return 'Invalid facility'
         pass
 
-    def post(self):
-        pass
+    def post(self, f_id, r_id):
+        data = request.form
+        user = session.get('user')
+        facilities = db.facilities
+        rooms = db.rooms
+        buildings = db.buildings
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:  # if facility exists
+            if r_id:
+                current_room = rooms.find_one({'_id': ObjectId(r_id)}, {'number': 1, 'buildingID': 1, '_id': 1})
+                if current_room:
+                    if not data.get('description'):
+                        return 'Missing maintenance request description'
+                    if not data.get('date'):
+                        return 'Missing date submitted'
+                    if not data.get('status'):
+                        return 'Missing maintenance request status'
+                    current_building = buildings.find_one({'_id': current_room.get('buildingID')})
+                    if not current_building: 
+                        return 'No building'
+                    newReq = facilities.update({'_id': ObjectId(f_id)},
+                                               {'$push': {'maintenance':
+                                                              {'_id': ObjectId(),
+                                                               'buildingName': current_building.get('name'),
+                                                               'roomID': current_room.get('_id'),
+                                                               'roomNum': current_room.get('number'),
+                                                               'description': data.get('description'),
+                                                               'userID': user.get('_id'),
+                                                               'date': data.get('date')}}})
+                    currentReq = [req for req in newReq]
+                    if currentReq:
+                        return jsonify(currentReq)
+                else:
+                    return 'Invalid room'
+            else:
+                return 'Missing room'
+        else:
+            return 'Invalid facility'
 
     def put(self):
         pass
