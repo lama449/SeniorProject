@@ -91,7 +91,25 @@ class Facility(Resource):
         return jsonify({'_id': takeID.inserted_id})
 
     def put(self):
-        pass
+        data = request.form
+        facilities = db.facilities
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            updated_facility = facilities.update_one({'_id': ObjectId(b_id)},
+                {'$set':
+                    {'name': data.get('name'),
+                     'address': {
+                          'address_L1': data.get('address_L1'),
+                          'address_L2': data.get('address_L2'),
+                          'city': data.get('city'),
+                          'state': data.get('state'),
+                          'zip': data.get('zip'),
+                          'country': data.get('country')},
+                      'phone': data.get('phone'),
+                      'description': data.get('description')}
+                })
+        else:
+            return 'Invalid facility'
 
     def delete(self):
         pass
