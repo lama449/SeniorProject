@@ -20,7 +20,7 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page:</h1>	
-			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a mantenance request please click the icon next to the building of the reservation.</h4>
+			<h6 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a maintenance request please click the icon next to the building of the reservation.</h6>
 		</div>    
 
         <!-- Table -->
@@ -31,7 +31,7 @@
                         <th>Building</th>
                         <th>Location</th>
                         <th>Facility</th> 
-                        <th>Maintanence Request</th>
+                        <th>Maintenance Request</th>
                     </tr>
                     <tr v-for="building in buildings">
                         <td></td>
@@ -43,7 +43,7 @@
                                 <form class="modal-content animate">
                                     <div class="imgcontainer" style="background-color: white">
                                         <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
-                                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Login</h1>
+                                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Maintenance </h1>
                                     </div>
                                     <div class="container" style="background-color: white">
                                         <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "text">
