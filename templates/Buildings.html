@@ -6,96 +6,6 @@
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
 
-	<style>
-		
-        th, td, p, input {
-            font: 16px Verdana;
-        }
-		table{
-			width: 100%;
-		}
-        table, th, td 
-        {
-            border: solid 1px #DDD;
-            border-collapse: collapse;
-            padding: 2px 3px;
-			margin: auto;
-            text-align: center;
-        }
-        th {
-            font-weight:bold;
-        }
-		tr :hover {
-			cursor:pointer;
-		}
-	</style>
-	
-	<script type="text/javascript">
-	
-	document.addEventListener("DOMContentLoaded", function CreateTableFromJSON() {
-        var buildings = [
-            {
-                "Building Name": "Robinson Hall",
-                "Location": "Glassboro NJ",
-                "Facility": "Rowan University"
-            },
-            {
-				"Building Name": "James Hall",
-                "Location": "Glassboro NJ",
-                "Facility": "Rowan University"
-            },
-            {
-				"Building Name": "Business Hall",
-                "Location": "Glassboro NJ",
-                "Facility": "Rowan University"
-            }
-        ]
-
-        // Get Value for HTML Table Header 
-        // ('Building Name', 'Location', 'Facility')
-        var col = [];
-        for (var i = 0; i < buildings.length; i++) {
-            for (var key in buildings[i]) {
-                if (col.indexOf(key) === -1) {
-                    col.push(key);
-                }
-            }
-        }
-
-        // Build Dynamic Table
-        var table = document.createElement("table");
-
-        // Build Table Header Row and Add Table Headers
-
-        var tr = table.insertRow(-1);                   // Table Row
-
-        for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th");      // Table Header
-            th.innerHTML = col[i];
-            tr.appendChild(th);
-        }
-
-        // Add JSON Values to Table
-        for (var i = 0; i < buildings.length; i++) {
-
-            tr = table.insertRow(-1);
-
-            for (var j = 0; j < col.length; j++) {
-                var tabCell = tr.insertCell(-1);
-                tabCell.innerHTML =buildings[i][col[j]];
-				tabCell.addEventListener("click", (function(){
-					window.location = "{{ url_for('calendar') }}"
-				}));
-            }
-        }
-
-        // Add New Created Table from JSON Data to Table
-        var divContainer = document.getElementById("buildings");
-        divContainer.innerHTML = "";
-        divContainer.appendChild(table);
-    });
-</script>
-
 </head>
 
 <body>
@@ -105,20 +15,58 @@
 	<div class="content">
 
 		<!-- Center Text -->
-		<div>
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page</h1>	
-			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the building from the table to be redirected to the scheduling page for that building.</h4>
+		<div class="primary-content container">
+
+			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>	
+            <h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h4>
+
 		</div>    
 
-		<!-- Confirmation Text -->
-		<div style="overflow-y: auto; background:white; text-align: justify; width:90%; height:50%; margin: 50px auto 10px auto; padding: 10px;  border: 1px solid transparent; border-radius: 5px;">
-			
-			<div style="padding: 20px;" id="buildings"></div>
-			
+		<!-- Calendar & Information -->
+		<div class="secondary-content container">
+
+            <div style="text-align: center">
+
+                <p> Building Name:[[ building.name ]] </p>
+                <p> Building Address: [[ building.address.address_L1]] [[building.address.address_L2 ]], [[ building.address.city ]], [[ building.address.state ]] </p>
+                <p> Building Phone Number: [[ building.phone ]]</p>
+            
+            </div>				
 		</div>
 		
 	</div>	
 
-	{% include 'footer.html' %}
+    {% include 'footer.html' %}
+    
+    
+    <script>
+
+        var vc = new Vue({
+            el: "#app",
+            data: {
+                b_id: "",
+                facility: [],
+                buildings: []                
+            },
+            mounted(){
+                const requestBuildingURL = axios.get("{{ url_for('building', f_id=" + b_id + ") }}");
+                const requestRoomURL = axios.get("{{ url_for('facility', f_id=" + b_id + ") }}");
+
+                axios.all([requestBuildingURL, requestRoomURL])
+	  	            .then(axios.spread((res1, res2) => {
+                        this.buildings = res1.data;
+			            this.rooms= res2.data;
+                    }))
+                    .catch(error => console.log(error))                        
+            },
+            delimiters: ["[[", "]]"],
+            methods: {
+                getBuildingURL: function(building_id) {
+                    return "/facilities/5d9a7446bc65c324386edcd6/buildings/" + building_id 
+                }
+            }
+        })
+        
+    </script>
 </body>
 </html>

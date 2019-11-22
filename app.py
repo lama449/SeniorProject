@@ -71,8 +71,8 @@ def management():
 def register():
     return render_template('Registration.html')
 
-@app.route('/building', methods=['GET'])
-def building(b_id):
+@app.route('/schedule', methods=['GET'])
+def schedule(b_id):
     return render_template('Buildings.html', b_id=b_id)
 
 @app.route('/calendar', methods=['GET'])
