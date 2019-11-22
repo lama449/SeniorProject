@@ -20,14 +20,14 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
             <h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page: </h1>
-			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h4>
+			<h6 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h6>
 		</div>    
 
         <!-- Table -->
         <div class="secondary-content container">
             <div style="text-align: center">
 
-            <p>Facility Name:[[ facility.name ]] </p>
+            <p>Facility Name: [[ facility.name ]] </p>
             <p>Facility Address: [[ facility.address.address_L1]] [[facility.address.address_L2 ]], [[ facility.address.city ]], [[ facility.address.state ]] </p>
             <p>Facility Phone Number: [[ facility.phone ]]</p>
 
@@ -42,7 +42,7 @@
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]] [[ building.address.address_L2]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"><a v-bind:href="getBuildingURL(building.id)">[[ building.phone ]]</a></td>
+                        <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
                     </tr>
                 </table>
             </div>
@@ -56,26 +56,29 @@
         var vc = new Vue({
             el: "#app",
             data: {
-                f_id: {{ f_id | toJSON }},
+                f_id: {{ f_id | tojson }},
                 facility: [],
                 buildings:[]                
             },
             mounted(){
-                const requestBuildingURL = axios.get("/api/facility/" + this.f_id + "/buildings");
-                const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
+                const requestBuildingURL = axios.get("/api/facilities/" + this.f_id + "/buildings");
+                const requestFacilityURL = axios.get("/api/facilities/" + this.f_id);
 
                 axios.all([requestBuildingURL, requestFacilityURL])
 	  	            .then(axios.spread((res1, res2) => {
-                        this.buildings = res1.data;
-			            this.facility = res2.data;
+                       	    this.buildings = res1.data;
+		            this.facility = res2.data;
                     }))
                     .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingURL: function() {                    
-                    return "/schedule"
-                }
+                getBuildingURL: function(b_id) {                    
+                    return "/facility/" + this.f_id + "/building/" + b_id
+                },
+		getTelephone: function(phone) {
+		    return "/facility/" + this.f_id + "/building/" + "tel:" + phone
+		}
             }
         })
     
