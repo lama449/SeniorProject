@@ -79,7 +79,27 @@ class Maintenance(Resource):
             return 'Invalid facility'
 
     def put(self, f_id, r_id, m_id):
-        pass 
+        data = request.form
+        facilities = db.facilities
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:  # if facility exists
+            if m_id:
+                if data.get('status'):
+                    updated_request = facilities.update_one({'_id': ObjectId(f_id), 'maintenance._id': ObjectId(m_id)},
+                                                            {'$set':
+                                                                {
+                                                                    'maintenance.$.status': data.get('status')
+                                                                }
+                                                            })
+                    #updatedRequest = [req for req in updated_request]
+                    #return jsonify(updated_request)
+                    return 'Update successful!' #will fix return later 
+                else:
+                    return 'Missing status update'
+            else:
+                return 'Invalid maintenance request ID'
+        else:
+            return 'Invalid facility ID'
 
     def delete(self):
         pass
