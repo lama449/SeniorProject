@@ -37,8 +37,8 @@
                         <td></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id"> [[ facility.name ]] </a></td>                        
                         <td style="text-align: center"><a herf=""><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
-                        <td style="text-align: center"><a>[[ facility.name ]] </a></td>
                     </tr>
                 </table>
             </div>		
@@ -66,11 +66,8 @@
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
-                    getBuildingList: function() {
-                        axios
-                            .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                            .then(res => { this.buildings = res.data })
-                            .catch(error => console.log(error))
+                    getFacilityURL: function(facility_id) {
+                        return "/facilities/" + facility_id
                     },
                     getBuildingURL: function(building_id) {
                         return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
