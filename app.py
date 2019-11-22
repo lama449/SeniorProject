@@ -95,7 +95,7 @@ def reservations():
     return render_template('Reservations.html')
 
 @app.route('/reservations/<res_id>', methods=['GET'])
-def reservtions_info():
+def reservtions_info(res_id):
     return render_template('Reservations_Info.html', res_id=res_id)
 
 @app.route('/profile', methods=['GET'])
