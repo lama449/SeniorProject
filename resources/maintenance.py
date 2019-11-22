@@ -66,7 +66,8 @@ class Maintenance(Resource):
                                                                'roomNum': current_room.get('number'),
                                                                'description': data.get('description'),
                                                                'userID': user.get('_id'),
-                                                               'date': data.get('date')}}})
+                                                               'date': data.get('date'), 
+                                                               'status': data.get('status')}}})
                     currentReq = [req for req in newReq]
                     if currentReq:
                         return jsonify(currentReq)
@@ -77,8 +78,8 @@ class Maintenance(Resource):
         else:
             return 'Invalid facility'
 
-    def put(self):
-        pass
+    def put(self, f_id, r_id, m_id):
+        pass 
 
     def delete(self):
         pass
