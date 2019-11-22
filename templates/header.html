@@ -4,7 +4,7 @@
 		<a class="nav--item" href="{{ url_for('calendar') }}">Calendar</a>
 		<a class="nav--item" href="#">Profile</a>
 		<a class="nav--item" href="{{ url_for('reservations') }}">Reservations</a>
-		<a class="nav--item" href="{{ url_for('management') }}">Management</a>
+		<a class="nav--item" href="{{ url_for('management_page') }}">Management</a>
 		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
