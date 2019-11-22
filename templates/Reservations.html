@@ -37,8 +37,21 @@
                         <td></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id)"> [[ facility.name ]] </a></td>                        
-                        <td style="text-align: center"><a><img src="{{url_for('static', filename='requesticon.png')}}"></a></td>
+                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id)"> [[ facility.name ]] </a></td>
+                        <td style="text-align: center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img src="{{url_for('static', filename='requesticon.png')}}"></a>
+                            <div id = "modalwrapper" class = "modal">
+                                <form class="modal-content animate">
+                                    <div class="imgcontainer" style="background-color: white">
+                                        <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Login</h1>
+                                    </div>
+                                    <div class="container" style="background-color: white">
+                                        <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "text">
+                                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="submitRequest()">Submit Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>		
@@ -77,7 +90,15 @@
             })
     
         </script>
-    
+
+        <script>
+            var modal = document.getElementById('modalwrapper');
+            window.onclick= function (event) {
+                if (event.target == modal){
+                    modal.style.display = "none";
+                }
+            }
+        </script>
     
 </body>
 </html>
