@@ -39,7 +39,11 @@ def login():
     if login_user:  # if login user exists check hashed pass
         if bcrypt.hashpw(data.get('password').encode('utf-8'), login_user['password']) == login_user['password']:
             session['user'] = {
-                '_id': login_user.get('_id')
+                '_id': login_user.get('_id'),
+                'email': login_user.get('email'),
+                'first_name': login_user.get('first_name'),
+                'last_name': login_user.get('last_name'),
+                'groupID': login_user.get('groupID')
             }
             res['msg'].append('success')
             return jsonify(res)
