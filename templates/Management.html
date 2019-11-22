@@ -50,24 +50,29 @@
         var vc = new Vue({
             el: "#app",
             data: {
-                facilities:[]                
+                facility: [],
+                buildings:[]                
             },
             mounted(){
-                axios
-                        .get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(res => { this.facilities = res.data; })
-                        .catch(error => console.log(error))
+                const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
+
+                axios.all([requestFacilityURL])
+	  	            .then(axios.spread((res1) => {
+                        this.buildings = res1.data;
+			            this.facility = res2.data;
+                    }))
+                    .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getFacilitiesList: function() {
+                getBuildingList: function() {
                     axios
-                        .get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(res => { this.facilities = res.data })
+                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
+                        .then(res => { this.buildings = res.data; })
                         .catch(error => console.log(error))
                 },
-                getFacilityURL: function(facilities_id) {
-                    return "/facilities/" + facilities_id
+                getBuildingURL: function(building_id) {
+                    return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
                 }
             }
         })
