@@ -95,7 +95,7 @@ def reservations():
     return render_template('Reservations.html')
 
 @app.route('/reservations/<res_id>', methods=['GET'])
-def reservtions_info():
+def reservtions_info(res_id):
     return render_template('Reservations_Info.html', res_id=res_id)
 
 @app.route('/profile', methods=['GET'])
@@ -107,14 +107,14 @@ def facility_creation():
     return render_template('Facility_Creation_Page.html')
 
 @app.route('/facility/<f_id>/building_creation', methods=['GET'])
-def building_creation():
+def building_creation(f_id):
     # TODO: check if user is an admin first. if not, send back to management page?
-    return render_template('Building_Creation_Page.html')
+    return render_template('Building_Creation_Page.html', f_id=f_id)
 
 @app.route('/facility/<f_id>/building/<b_id>/room_creation', methods=['GET'])
-def room_creation():
+def room_creation(f_id, b_id):
     # TODO: check if user is an admin first. if not, send back to management page?
-    return render_template('Building_Creation_Page.html')
+    return render_template('Room_Creation_Page.html', f_id=f_id, b_id=b_id)
 
 
 
