@@ -59,9 +59,13 @@ def logout():
 def forgot_password():
     return render_template('Forgot_Password.html')
 
-@app.route('/facility', methods=['GET'])
+@app.route("/facility", methods=['GET'])
 def facilities():
     return render_template('Facility.html')
+
+@app.route("/facility/<f_id>")
+def facility_page(f_id):
+    return render_template("Facility.html", f_id=f_id) #allows us to use f_id in the html template
 
 @app.route('/management', methods=['GET'])
 def management():

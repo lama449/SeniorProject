@@ -41,7 +41,7 @@
                     </tr>
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
-                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]] [[ building.address.address_L2]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
                         <td style="text-align: center"><a v-bind:href="getBuildingURL(building.id)">[[ building.phone ]]</a></td>
                     </tr>
                 </table>
@@ -56,11 +56,12 @@
         var vc = new Vue({
             el: "#app",
             data: {
+                f_id: {{ f_id | toJSON }},
                 facility: [],
                 buildings:[]                
             },
             mounted(){
-                const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}");
+                const requestBuildingURL = axios.get("/api/facility/" + this.f_id + "/buildings");
                 const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
 
                 axios.all([requestBuildingURL, requestFacilityURL])
@@ -72,7 +73,7 @@
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingURL: function(b_id) {                    
+                getBuildingURL: function() {                    
                     return "/schedule"
                 }
             }
