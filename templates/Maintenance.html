@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content" id="app">
+        <form>
+          <h1> Maintenance Request Overview </h1>
+
+        <table id="infoTable" v-if="maintenanceRequest.length">
+          <thead>
+            <tr>
+              <th>Date Submitted</th>
+              <th>Submitted By</th>
+              <th>Building Name</th>
+              <th>Room Number</th>
+              <th>Description</th>
+              <th>Status<th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="maintenanceInfo in maintenanceRequest">
+              <td>[[maintenanceRequest.date]]</td>
+              <td>[[maintenanceRequest.userID]]</td>
+              <td>[[maintenanceRequest.buildingName]]</td>
+              <td>[[maintenanceRequest.roomNum]]</td>
+              <td>[[maintenanceRequest.description]]</td>
+              <td style="text-align: center"><a v-bind:href=""><select><option> Recieved </option> <option>In Progress</option><option>Complete</option></select></a></td>
+            </tr>
+          </tbody>
+      </table>
+      <button type="submit">Submit</button>
+        </form>
+        {% include 'footer.html' %}
+    </div>
+  <script>
+
+  var vc = new Vue({
+          el: "#app",
+          data: {
+              f_id: {{ f_id | tojson }},
+              maintenanceRequest: [],
+          },
+          mounted(){
+              const requestBuildingURL = axios.get("/api/facility/" + this.f_id + "/maintenance");
+              axios.all([requestBuildingURL])
+                .then((res1) => {
+                      this.maintenanceRequest = res1.data;
+                  }))
+                  .catch(error => console.log(error))
+          },
+          delimiters: ["[[", "]]"],
+          methods: {
+
+              }
+          }
+      })
+  </script>
+</body>
+</html>
