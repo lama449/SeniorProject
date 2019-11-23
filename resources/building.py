@@ -37,7 +37,7 @@ class Building(Resource):
         buildings = db.buildings
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
-            data = request.form
+            data = request.json
             if not data.get('name'):
                 return 'Missing Building Name'
             if not data.get('address_L1'):
@@ -72,7 +72,7 @@ class Building(Resource):
             return 'Invalid facility'
 
     def put(self, f_id, b_id):
-        data = request.form
+        data = request.json
         facilities = db.facilities
         buildings = db.buildings
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})

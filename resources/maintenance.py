@@ -39,7 +39,7 @@ class Maintenance(Resource):
         pass
 
     def post(self, f_id, r_id):
-        data = request.form
+        data = request.json
         user = session.get('user')
         facilities = db.facilities
         rooms = db.rooms
@@ -79,7 +79,7 @@ class Maintenance(Resource):
             return 'Invalid facility'
 
     def put(self, f_id, m_id, r_id):
-        data = request.form
+        data = request.json
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
