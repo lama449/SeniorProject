@@ -77,8 +77,9 @@
         var selectList = document.getElementById("groupSelect");
         selectList.remove(selectList.selectedIndex);
       }
-    </script>
-    <script>
+      
+      </script>
+      <script>
       var vc = new Vue({
         el: "#app",
           data: {
@@ -89,12 +90,12 @@
           },
 
           mounted(){
-            axios.get("/api/facility/" + this.f_id + "/building" + this.building_id + "/room" + this.room_id);
+            axios.get("/api/facilities/" + this.f_id + "/buildings" + this.building_id + "/rooms" + this.room_id);
             .then(res => this.room = res.data)
             .catch(error => console.log(error))
           }
           delimiters: ["[[", "]]"],
-      })
+        })
     </script>
 
 </body>
