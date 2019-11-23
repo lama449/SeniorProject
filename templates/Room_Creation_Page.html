@@ -101,6 +101,7 @@
       data: {
         f_id: {{ f_id | tojson }},
         b_id: {{ b_id | tojson}},
+        room_id: {{ r_id | tojson}},
         RoomName: "",
         roomNum: "",
         roomCap: "",
@@ -112,7 +113,7 @@
       delimiters: ["[[", "]]"],
       methods: {
         submitInfo: function() {
-          axios.post("/api/facilities/" + this.f_id + "/buildings" + this.building_id + "/rooms" + this.room_id, {
+          axios.post("/api/facilities/" + this.f_id + "/buildings" + this.b_id + "/rooms" + this.room_id, {
             name: this.RoomName,
             number: this.roomNum
             capacity: this.roomCap
