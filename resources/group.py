@@ -35,7 +35,7 @@ class Group(Resource):
 
 
     def post(self, f_id):
-        data = request.form
+        data = request.json
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
