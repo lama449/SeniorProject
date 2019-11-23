@@ -120,32 +120,4 @@
     })
 
 </script>
-
-<script>
-
-    // Function to check Whether both passwords
-    // is same or not.
-    function checkEntries(form) {
-        password1 = form.password1.value;
-        password2 = form.password2.value;
-        answer = form.answer.value;
-
-        if ((password1 != password2) & (answer.trim() == "")){
-            alert("Passwords did not match, and invalid security answer");
-            return false;
-        }
-
-        else if (password1 != password2) {
-            alert ("Password did not match: Please try again.");
-            return false;
-        }
-
-        else if (answer.trim() == "") {
-            alert("Please answer security question");
-            return false;
-        }
-
-        return true;
-    }
-</script>
 </html>
