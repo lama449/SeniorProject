@@ -5,6 +5,8 @@
     <title>Profile Page</title>
     <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
     <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
 </head>
 <body>
     {% include 'header.html' %}
@@ -28,10 +30,10 @@
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
                     </div>
                     <div class="container" style="background-color: white">
-                        <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "text">
-                        <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "text">
-                        <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "text">
-                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="checkPassword()">Change Password</button>
+                        <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "opsw">
+                        <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "npsw">
+                        <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "cpsw">
+                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="confirmPassword()">Change Password</button>
                     </div>
                 </form>
             </div>
@@ -45,13 +47,20 @@
     var vc = new Vue({
         el: "#app",
         data: {
-            user: {}
+            first_name: "",
+            last_name: "",
+            email: "",
+            opsw: "",
+            npsw: "",
+            cpsw: ""
         },
         mounted(){
             axios
                 .get("/api/users")
                 .then(res => {
-                    this.user = res.data
+                    this.first_name = res.data.first_name
+                    this.last_name = res.data.last_name
+                    this.email = res.data.email
                 })
                 .catch(error => console.log(error))
         },
@@ -62,8 +71,23 @@
                     .put("{{ url_for('user') }}", {
                         first_name: this.first_name,
                         last_name: this.last_name,
-                        email: this.email,
-                        password: this.password
+                        email: this.email
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            checkPassword: function () {
+                axios
+                    .put("{{ url_for('user') }}", {
+                        opsw: this.opsw,
+                        npsw: this.npsw,
+                        cpsw: this.cpsw
                     })
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
@@ -83,7 +107,7 @@
 
     // Function to check Whether both passwords
     // is same or not.
-    function checkPassword(form) {
+    function confirmPassword(form) {
         opsw = form.opsw.value;
         npsw = form.npsw.value;
         cpsw = form.cpsw.value;
