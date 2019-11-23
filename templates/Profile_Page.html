@@ -82,7 +82,6 @@
     var vc = new Vue({
         el: "#app",
         data: {
-            u_id: {{ u_id | tojson }},
             first_name: "",
             last_name: "",
             email: "",
@@ -158,9 +157,7 @@
             },
             deleteAccount: function () {
                 axios
-                    .delete("", {
-                        u_id: this.u_id
-                    })
+                    .delete("/api/users")
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
                             window.location.reload(false);
