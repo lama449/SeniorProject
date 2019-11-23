@@ -85,6 +85,7 @@ class User(Resource):
     def put(self):
         data = request.json
         users = db.users
+        facilities = db.facilities
         #response object
         res = {
             'msg': [],
@@ -96,8 +97,6 @@ class User(Resource):
             email = data.get('email')
             f_name = data.get('first_name')
             l_name = data.get('last_name')
-            question = data.get('question')
-            answer = data.get('answer')
 
             if '@' not in email:
                 res['err'].append('Invalid email.')
@@ -105,10 +104,6 @@ class User(Resource):
                 res['err'].append('No First Name')
             if not l_name:
                 res['err'].append('No Last Name')
-            if not question:
-                res['err'].append('No security question')
-            if not answer:
-                res['err'].append('No security question answer')
 
             if res['err']:
                 return jsonify(res)
@@ -132,7 +127,7 @@ class User(Resource):
             })
             res['msg'].append('success')
             return jsonify(res)
-        elif data.get('password'):
+        elif data.get('opsw'):
             # check if all the fields are filled out
             old_password = data.get('opsw')
             new_password = data.get('npsw')
@@ -165,6 +160,33 @@ class User(Resource):
             })
             res['msg'].append('success')
             return jsonify(res)
+        elif data.get('question'):
+            # check if all the fields are filled out
+            question = data.get('question')
+            answer = data.get('answer')
+
+            if not question:
+                res['err'].append('No security question')
+            if not answer:
+                res['err'].append('No security question answer')
+
+            if res['err']:
+                return jsonify(res)
+
+            hashed_answer = bcrypt.hashpw(answer.encode('utf-8'), bcrypt.gensalt())
+
+            users.update_one({'_id': session.get('user').get('_id')}, {
+                '$set': {
+                    'question': question,
+                    'answer': hashed_answer,
+                }
+            })
+        elif data.get('groupID'): 
+            users.update_one({'_id': session.get('user').get('_id')}, {
+                '$push': {
+                    'groupID': ObjectId(data.get('groupID'))
+                }
+            })
         else:
             res['err'].append('Invalid arguments')
             return jsonify(res)
