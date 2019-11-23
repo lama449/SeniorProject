@@ -47,8 +47,7 @@
         data: {
             user: {}
         },
-        delimiters: ["[[", "]]"],
-        mounted: function () {
+        mounted(){
             axios
                 .get("/api/users")
                 .then(res => {
@@ -56,6 +55,7 @@
                 })
                 .catch(error => console.log(error))
         },
+        delimiters: ["[[", "]]"],
         methods: {
             getDetails: function () {
                 axios
