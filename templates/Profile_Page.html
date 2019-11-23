@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="content" id="app">
+
+        <h4>[Code to get first name]'s Profile</h4>
+        <div>
+            <h6><b><label for="fname">First Name: </label></b></h6>
+            <h6 style="margin-left: 5em"> <input type="text" name="first_name" id="fname" v-bind:placeholder="user.first_name"></h6>
+            <h6><b><label for="lname">Last Name: </label></b></h6>
+            <h6 style="margin-left: 5em"> <input type="text" name="last_name" id="lname" v-bind:placeholder="user.last_name"></h6>
+            <h6><b><label for="email">Email: </label></b></h6>
+            <h6 style="margin-left: 5em"> <input type="email" name="email" id="email" v-bind:placeholder="user.email"></h6>
+            <h6><b><label for="password">Password: </label></b></h6>
+            <h6 style="margin-left: 5em"><a onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</h6>
+            <div id = "modalwrapper" class = "modal">
+                <form class="modal-content animate" onclick="return checkPassword(this)">
+                    <div class="imgcontainer" style="background-color: white">
+                        <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
+                    </div>
+                    <div class="container" style="background-color: white">
+                        <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "text">
+                        <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "text">
+                        <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "text">
+                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="submitRequest()">Change Password</button>
+                    </div>
+                </form>
+            </div>
+            <h6><b><label for="facilites">Facilities: </label></b></h6>
+        </div>
+
+    {% include 'footer.html' %}
+
+</body>
+
+<script>
+    var vc = new Vue({
+        el: "#app",
+        data: {
+            user: {},
+        },
+        delimiters: ["[[", "]]"],
+        mounted: function() {
+            axios
+                .get("/api/users")
+                .then(res => {
+                    this.user = res.data
+                })
+                .catch(error => console.log(error))
+        },
+        methods: {
+            getDetails: function() {
+                axios
+                    .put("{{ url_for('user') }}", {
+                        first_name: this.first_name,
+                        last_name: this.last_name,
+                        email: this.email,
+                        password: this.password
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length){
+                            window.location.reload(false);
+                        }
+                        else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+    })
+
+</script>
+
+<script>
+
+    // Function to check Whether both passwords
+    // is same or not.
+    function checkPassword(form) {
+        opsw = form.opsw.value;
+        npsw = form.npsw.value;
+        cpsw = form.cpsw.value;
+
+        // If old password not entered
+        if (opsw == '')
+            alert ("Please enter password");
+
+        // If new password not entered
+        else if (npsw == '')
+            alert ("Please enter new password");
+
+        // If confirm password not entered
+        else if (cpsw == '')
+            alert ("Please enter confirm password");
+
+        // If Not same return False.
+        else if (npsw != cpsw) {
+            alert ("\nNew password did not match: Please try again.")
+            return false;
+        }
+
+        // If same return True.
+        else{
+            return true;
+        }
+    }
+</script>
+
+</html>
