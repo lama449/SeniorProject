@@ -38,20 +38,32 @@
                 </form>
             </div>
             <h6><b><label for="question">Security Question: </label></b></h6>
-            <select v-model="question">
-                <option value="What is your favorite book?">What is your favorite book?</option>
-                <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
-                <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
-                <option value="What was the name of your first/current/favorite pet?">What was the name of your first/current/favorite pet?</option>
-                <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
-                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
-                <option value="Where did you go to high school/college?">Where did you go to high school/college?</option>
-                <option value="What is your favorite food?">What is your favorite food?</option>
-                <option value="What city were you born in?">What city were you born in?</option>
-                <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
-            </select>
-            <h6><b><label for="answer">Answer: </label></b></h6>
-            <h6 style="margin-left: 10em"> <input type="password" name="answer" id="answer" v-model:placeholder="answer"></h6>
+            <button style="margin-left: 10em" type="submit" class="button"><a onclick="document.getElementById('modalwrapper2').style.display='block'" id="question">Click here to change security question/answer</a></button></h6>
+            <div id = "modalwrapper2" class = "modal">
+                <form class="modal-content animate">
+                    <div class="container" style="background-color: white">
+                        <span onclick="document.getElementById('modalwrapper2').style.display='none'" class="close" title="Close Popup">&times;</span>
+                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Security Details</h1>
+                    </div>
+                    <div class="container" style="background-color: white">
+                        <select v-model="question">
+                            <option value="What is your favorite book?">What is your favorite book?</option>
+                            <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
+                            <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                            <option value="What was the name of your first/current/favorite pet?">What was the name of your first/current/favorite pet?</option>
+                            <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
+                            <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                            <option value="Where did you go to high school/college?">Where did you go to high school/college?</option>
+                            <option value="What is your favorite food?">What is your favorite food?</option>
+                            <option value="What city were you born in?">What city were you born in?</option>
+                            <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
+                        </select>
+                        <h6><b><label for="answer">Answer: </label></b></h6>
+                        <h6 style="margin-left: 10em"> <input type="password" name="answer" id="answer" v-model:placeholder="answer"></h6>
+                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="checkAnswer()">Confirm Changes</button>
+                    </div>
+                </form>
+            </div>
             <button type="submit" class="button">Save changes</button>
         </div>
     </div>
@@ -104,7 +116,8 @@
                     })
                     .catch(error => console.log(error))
             },
-            checkPassword: function (form) {
+            checkPassword: function () {
+                this.confirmPassword();
                 axios
                     .put("{{ url_for('user') }}", {
                         opsw: this.opsw,
@@ -119,44 +132,67 @@
                         }
                     })
                     .catch(error => console.log(error))
+            },
+            checkAnswer: function () {
+                this.confirmAnswer();
+                axios
+                    .put("{{ url_for('user') }}", {
+                        question: this.question,
+                        answer: this.answer
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            confirmPassword: function() {
+                opsw = this.opsw;
+                npsw = this.npsw;
+                cpsw = this.cpsw;
+                // If old password not entered
+                if (opsw == '') {
+                    alert("Please enter password");
+                    return false
+                }
+                // If new password not entered
+                else if (npsw == '') {
+                    alert("Please enter new password");
+                    return false;
+                }
+                 // If confirm password not entered
+                else if (cpsw == '') {
+                    alert("Please enter confirm password");
+                    return false;
+                }
+                // If Not same return False.
+                else if (npsw != cpsw) {
+                    alert("New password did not match: Please try again.");
+                    return false;
+                }
+                return true;
+            },
+            confirmAnswer: function() {
+                question = this.question;
+                answer = this.answer;
+
+                // If old password not entered
+                if (question.trim() == "") {
+                    alert("Please select a security question.");
+                    return false
+                }
+                // If new password not entered
+                else if (answer.trim() == "") {
+                    alert("Please input an answer for the security question.");
+                    return false;
+                }
+                return true;
             }
         }
     })
 
 </script>
-
-<script>
-
-    // Function to check Whether both passwords
-    // is same or not.
-    function confirmPassword(form) {
-        opsw = form.opsw.value;
-        npsw = form.npsw.value;
-        cpsw = form.cpsw.value;
-
-        // If old password not entered
-        if (opsw == '')
-            alert ("Please enter password");
-
-        // If new password not entered
-        else if (npsw == '')
-            alert ("Please enter new password");
-
-        // If confirm password not entered
-        else if (cpsw == '')
-            alert ("Please enter confirm password");
-
-        // If Not same return False.
-        else if (npsw != cpsw) {
-            alert ("\nNew password did not match: Please try again.")
-            return false;
-        }
-
-        // If same return True.
-        else{
-            return true;
-        }
-    }
-</script>
-
 </html>
