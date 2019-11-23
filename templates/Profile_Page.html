@@ -68,7 +68,7 @@
                             <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Account?</h1>
                             <h6><center>Once you delete your account, all of your information will be removed from the Penguin's Building Management servers. All account data and information will no longer be available after deletion.</center></h6>
                             <h6><center>Are you sure you would like to delete your account?</center></h6>
-                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red">Permanently Delete Account</button>
+                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteAccount()">Permanently Delete Account</button>
                         </div>
                     </form>
                 </div>
@@ -82,6 +82,7 @@
     var vc = new Vue({
         el: "#app",
         data: {
+            u_id: {{ u_id | tojson }},
             first_name: "",
             last_name: "",
             email: "",
@@ -145,6 +146,20 @@
                         question: this.question,
                         oanswer: this.oanswer,
                         nanswer: this.nanswer
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            deleteAccount: function () {
+                axios
+                    .delete("", {
+                        u_id: this.u_id
                     })
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
