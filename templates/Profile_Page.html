@@ -11,12 +11,12 @@
 
     <div class="content" id="app">
 
-        <h4>[Code to get first name]'s Profile</h4>
+        <h4>Profile</h4>
         <div>
             <h6><b><label for="fname">First Name: </label></b></h6>
             <h6 style="margin-left: 5em"> <input type="text" class="full-width" name="first_name" id="fname" v-bind:placeholder="user.first_name"></h6>
             <h6><b><label for="lname">Last Name: </label></b></h6>
-            <h6 style="margin-left: 5em"> <input type="text" class="full-width" name="last_name" id="lname" v-bind:placeholder="user.last_name"></h6>
+            <h6 style="margin-left: 5em"> <input type="text" class="" name="last_name" id="lname" v-bind:placeholder="user.last_name"></h6>
             <h6><b><label for="email">Email: </label></b></h6>
             <h6 style="margin-left: 5em"> <input type="email" class="full-width" name="email" id="email" v-bind:placeholder="user.email"></h6>
             <h6><b><label for="password">Password: </label></b></h6>
@@ -48,7 +48,7 @@
             user: {},
         },
         delimiters: ["[[", "]]"],
-        mounted: function() {
+        mounted: function () {
             axios
                 .get("/api/users")
                 .then(res => {
@@ -57,7 +57,7 @@
                 .catch(error => console.log(error))
         },
         methods: {
-            getDetails: function() {
+            getDetails: function () {
                 axios
                     .put("{{ url_for('user') }}", {
                         first_name: this.first_name,
@@ -66,14 +66,15 @@
                         password: this.password
                     })
                     .then(res => {
-                        if ("msg" in res.data && res.data.msg.length){
+                        if ("msg" in res.data && res.data.msg.length) {
                             window.location.reload(false);
-                        }
-                        else {
+                        } else {
                             this.error = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
+            }
+        }
     })
 
 </script>
