@@ -20,6 +20,7 @@
             delimiters: ["[[", "]]"],
             methods: {
                 submitReg: function() {
+                    checkEntries();
                     axios
                         .post("{{ url_for('user')}}", {
                             fname: this.fname,
@@ -85,7 +86,7 @@
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
 
-        <form action="{{ url_for('user') }}" method="post" onSubmit="return (checkEntries(this))">
+        <form>
             <label for="fname"><b>First Name</b></label>
             <input type="text" placeholder="First Name" name="fname" class="full-width" required v-model="fname">
 
@@ -103,16 +104,16 @@
 
             <label for="question"><b>Security Question</b></label>
             <select v-model="question">
-                <option selected>What is your favorite book?</option>
-                <option>What is the name of the road you grew up on?</option>
-                <option>What is your mother’s maiden name?</option>
-                <option>What was the name of your first/current/favorite pet?</option>
-                <option>What was the first company that you worked for?</option>
-                <option>Where did you meet your spouse?</option>
-                <option>Where did you go to high school/college?</option>
-                <option>What is your favorite food?</option>
-                <option>What city were you born in?</option>
-                <option>Where is your favorite place to vacation?</option>
+                <option selected value="What is your favorite book?">What is your favorite book?</option>
+                <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
+                <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                <option value="What was the name of your first/current/favorite pet?">What was the name of your first/current/favorite pet?</option>
+                <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
+                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                <option value="Where did you go to high school/college?">Where did you go to high school/college?</option>
+                <option value="What is your favorite food?">What is your favorite food?</option>
+                <option value="What city were you born in?">What city were you born in?</option>
+                <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
             </select>
 
             <label for="answer"><b>Answer</b></label>
