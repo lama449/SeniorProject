@@ -15,12 +15,10 @@
 
         <h4 style="padding-left: 5em">Profile</h4>
         <div style="padding-left: 10em">
-            <h6><b><label for="fname">First Name: </label></b>
-            <h6 style="margin-left: 10em"> <input type="text"  name="first_name" id="fname" v-model:placeholder="first_name"></h6>
-            <h6><b><label for="lname">Last Name: </label></b></h6>
-            <h6 style="margin-left: 10em"> <input type="text"  name="last_name" id="lname" v-model:placeholder="last_name"></h6>
-            <h6><b><label for="email">Email: </label></b></h6>
-            <h6 style="margin-left: 10em"> <input type="email" name="email" id="email" v-model:placeholder="email"></h6><button type="submit" class="button">Save changes</button>
+            <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"></h6>
+            <h6><b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"></h6>
+            <h6><b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"></h6>
+            <button type="submit" class="button">Save changes</button>
             <h6><b><label for="password">Password: </label></b></h6>
             <button style="margin-left: 10em" type="submit" class="button"><a onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</a></button></h6>
             <div id = "modalwrapper" class = "modal">
