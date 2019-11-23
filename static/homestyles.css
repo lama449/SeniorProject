@@ -421,6 +421,7 @@ input[type=password]{
     margin: 4% auto 10% auto;
     width: 40%;
     padding-bottom: 30px;
+    position: relative;
 }
 
 .close{
