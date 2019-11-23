@@ -8,6 +8,7 @@ import bcrypt
 # from bson.json_util import dumps
 from SeniorProject import database
 from bson.objectid import ObjectId
+from SeniorProject.resources.room import Room
 
 db = database.conn_DB()
 
@@ -107,10 +108,17 @@ class Building(Resource):
         if current_facility:
             current_building = buildings.find_one({'_id': ObjectId(b_id)})
             if current_building:
-                rooms.delete_many({'buildingID': ObjectId(b_id)})
+                drooms = rooms.find({'buildingID': ObjectId(b_id)})
+                if drooms:
+                    print(drooms)
+                    for room in drooms:
+                        Room().delete(f_id, b_id, str(room.get('_id')))
+                elif drooms is None:
+                    print('No rooms to delete')
+                # rooms.delete_many({'buildingID': ObjectId(b_id)})
                 buildings.delete_one({'_id': ObjectId(b_id)})
+                return 'Building deleted.'
             else:
                 return 'Invalid building'
         else:
-            return 'Invalid facility'
-    
+            return 'Invalid facility' 
