@@ -70,5 +70,15 @@ class Group(Resource):
         else:
             return 'Invalid facility ID'
 
-    def delete(self):
-        pass
+    def delete(self, f_id, g_id):
+        facilities = db.facilities
+        users = db.users
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            facilities.update({'_id': ObjectId(f_id)},
+                              {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
+            users.update({'groupID': ObjectId(g_id)},
+                         {'$pull': {'groupID': {'_id': ObjectId(g_id)}}})
+            return 'Delete successful'
+        else:
+            return 'Invalid facility'
