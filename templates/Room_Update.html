@@ -52,7 +52,7 @@
 
         </form>
     </div>
-    {% include 'header.html' %}
+    {% include 'footer.html' %}
 
     <script>
       function addFeature() {
@@ -77,6 +77,8 @@
         var selectList = document.getElementById("groupSelect");
         selectList.remove(selectList.selectedIndex);
       }
+    </script>
+    <script>
       var vc = new Vue({
         el: "#app",
           data: {
@@ -92,7 +94,7 @@
             .catch(error => console.log(error))
           }
           delimiters: ["[[", "]]"],
-        })
+      })
     </script>
 
 </body>

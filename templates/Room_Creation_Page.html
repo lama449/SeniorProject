@@ -5,6 +5,8 @@
 <title>Penguin's Building Management</title>
   <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
   <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
 </head>
 <body>
     {% include 'header.html' %}
@@ -12,29 +14,24 @@
 
         <!-- Room Creation Form -->
         <form>
-          <h1> Edit Room: </h1>
+          <h1> Room Creation </h1>
 
           <!--Room Information -->
           <label for="name">Room Name (Optional):</label>
-          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name">
+          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name" v-model = "roomName">
 
           <label for="roomNum">Room Number:</label>
-          <input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required>
-
-          <label for="roomType">Room Type:</label>
-          <input type="text" name="roomType" id ="roomType" placeholder="i.e Classroom" required>
-
-          <label for="floorNum">Floor Number:</label>
-          <input type="text" name="FloorNumber" id ="FloorNum" placeholder="Enter Floor Number" required>
+          <input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required v-model="roomNum">
 
           <label for="roomCap">Room Capacity:</label>
-          <input type="number" name="Room Capacity" id ="roomCap" placeholder="Enter Room Capacity" required>
+          <input type="number" name="Room Capacity" id ="roomCap" placeholder="Enter Room Capacity" required v-model="roomCap">
 
+          <!-- Attributes/Features -->
           <p>Click the button to add an option at the end of the list.
             <br>  Control+click (command on mac) to select multiple features.
             <br> To remove a feature select it and press "Remove Feature"
           </p>
-          <select id="mySelect" size="8" multiple>
+          <select id="atSelect" size="8" multiple v-model="atSelect">
             <option>None</option>
             <option>Whiteboard</option>
             <option>Projector</option>
@@ -42,15 +39,32 @@
             <option>Speakers</option>
           </select>
 
+          <!-- Add/Remove Features -->
           <input type="text" name="newFeature" id="feature" value="TV">
 
           <button type="button" onclick="addFeature()">Add Feature</button>
           <button type="button" id="deleteButton" onclick="removeFeature()">Remove Feature</button>
 
-          <p>Description:</p>
-          <textarea rows="4" cols="50" maxlength="288">  </textarea>
+          <!-- Groups
 
-          <input id="button1" type="submit">
+          Not sure what's up with groups:
+          If groups are made from facility then have to grab those
+
+        -->
+
+
+          <select id="groupSelect" size="8" multiple v-model="groupSelect">
+            <option v-for="roomGroups in room.groupID" selected>[[roomGroups]]</option>
+          </select>
+
+          <input type="text" name="newFeature" id="group">
+
+          <!-- Add/Remove Groups -->
+
+          <button type="button" onclick="addGroup()">Add Group</button>
+          <button type="button" id="deleteButton" onclick="removeGroup()">Remove Group</button>
+
+          <button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button>
 
         </form>
     </div>
@@ -58,17 +72,62 @@
 
     <script>
     function addFeature() {
-      var selectList = document.getElementById("mySelect");
+      var selectList = document.getElementById("atSelect");
       var option = document.createElement("option");
       option.text = document.getElementById('feature').value;
       selectList.add(option);
     }
 
     function removeFeature() {
-        var selectList = document.getElementById("mySelect");
-        selectList.remove(selectList.selectedIndex);
-      }
-    </script>
+      var selectList = document.getElementById("atSelect");
+      selectList.remove(selectList.selectedIndex);
+    }
 
+    function addGroup() {
+      var selectList = document.getElementById("groupSelect");
+      var option = document.createElement("option");
+      option.text = document.getElementById('group').value;
+      selectList.add(option);
+    }
+
+    function removeGroup() {
+      var selectList = document.getElementById("groupSelect");
+      selectList.remove(selectList.selectedIndex);
+    }
+    </script>
+    <script>
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        f_id: {{ f_id | tojson }},
+        b_id: {{ b_id | tojson}},
+        RoomName: "",
+        roomNum: "",
+        roomCap: "",
+        atSelect: [],
+        groupSelect: [],
+        description: ""
+
+      },
+      delimiters: ["[[", "]]"],
+      methods: {
+        submitInfo: function() {
+          axios.post("{{ url_for('room') }}", {
+            name: this.RoomName,
+            number: this.roomNum
+            capacity: this.roomCap
+            attributes: this.atSelect
+            groupID: this.groupSelect
+          })
+          .then(getBuildingURL())
+          .catch(error => console.log(error))
+        },
+        getBuildingURL: function() {
+                    return "/facility/" + this.f_id + "/building/" + this.b_id
+                  }
+      }
+    })
+
+    </script>
 </body>
 </html>
