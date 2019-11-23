@@ -39,6 +39,25 @@
                             }
                         })
                         .catch(error => console.log(error))
+                },
+
+                checkEntries: function() {
+                    password1 = this.password1;
+                    password2 = this.password2;
+                    answer = this.answer;
+                    if ((password1 != password2) & (answer.trim() == "")){
+                        alert("Passwords did not match, and invalid security answer");
+                        return false;
+                    }
+                    else if (password1 != password2) {
+                        alert ("Password did not match: Please try again.");
+                        return false;
+                    }
+                    else if (answer.trim() == "") {
+                        alert("Please answer security question");
+                        return false;
+                    }
+                    return true;
                 }
             }
         })
@@ -119,7 +138,7 @@
             <label for="answer"><b>Answer</b></label>
             <input type="text" placeholder="Enter Security Answer" name="answer" class="full-width" required v-model="answer">
 			
-            <button type="submit" class="button" @click.prevent="submitReg()">Register</button>
+            <button class="button" @click.prevent="submitReg()">Register</button>
 			
         </form>
     </div>
