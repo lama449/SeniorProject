@@ -10,6 +10,7 @@ from SeniorProject.resources.room import Room
 from SeniorProject.resources.building import Building
 from SeniorProject.resources.maintenance import Maintenance
 from SeniorProject.new_json_encoder import New_JSON_Encoder
+from SeniorProject.resources.group import Group
 
 app = Flask(__name__)
 api = Api(app)
@@ -129,6 +130,7 @@ api.add_resource(Room, '/api/facilities/<f_id>/buildings/<b_id>/rooms', '/api/fa
 api.add_resource(Reservation, '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>/reservations', '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_id>/reservations/<reserv_id>', endpoint='reservation')
 api.add_resource(User, '/api/users', '/api/users/<u_id>', endpoint='user')
 api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<m_id>', '/api/facilities/<f_id>/maintenance/room/<r_id>', endpoint='maintenance')
+api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id/groups/<g_id>', endpoint='group')
 
 if __name__ == '__main__':
     app.run()
