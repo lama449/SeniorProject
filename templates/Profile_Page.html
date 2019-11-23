@@ -15,7 +15,7 @@
 
         <h4 style="padding-left: 5em">Profile</h4>
         <div style="padding-left: 10em">
-            <h6><b><label for="fname">First Name: </label></b></h6>
+            <h6><b><label for="fname">First Name: </label></b>
             <h6 style="margin-left: 10em"> <input type="text"  name="first_name" id="fname" v-model:placeholder="first_name"></h6>
             <h6><b><label for="lname">Last Name: </label></b></h6>
             <h6 style="margin-left: 10em"> <input type="text"  name="last_name" id="lname" v-model:placeholder="last_name"></h6>
@@ -37,23 +37,22 @@
                     </div>
                 </form>
             </div>
-            <h6><b><la for="question">Security Question: </la></b></h6>
-            <h6 style="margin-left: 5em"> <input type="text" name="question" id="question" v-model:placeholder="question"></h6>
-            <select>
-                <option>What is your favorite book?</option>
-                <option>What is the name of the road you grew up on?</option>
-                <option>What is your mother’s maiden name?</option>
-                <option>What was the name of your first/current/favorite pet?</option>
-                <option>What was the first company that you worked for?</option>
-                <option>Where did you meet your spouse?</option>
-                <option>Where did you go to high school/college?</option>
-                <option>What is your favorite food?</option>
-                <option>What city were you born in?</option>
-                <option>Where is your favorite place to vacation?</option>
+            <h6><b><label for="question">Security Question: </label></b></h6>
+            <select v-model="question">
+                <option value="What is your favorite book?">What is your favorite book?</option>
+                <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
+                <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                <option value="What was the name of your first/current/favorite pet?">What was the name of your first/current/favorite pet?</option>
+                <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
+                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                <option value="Where did you go to high school/college?">Where did you go to high school/college?</option>
+                <option value="What is your favorite food?">What is your favorite food?</option>
+                <option value="What city were you born in?">What city were you born in?</option>
+                <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
             </select>
-            <button type="submit" class="button">Save changes</button>
             <h6><b><label for="answer">Answer: </label></b></h6>
             <h6 style="margin-left: 10em"> <input type="password" name="answer" id="answer" v-model:placeholder="answer"></h6>
+            <button type="submit" class="button">Save changes</button>
         </div>
     </div>
     {% include 'footer.html' %}
