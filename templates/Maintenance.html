@@ -46,7 +46,7 @@
           el: "#app",
           data: {
               f_id: {{ f_id | tojson }},
-              maintenanceRequest: [],
+              maintenanceRequest: []
           },
           mounted(){
               const requestBuildingURL = axios.get("/api/facility/" + this.f_id + "/maintenance");
