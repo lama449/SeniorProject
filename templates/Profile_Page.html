@@ -160,7 +160,7 @@
                     .delete("/api/users")
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
-                            window.location.reload(false);
+                            window.location.replace("{{ url_for('home')}}")
                         } else {
                             this.error = res.data.err;
                         }
