@@ -5,6 +5,7 @@ import bcrypt
 import string
 import random
 from SeniorProject import database
+from SeniorProject.resources.building import Building
 
 db = database.conn_DB()
 
@@ -90,7 +91,7 @@ class Facility(Resource):
         })
         return jsonify({'_id': takeID.inserted_id})
 
-    def put(self):
+    def put(self, f_id):
         data = request.form
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -111,5 +112,21 @@ class Facility(Resource):
         else:
             return 'Invalid facility'
 
-    def delete(self):
-        pass
+    def delete(self, f_id):
+        facilities = db.facilities
+        buildings = db.buildings
+        rooms = db.rooms
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            dbuildings = buildings.find({'facilityID': ObjectId(f_id)})
+            if dbuildings:
+                print(dbuildings)
+            else:
+                print("no buildings")
+            for building in dbuildings:
+                print(building)
+                Building().delete(f_id, str(building.get('_id')))
+                facilities.delete_one({'_id': ObjectId(f_id)})   
+        else:
+            return 'Invalid facility'
+
