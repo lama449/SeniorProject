@@ -112,7 +112,7 @@
       delimiters: ["[[", "]]"],
       methods: {
         submitInfo: function() {
-          axios.post("{{ url_for('room') }}", {
+          axios.post("/api/facilities/" + this.f_id + "/buildings" + this.building_id + "/rooms" + this.room_id, {
             name: this.RoomName,
             number: this.roomNum
             capacity: this.roomCap
