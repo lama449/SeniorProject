@@ -49,8 +49,26 @@ class Group(Resource):
         else:
             return 'Invalid facility'
 
-    def put(self):
-        pass
+    def put(self, f_id, g_id):
+        data = request.form
+        facilities = db.facilities
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:  # if facility exists
+            if g_id:
+                if data.get('name'):
+                    facilities.update_one({'_id': ObjectId(f_id), 'groups._id': ObjectId(g_id)},
+                                                            {'$set':
+                                                                {
+                                                                    'groups.$.name': data.get('name')
+                                                                }
+                                                            })
+                    return 'Updated the group name' 
+                else:
+                    return 'Missing new name'
+            else:
+                return 'Missing group ID'
+        else:
+            return 'Invalid facility ID'
 
     def delete(self):
         pass
