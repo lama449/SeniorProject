@@ -77,7 +77,7 @@
         delimiters: ["[[", "]]"],
         methods: {
             submitReg: function() {
-                checkEntries();
+                this.checkEntries();
                 axios
                     .post("{{ url_for('user')}}", {
                         fname: this.fname,
