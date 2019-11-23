@@ -65,7 +65,7 @@ class Maintenance(Resource):
                                                                'roomID': current_room.get('_id'),
                                                                'roomNum': current_room.get('number'),
                                                                'description': data.get('description'),
-                                                               'userID': user.get('_id'),
+                                                               #'userID': user.get('_id'),
                                                                'date': data.get('date'), 
                                                                'status': data.get('status')}}})
                     currentReq = [req for req in newReq]

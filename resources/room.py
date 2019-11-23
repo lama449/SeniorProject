@@ -4,6 +4,7 @@ import bcrypt
 from bson.objectid import ObjectId
 #from bson.json_util import dumps
 from SeniorProject import database
+from SeniorProject.resources.maintenance import Maintenance
 
 db = database.conn_DB()
 
@@ -35,7 +36,7 @@ class Room(Resource):
                 'err': []
                 }
               
-        data = request.form
+        data = request.json
         if not data.get('name'):
             res['err'].append('Missing name')
         if not data.get('capacity'):
@@ -65,7 +66,7 @@ class Room(Resource):
 
 
     def put(self, f_id, b_id, r_id):
-        data = request.form
+        data = request.json
         rooms = db.rooms
         
         validation = validate_room(f_id, b_id, r_id)
@@ -84,6 +85,7 @@ class Room(Resource):
         validation = validate_room(f_id, b_id, r_id)
         if validation[0] is True:
             rooms = db.rooms
+            Maintenance().delete(f_id, r_id=r_id)
             delete_room = rooms.delete_one({'_id': ObjectId(r_id)})
             if delete_room:
                 return {'msg': 'success'}
