@@ -18,7 +18,6 @@
             <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"></h6>
             <h6><b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"></h6>
             <h6><b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"></h6>
-            <button type="submit" class="button">Save changes</button>
             <h6><b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button style="margin-left: 5em" type="submit" class="button" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button></h6>
             <div id = "modalwrapper" class = "modal">
                 <form class="modal-content animate">
@@ -60,7 +59,8 @@
                     </div>
                 </form>
                 </div><p></p>
-                <button style="margin-left: 5em; background-color: red" type="submit" class="button" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button></h6>
+                <button type="submit" class="button" style="display: inline-block; width: 200px">Save changes</button>
+                <button style="margin-left: 5em; background-color: red; width: 200px" type="submit" class="button" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button></h6>
                 <div id = "modalwrapper3" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
