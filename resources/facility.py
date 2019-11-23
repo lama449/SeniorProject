@@ -43,7 +43,7 @@ class Facility(Resource):
 
     def post(self):
         facilities = db.facilities
-        data = request.form
+        data = request.json
         if data.get('access_code'):
             return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
         while data.get('private') == 'true':
@@ -92,11 +92,11 @@ class Facility(Resource):
         return jsonify({'_id': takeID.inserted_id})
 
     def put(self, f_id):
-        data = request.form
+        data = request.json
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
-            updated_facility = facilities.update_one({'_id': ObjectId(b_id)},
+            updated_facility = facilities.update_one({'_id': ObjectId(f_id)},
                 {'$set':
                     {'name': data.get('name'),
                      'address': {
