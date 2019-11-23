@@ -102,10 +102,12 @@ class Building(Resource):
     def delete(self, f_id, b_id):
         facilities = db.facilities
         buildings = db.buildings
+        rooms = db.rooms
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             current_building = buildings.find_one({'_id': ObjectId(b_id)})
             if current_building:
+                rooms.delete_many({'buildingID': ObjectId(b_id)})
                 buildings.delete_one({'_id': ObjectId(b_id)})
             else:
                 return 'Invalid building'
