@@ -6,28 +6,27 @@
           
             // Function to check Whether both passwords 
             // is same or not. 
-            function checkPassword(form) { 
-                password1 = form.password1.value; 
-                password2 = form.password2.value; 
-  
-                // If password not entered 
-                if (password1 == '') 
-                    alert ("Please enter Password"); 
-                      
-                // If confirm password not entered 
-                else if (password2 == '') 
-                    alert ("Please enter confirm password"); 
-                      
-                // If Not same return False.     
-                else if (password1 != password2) { 
-                    alert ("\nPassword did not match: Please try again.") 
+            function checkEntries(form) {
+                password1 = form.password1.value;
+                password2 = form.password2.value;
+                answer = form.answer.value;
+
+                if ((password1 != password2) & (answer.trim() == "")){
+                    alert("Passwords did not match, and invalid security answer");
+                    return false;
+                }
+
+                else if (password1 != password2) {
+                    alert ("Password did not match: Please try again.");
                     return false; 
                 } 
   
-                // If same return True. 
-                else{ 
-                    return true; 
-                } 
+                else if (answer.trim() == "") {
+                    alert("Please answer security question");
+                    return false;
+                }
+
+                return true;
             } 
         </script>
 	
@@ -44,7 +43,7 @@
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
 
-        <form action="{{ url_for('user') }}" method="post" onSubmit="return checkPassword(this)">
+        <form action="{{ url_for('user') }}" method="post" onSubmit="return (checkEntries(this))">
             <label for="fname"><b>First Name</b></label>
             <input type="text" placeholder="First Name" name="fname" class="full-width" required>
 
@@ -59,6 +58,23 @@
 
             <label for="password2"><b>Repeat Password</b></label>
             <input type="password" placeholder="Repeat Password" name="password2" class="full-width" required>
+
+            <label for="question"><b>Security Question</b></label>
+            <select>
+                <option>What is your favorite book?</option>
+                <option>What is the name of the road you grew up on?</option>
+                <option>What is your mother’s maiden name?</option>
+                <option>What was the name of your first/current/favorite pet?</option>
+                <option>What was the first company that you worked for?</option>
+                <option>Where did you meet your spouse?</option>
+                <option>Where did you go to high school/college?</option>
+                <option>What is your favorite food?</option>
+                <option>What city were you born in?</option>
+                <option>Where is your favorite place to vacation?</option>
+            </select>
+
+            <label for="answer"><b>Answer</b></label>
+            <input type="text" placeholder="Enter Security Answer" name="answer" class="full-width" required>
 			
             <button type="submit" class="button">Register</button>
 			
