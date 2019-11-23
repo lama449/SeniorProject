@@ -17,7 +17,7 @@ class User(Resource):
         }
 
         if session.get('user'):
-            logged_in_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))}, {'password': 0})
+            logged_in_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))}, {'password': 0, 'answer': 0})
             return jsonify(logged_in_user)
         else:
             res['err'].append('No user is logged in.')
@@ -171,10 +171,16 @@ class User(Resource):
 
 
     def delete(self):
-        pass
+        # response object
+        res = {
+            'msg': [],
+            'err': []
+        }
 
-
-
-
-
-
+        users = db.users
+        delete_user = users.delete_one({'_id': session.get('user').get('_id')})
+        if delete_room.deleted_count:
+            res['msg'].append('success')
+        else:
+            res['err'].append('Did not find user')
+        return jsonify(res)
