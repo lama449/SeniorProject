@@ -78,7 +78,7 @@ class Maintenance(Resource):
         else:
             return 'Invalid facility'
 
-    def put(self, f_id, r_id, m_id):
+    def put(self, f_id, m_id, r_id):
         data = request.form
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -101,5 +101,24 @@ class Maintenance(Resource):
         else:
             return 'Invalid facility ID'
 
-    def delete(self):
-        pass
+    def delete(self, f_id, m_id=None, r_id=None):
+        facilities = db.facilities
+        rooms = db.rooms
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            if r_id is None:
+                facilities.update({'_id': ObjectId(f_id)},
+                                  {'$pull': {'maintenance': {'_id': ObjectId(m_id)}}})
+                return 'Delete successful'
+            elif m_id:
+                return 'Invalid maintenance request ID'
+            if m_id is None:
+                current_room = rooms.find_one({'_id': ObjectId(r_id)})
+                if current_room:
+                    facilities.update({'_id': ObjectId(f_id)},
+                                      {'$pull': {'maintenance': {'roomID': ObjectId(r_id)}}})
+                    return 'Delete successful'
+                else:
+                    return 'Invalid room ID'
+        else:
+            return 'Invalid facility'
