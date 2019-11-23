@@ -20,7 +20,7 @@
             <h6><b><label for="lname">Last Name: </label></b></h6>
             <h6 style="margin-left: 10em"> <input type="text"  name="last_name" id="lname" v-model:placeholder="last_name"></h6>
             <h6><b><label for="email">Email: </label></b></h6>
-            <h6 style="margin-left: 10em"> <input type="email" name="email" id="email" v-model:placeholder="email"></h6>
+            <h6 style="margin-left: 10em"> <input type="email" name="email" id="email" v-model:placeholder="email"></h6><button type="submit" class="button">Save changes</button>
             <h6><b><label for="password">Password: </label></b></h6>
             <button style="margin-left: 10em" type="submit" class="button"><a onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</a></button></h6>
             <div id = "modalwrapper" class = "modal">
@@ -38,7 +38,7 @@
                 </form>
             </div>
             <h6><b><label for="question">Security Question: </label></b></h6>
-            <button style="margin-left: 10em" type="submit" class="button"><a onclick="document.getElementById('modalwrapper2').style.display='block'" id="question">Click here to change security question/answer</a></button></h6>
+            <button style="margin-left: 10em" type="submit" class="button"><a onclick="document.getElementById('modalwrapper2').style.display='block'" id="question">Click here to change security details</a></button></h6>
             <div id = "modalwrapper2" class = "modal">
                 <form class="modal-content animate">
                     <div class="container" style="background-color: white">
@@ -58,13 +58,25 @@
                             <option value="What city were you born in?">What city were you born in?</option>
                             <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
                         </select>
-                        <h6><b><label for="answer">Answer: </label></b></h6>
-                        <h6 style="margin-left: 10em"> <input type="password" name="answer" id="answer" v-model:placeholder="answer"></h6>
+                        <input type="password" class ="full-width" name="answer" id="oanswer" placeholder="Enter old answer" v-model="oanswer">
+                        <input type="password" class ="full-width" name="answer" id="nanswer" placeholder="Enter new answer"v-model="nanswer">
                         <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="checkAnswer()">Confirm Changes</button>
                     </div>
                 </form>
+                <button style="margin-left: 10em; background-color: red" type="submit" class="button"><a onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</a></button></h6>
+                <div id = "modalwrapper3" class = "modal">
+                    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                            <span onclick="document.getElementById('modalwrapper3').style.display='none'" class="close" title="Close Popup">&times;</span>
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Account?</h1>
+                        </div>
+                        <div>
+                            <p>Once you delete your account, all of your information will be removed from the Penguin's Building Management servers. All account data and information will no longer be available after deletion. </p>
+                            <p>Are you sure you would like to delete your account?</p>
+                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="checkDeletion()">Permanently Delete Account</button>
+                        </div>
+                        <div class="container" style="background-color: white">
             </div>
-            <button type="submit" class="button">Save changes</button>
         </div>
     </div>
     {% include 'footer.html' %}
@@ -82,7 +94,8 @@
             npsw: "",
             cpsw: "",
             question: "",
-            answer: ""
+            oanswer: "",
+            nanswer: '',
         },
         mounted(){
             axios
@@ -91,7 +104,6 @@
                     this.first_name = res.data.first_name
                     this.last_name = res.data.last_name
                     this.email = res.data.email
-                    this.answer = res.data.answer
                     this.question = res.data.question
                 })
                 .catch(error => console.log(error))
@@ -104,8 +116,6 @@
                         first_name: this.first_name,
                         last_name: this.last_name,
                         email: this.email,
-                        question: this.question,
-                        answer: this.answer
                     })
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
@@ -138,7 +148,8 @@
                 axios
                     .put("{{ url_for('user') }}", {
                         question: this.question,
-                        answer: this.answer
+                        oanswer: this.oanswer,
+                        nanswer: this.nanswer
                     })
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
@@ -177,16 +188,22 @@
             },
             confirmAnswer: function() {
                 question = this.question;
-                answer = this.answer;
+                oanswer = this.oanswer;
+                nanswer = this.nanswer
 
-                // If old password not entered
+                // If there is no question
                 if (question.trim() == "") {
                     alert("Please select a security question.");
                     return false
                 }
-                // If new password not entered
-                else if (answer.trim() == "") {
-                    alert("Please input an answer for the security question.");
+                // If old answer not entered
+                else if (oanswer.trim() == "") {
+                    alert("Please input the old answer for previous security question.");
+                    return false;
+                }
+                // If new answer not entered
+                else if (nanswer.trim() == "") {
+                    alert("Please input an answer for the new security question.");
                     return false;
                 }
                 return true;
