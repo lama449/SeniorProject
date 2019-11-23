@@ -3,94 +3,6 @@
 <head>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
-
-    <script>
-        var vc = new Vue({
-            el: "#app",
-            data: {
-                fname: "",
-                lname: "",
-                email: "",
-                password1:"",
-                password2: "",
-                question: "",
-                answer: "",
-                err: []
-            },
-            delimiters: ["[[", "]]"],
-            methods: {
-                submitReg: function() {
-                    checkEntries();
-                    axios
-                        .post("{{ url_for('user')}}", {
-                            fname: this.fname,
-                            lname: this.lname,
-                            email: this.email,
-                            password1: this.password1,
-                            password2: this.password2,
-                            question: this.question,
-                            answer: this.answer
-                        })
-                        .then(res => {
-                            if ("msg" in res.data && res.data.msg.length) {
-                                window.location.replace("{{ url_for('home')}}");
-                            } else {
-                                this.err = res.data.err;
-                            }
-                        })
-                        .catch(error => console.log(error))
-                },
-
-                checkEntries: function() {
-                    password1 = this.password1;
-                    password2 = this.password2;
-                    answer = this.answer;
-                    if ((password1 != password2) & (answer.trim() == "")){
-                        alert("Passwords did not match, and invalid security answer");
-                        return false;
-                    }
-                    else if (password1 != password2) {
-                        alert ("Password did not match: Please try again.");
-                        return false;
-                    }
-                    else if (answer.trim() == "") {
-                        alert("Please answer security question");
-                        return false;
-                    }
-                    return true;
-                }
-            }
-        })
-
-    </script>
-	
-	<script> 
-          
-            // Function to check Whether both passwords 
-            // is same or not. 
-            function checkEntries(form) {
-                password1 = form.password1.value;
-                password2 = form.password2.value;
-                answer = form.answer.value;
-
-                if ((password1 != password2) & (answer.trim() == "")){
-                    alert("Passwords did not match, and invalid security answer");
-                    return false;
-                }
-
-                else if (password1 != password2) {
-                    alert ("Password did not match: Please try again.");
-                    return false; 
-                }
-  
-                else if (answer.trim() == "") {
-                    alert("Please answer security question");
-                    return false;
-                }
-
-                return true;
-            } 
-        </script>
 	
     <meta charset="UTF-8">
     <title>New User Registrations</title>
@@ -105,7 +17,7 @@
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
 
-        <form>
+        <form id="app">
             <label for="fname"><b>First Name</b></label>
             <input type="text" placeholder="First Name" name="fname" class="full-width" required v-model="fname">
 
@@ -148,4 +60,92 @@
 </div>
 	{% include 'footer.html' %}
 </body>
+
+<script>
+    var vc = new Vue({
+        el: "#app",
+        data: {
+            fname: "",
+            lname: "",
+            email: "",
+            password1:"",
+            password2: "",
+            question: "",
+            answer: "",
+            err: []
+        },
+        delimiters: ["[[", "]]"],
+        methods: {
+            submitReg: function() {
+                checkEntries();
+                axios
+                    .post("{{ url_for('user')}}", {
+                        fname: this.fname,
+                        lname: this.lname,
+                        email: this.email,
+                        password1: this.password1,
+                        password2: this.password2,
+                        question: this.question,
+                        answer: this.answer
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.replace("{{ url_for('home')}}");
+                        } else {
+                            this.err = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+
+            checkEntries: function() {
+                password1 = this.password1;
+                password2 = this.password2;
+                answer = this.answer;
+                if ((password1 != password2) & (answer.trim() == "")){
+                    alert("Passwords did not match, and invalid security answer");
+                    return false;
+                }
+                else if (password1 != password2) {
+                    alert ("Password did not match: Please try again.");
+                    return false;
+                }
+                else if (answer.trim() == "") {
+                    alert("Please answer security question");
+                    return false;
+                }
+                return true;
+            }
+        }
+    })
+
+</script>
+
+<script>
+
+    // Function to check Whether both passwords
+    // is same or not.
+    function checkEntries(form) {
+        password1 = form.password1.value;
+        password2 = form.password2.value;
+        answer = form.answer.value;
+
+        if ((password1 != password2) & (answer.trim() == "")){
+            alert("Passwords did not match, and invalid security answer");
+            return false;
+        }
+
+        else if (password1 != password2) {
+            alert ("Password did not match: Please try again.");
+            return false;
+        }
+
+        else if (answer.trim() == "") {
+            alert("Please answer security question");
+            return false;
+        }
+
+        return true;
+    }
+</script>
 </html>
