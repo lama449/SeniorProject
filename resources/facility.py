@@ -132,7 +132,6 @@ class Facility(Resource):
             else:
                 print("no buildings")
             for building in dbuildings:
-                print(building)
                 Building().delete(f_id, str(building.get('_id')))
                 Group().delete(f_id, str(group.get('_id')))
                 facilities.delete_one({'_id': ObjectId(f_id)})   
