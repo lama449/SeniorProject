@@ -47,8 +47,8 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
         val = validate_room(f_id, b_id, r_id)
         if val[0]:
             reserv_id = ObjectId()
-            start_time = datetime.fromisoformat(data.get('start_time')
-            end_time = datetime.fromisoformat(data.get('end_time')
+            start_time = datetime.fromisoformat(data.get('start_time'))
+            end_time = datetime.fromisoformat(data.get('end_time'))
             new_reservation = rooms.update_one({'_id': ObjectId(r_id)},
                                             {'$push': {'reservations': {
                                                 '_id': reserv_id,
@@ -68,7 +68,7 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
             end_time = datetime.fromisoformat(date.get('end_time'))
             update_reservation = rooms.update_one({'_id': ObjectId(r_id), 'reservations._id': ObjectId(reserv_id)},
                                     {'$set': {'reservations.$.start_time' : start_time,
-                                            'reservations.$.end_time' : end_time)}})
+                                            'reservations.$.end_time' : end_time}})
             return jsonify(ObjectId(r_id))
         else:
             return {'err':val[1]}
