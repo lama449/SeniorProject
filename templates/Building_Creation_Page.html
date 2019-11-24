@@ -389,7 +389,7 @@
           })
           .then(res => {
             this.b_id = res.data._id
-            window.location.replace("/facility/" + this.f_id +"/buildings" + this.b_id)
+            window.location.replace("/facility/" + this.f_id +"/buildings/" + this.b_id)
             })
           .catch(error => console.log(error))
         }
