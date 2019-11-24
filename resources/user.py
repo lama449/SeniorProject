@@ -194,6 +194,34 @@ class User(Resource):
 
             session['user']['question'] = question
             return jsonify(res)
+        elif session.get('change_password'):
+            # check if all the fields are filled out
+            new_password = data.get('npsw')
+            confirm_password = data.get('cpsw')
+
+            if not new_password:
+                res['err'].append('No new password')
+            if not confirm_password:
+                res['err'].append('No password confirmation')
+            if new_password != confirm_password:
+                res['err'].append('Passwords do not match')
+
+            if res['err']:
+                return jsonify(res)
+
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+            users.update_one({'email': session.get('email')}, {
+                '$set': {
+                    'password': hashed_password,
+                }
+            })
+
+            session['email'] = None
+            session['change_password'] = None
+            res['msg'].append('success')
+
+            return jsonify(res)
         elif data.get('groupID'): 
             users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {
                 '$push': {
