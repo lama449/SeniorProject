@@ -328,7 +328,6 @@
     var vm = new Vue({
       el: "#app",
       data: {
-        f_id: {{ f_id | tojson }},
         name: "",
         phoneNum: "",
         addressL1: "",
@@ -343,7 +342,7 @@
       delimiters: ["[[", "]]"],
       methods: {
         submitInfo: function() {
-          axios.post("/api/facilities/" + this.f_id {
+          axios.post("/api/facilities/" {
             this.name: name,
             this.phone: phoneNum,
             this.address_L1: addressL1,
@@ -354,12 +353,11 @@
             this.country: countrySelect,
             this.description: description
           })
-          .then(getFacilityURL())
-          .catch(error => console.log(error))
-        },
-        getBuildingURL: function() {
-                    return "/facility/" + this.f_id
-                  }
+          .then(res => {
+            this.f_id = res.data._id
+            window.location.replace("/facility/" + this.f_id)
+            }) .catch(error => console.log(error))
+        }
       }
     })
     </script>
