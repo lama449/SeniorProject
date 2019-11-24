@@ -85,7 +85,7 @@
 
 							})
 							.then(res => { this.facility = res.data
-								window.location.href("/facility/" + this.facility._id)
+								location.href = ("/facility/" + this.facility._id);
 							})
 							.catch(error => console.log(error))
 				}
