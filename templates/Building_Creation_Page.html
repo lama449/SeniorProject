@@ -361,7 +361,7 @@
       el: "#app",
       data: {
         f_id: {{ f_id | tojson }},
-        building_id: {{ b_id | tojson}},
+        b_id: {{ b_id | tojson}},
         buildingName: "",
         phoneNum: "",
         addressL1: "",
@@ -376,7 +376,7 @@
       delimiters: ["[[", "]]"],
       methods: {
         submitInfo: function() {
-          axios.post("/api/facilities/" + this.f_id + "/buildings" + this.building_id , {
+          axios.post("/api/facilities/" + this.f_id + "/buildings" {
             name: this.buildingName,
             phone: this.phoneNum,
             address_L1: this.addressL1,
@@ -387,12 +387,12 @@
             country: this.countrySelect,
             description: this.description
           })
-          .then(getFacilityURL())
+          .then(res => {
+            this.b_id = res.data._id
+            window.location.replace("/facility/" + this.f_id +"/buildings" + this.b_id)
+            })
           .catch(error => console.log(error))
-        },
-        getFacilityURL: function() {
-                    return "/facility/" + this.f_id
-                }
+        }
       }
     })
 
