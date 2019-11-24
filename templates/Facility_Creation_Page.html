@@ -355,7 +355,7 @@
             this.description: description
           })
           .then(res => {
-            this.f_id = res.data._id
+            this.f_id = res.data._id;
             window.location.replace("/facility/" + this.f_id)
             }) .catch(error => console.log(error))
         }
