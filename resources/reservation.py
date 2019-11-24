@@ -33,7 +33,7 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
                 'err': []
                 }
     
-        data = request.json
+        data = request.form
         if not data.get('start_time'):
             res['err'].append('Missing start time')
         if not data.get('end_time'):
@@ -58,15 +58,14 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
             return {'err':val[1]}
 
     def put(self, f_id, b_id, r_id, reserv_id):
-        data = request.json
+        data = request.form
         rooms = db.rooms
         val = validate_room(f_id,b_id,r_id)
         if val[0]:
-            update_reservation = rooms.update_one(
-                                    {'_id': ObjectId(r_id), 'reservations._id': ObjectId(reserv_id)},
+            update_reservation = rooms.update_one({'_id': ObjectId(r_id), 'reservations._id': ObjectId(reserv_id)},
                                     {'$set': {'reservations.$.start_time' : data.get('start_time'),
                                             'reservations.$.end_time' : data.get('end_time')}})
-            return jsonify(update_reservation)
+            return jsonify(ObjectId(r_id))
         else:
             return {'err':val[1]}
 
@@ -74,11 +73,12 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
         rooms = db.rooms
         val = validate_room(f_id, b_id, r_id)
         if val[0]:
-            delete_reservation = rooms.update_one(
+            delete_reservation = rooms.update(
                                     {'_id' : ObjectId(r_id)},
-                                    {'$pull': {'reservations': {'_id': ObjectId(reserv_id)}}})
+                                        {'$pull': {'reservations': {
+                                            '_id': ObjectId(reserv_id)}}})
             if delete_reservation:
-                return delete_reservation
+                return 'success'
             else:
                 return {'err': 'failed'}
         else:
