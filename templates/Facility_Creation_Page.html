@@ -363,9 +363,9 @@
           </select>
 
           <p>Facility Type:
-          <select>
-			  <option value="public">Public</option>
-			  <option value="private">Private</option>
+          <select v-model="private">
+			  <option value="false">Public</option>
+			  <option value="true">Private</option>
 			</select>
 			</p>
 
@@ -393,8 +393,8 @@
         state:"",
         zipCode: "",
         countrySelect:"",
-        description: ""
-
+        description: "",
+	private: false
       },
       delimiters: ["[[", "]]"],
       methods: {
@@ -408,7 +408,8 @@
             state: this.state,
             zip: this.zipCode,
             country: this.countrySelect,
-            description: this.description
+            description: this.description,
+            private: this.private
           })
           .then(res => {
             this.f_id = res.data._id;

@@ -54,7 +54,7 @@ class Facility(Resource):
                 break
         if not data.get('name'):
             return 'Missing Facility Name'
-        if not data.get('private'):
+        if data.get('private') is None:
             return 'Missing Facility Private Field'
         if not data.get('address_L1'):
             return 'Missing Facility Address Line'
@@ -90,6 +90,7 @@ class Facility(Resource):
             'name': 'admin'
             }]
         })
+        print(takeID)
         users.update_one({'_id': session.get('user').get('_id')},
                          {'$push': {'groupID': {'_id': 'takeID.groups._id',
                                                 'name': 'takeID.groups.name'}}})
