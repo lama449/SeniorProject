@@ -12,7 +12,7 @@
     {% include 'header.html' %}
 
     <div class="content" id="app">
-
+        {% if session.get('user') %}
         <h4 style="padding-left: 5em">Profile</h4>
         <div style="padding-left: 10em">
             <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"></h6>
@@ -73,6 +73,12 @@
                     </form>
                 </div>
         </div>
+        {% else %}
+        <div class="container center-text">
+            <h4>Unable to view content</h4>
+            <h6>Please log in to view contents on this page</h6>
+        </div>
+        <% endif %>
     </div>
     {% include 'footer.html' %}
 
