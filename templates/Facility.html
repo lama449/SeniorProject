@@ -164,7 +164,8 @@
             delimiters: ["[[", "]]"],
             methods: {
                 getBuildingURL: function(b_id) {                    
-                    return "/facility/" + this.f_id + "/building/" + b_id
+                    location.href = ("/facility" + this.f_id + "/building/" + b_id);
+		    return
                 },
 		getTelephone: function(phone) {
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")

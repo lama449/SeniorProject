@@ -90,7 +90,7 @@
                     })
                     .then(res => {
                         if ("msg" in res.data && res.data.msg.length) {
-                            window.location.replace("{{ url_for('home')}}");
+                            location.href = ("{{ url_for('home')}}");
                         } else {
                             this.err = res.data.err;
                         }

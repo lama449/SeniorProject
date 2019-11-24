@@ -413,7 +413,7 @@
           })
           .then(res => {
             this.f_id = res.data._id;
-            window.location.replace("/facility/" + this.f_id)
+            location.href = ("/facility/" + this.f_id)
             }) .catch(error => console.log(error))
         }
       }
