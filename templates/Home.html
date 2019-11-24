@@ -54,7 +54,8 @@
 				query: "",
 				zip_code: "",
 				access_code: "",
-				facilities: []
+				facilities: [],
+				facility:{}
 			},
 			delimiters: ["[[", "]]"],
 			methods: {
@@ -79,7 +80,9 @@
 								access_code: this.access_code
 
 							})
-							.then(res => { this.facilities = res.data })
+							.then(res => { this.facility = res.data
+								window.location.replace("/facility/" + this.facility._id)
+							})
 							.catch(error => console.log(error))
 				}
 			}
