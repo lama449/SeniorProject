@@ -68,8 +68,8 @@
 		    facility:[]                
                 },
                 mounted(){
-                    const requestBuildingURL = axios.get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}");
-                    const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
+                    const requestBuildingURL = axios.get("{{ url_for('building', f_id='5dd81b02c3fe0ffb0e9e2950') }}");
+                    const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5dd81b02c3fe0ffb0e9e2950') }}");
 
                     axios.all([requestBuildingURL, requestFacilityURL])
   	                .then(axios.spread((res1, res2) => {

@@ -50,17 +50,15 @@
         var vc = new Vue({
             el: "#app",
             data: {
-                facility: [],
-                buildings:[]                
+                facilities: []                
             },
             mounted(){
                 const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
 
                 axios.all([requestFacilityURL])
-	  	            .then(axios.spread((res1) => {
-                        this.buildings = res1.data;
-			            this.facility = res2.data;
-                    }))
+	  	    .then((res1) => {
+                        this.facilities = res1.data;			            
+                    })
                     .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
@@ -72,7 +70,7 @@
                         .catch(error => console.log(error))
                 },
                 getBuildingURL: function(building_id) {
-                    return "/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
+                    return "/api/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
                 }
             }
         })

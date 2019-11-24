@@ -5,7 +5,7 @@
 		<a class="nav--item" href="{{ url_for('profile')}}">Profile</a>
 		<a class="nav--item" href="{{ url_for('reservations') }}">Reservations</a>
 		<a class="nav--item" href="{{ url_for('management_page') }}">Management</a>
-		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('username') }}!</span>
+		<span class="nav--item nav--welcome">Welcome {{ session.get('user').get('first_name') }}!</span>
 		<a class="nav--item nav--logout" href="{{ url_for('logout') }}">Log Out</a>
 	{% else %}
 		<a class="nav--item nav--login" onclick="document.getElementById('modalwrapper').style.display='block'">Login</a>

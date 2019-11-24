@@ -58,7 +58,7 @@
 			selectable: true,
 			height: 450,
 			refetchResourcesOnNavigate: true,
-			resources: function(callback) {
+			resources: function(successCallback) {
 				var buildings = [];
 
 				axios
@@ -66,7 +66,7 @@
 					.then(res => { this.buildings = res.data; })
 					.catch(err => console.log(err))	
 				
-				return buildings;
+				successCallback(buildings);
 			},
 			//resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
 			events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
