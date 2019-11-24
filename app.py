@@ -134,6 +134,11 @@ def forgot_password():
             else:
                 res['err'].append('fail')
 
+@app.route('/changepassword', methods=['GET'])
+def change_password():
+    return render_template('Change_Password_Page.html')
+
+
 @app.route('/calendar', methods=['GET'])
 def calendar():
     return render_template('calendar.html')
