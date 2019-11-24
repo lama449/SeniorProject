@@ -73,8 +73,8 @@ class Building(Resource):
                     'description': data.get('description'),
                     'facilityID': ObjectId(f_id)
                 })
-                #return jsonify({'_id': takeID.inserted_id})
-                return 'Building created'
+                return jsonify({'_id': takeID.inserted_id})
+                #return 'Building created'
             else:
                 return 'Invalid facility'
 
@@ -84,6 +84,11 @@ class Building(Resource):
         buildings = db.buildings
         users = db.users
         current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id')), 'groupID.name': 'admin'})
+        res = {
+            'msg': [],
+            'err': []
+        }
+
         if current_user is None:
             return 'You do not have the permissions to create a new building.'
         else:
@@ -105,13 +110,20 @@ class Building(Resource):
                                                                   'description': data.get('description'),
                                                                   'facilityID': ObjectId(f_id)}
                                                              })
-                    return 'Building updated'
+                    res['msg'].append('success')
+                    return jsonify(res)
                 else:
-                    return 'Invalid building'
+                    res['err'].append('Invalid building')
+                    return jsonify(res) 
             else:
-                return 'Invalid facility'
+                res['err'].append('Invalid facility')
+                return jsonify(res)
 
     def delete(self, f_id, b_id):
+        res = {
+            'msg': [],
+            'err': []
+        }
         facilities = db.facilities
         buildings = db.buildings
         rooms = db.rooms
@@ -126,10 +138,13 @@ class Building(Resource):
                         Room().delete(f_id, b_id, str(room.get('_id')))
                 elif drooms is None:
                     print('No rooms to delete')
-                # rooms.delete_many({'buildingID': ObjectId(b_id)})
                 buildings.delete_one({'_id': ObjectId(b_id)})
-                return 'Building deleted.'
+                res['msg'].append('Building deleted')
+                return jsonify(res)
             else:
-                return 'Invalid building'
+                res['err'].append('Invalid building')
+                return jsonify(res)
         else:
-            return 'Invalid facility' 
+            res['err'].append('Invalid facility')
+            return jsonify(res)
+
