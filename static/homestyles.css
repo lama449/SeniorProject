@@ -15,9 +15,11 @@ body, html{
 
 html {
     font-size: 16px;
+    min-height: 100%;
 }
 
 body {
+    height: 100%
     display: flex;
     flex-direction: column;
     font-size: 1rem;
