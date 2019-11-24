@@ -376,7 +376,7 @@
       delimiters: ["[[", "]]"],
       methods: {
         submitInfo: function() {
-          axios.post("/api/facilities/" + this.f_id + "/buildings" {
+          axios.post("/api/facilities/" + this.f_id + "/buildings", {
             name: this.buildingName,
             phone: this.phoneNum,
             address_L1: this.addressL1,
