@@ -59,7 +59,7 @@
                     </div>
                 </form>
                 </div><p></p>
-                <button type="submit" class="button" style="display: inline-block; width: 200px">Save changes</button>
+                <button type="submit" class="button" style="display: inline-block; width: 200px" @click.prevent="putDetails()">Save changes</button>
                 <button style="margin-left: 5em; background-color: red; width: 200px" type="submit" class="button" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button></h6>
                 <div id = "modalwrapper3" class = "modal">
                     <form class="modal-content animate">
@@ -105,7 +105,7 @@
         },
         delimiters: ["[[", "]]"],
         methods: {
-            getDetails: function () {
+            putDetails: function () {
                 axios
                     .put("{{ url_for('user') }}", {
                         first_name: this.first_name,
