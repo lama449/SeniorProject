@@ -26,11 +26,13 @@
 		</div>
 		{% if session.get('user') %}
 		<h6><center>OR</center></h6>
-		<div class="form-group center-text container">
-			<label for="code">Search for a Facility by Access Code</label>
-			<input type="text" name="code" style="margin: 0 auto" id="homepage--access-code" class="full-width" placeholder="##########" v-model="access_code">
+		<div class="center-text container">
+			<div class="form-group">
+				<label for="code">Search for a Facility by Access Code</label>
+				<input type="text" name="code" style="margin: 0 auto" id="homepage--access-code" class="full-width" placeholder="##########" v-model="access_code">
+				<button @click.prevent="getFacilityCode()" class="button">Submit</button>
+			</div>
 		</div>
-		<button @click.prevent="getFacilityCode()" class="button">Submit</button>
 		{% endif %}
 		<div v-if="facilities.length" class="secondary-content container">
 			<table class="table">
