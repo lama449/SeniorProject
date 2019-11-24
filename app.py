@@ -132,7 +132,7 @@ def forgot_password():
             security_question = users.find_one({'email': data.get('email')})
             return jsonify({'question': security_question.get('question')})
         else:
-            login_user = users.find_one({'email': data.get('email'))})  # find user in db
+            login_user = users.find_one({'email': data.get('email')})  # find user in db
             if bcrypt.hashpw(data.get('answer').encode('utf-8'), login_user['answer']) != login_user['answer']:
                 res['msg'].append('success')
             else:
