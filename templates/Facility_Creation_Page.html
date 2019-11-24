@@ -5,6 +5,8 @@
 <title>Facility Creation</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	{% include 'header.html' %}
@@ -314,7 +316,7 @@
 			</p>
 
           <p>Description:</p>
-          <textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here" v-model="description"></textarea>
+          <textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here" required v-model="description"></textarea>
 
           <!-- submit -->
           <button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button>
