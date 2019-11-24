@@ -116,9 +116,7 @@ class User(Resource):
                 res['err'].append('That email already exists.')
                 return jsonify(res)
     
-            hashed_answer = bcrypt.hashpw(answer.encode('utf-8'), bcrypt.gensalt())
-
-            users.update_one({'_id': session.get('user').get('_id')}, {
+            users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {
                 '$set': {
                     'email': email,
                     'first_name': f_name,
@@ -126,6 +124,11 @@ class User(Resource):
                 }
             })
             res['msg'].append('success')
+
+            session['user']['email'] = email
+            session['user']['first_name'] = f_name
+            session['user']['last_name'] = l_name
+
             return jsonify(res)
         elif data.get('opsw'):
             # check if all the fields are filled out
@@ -139,50 +142,60 @@ class User(Resource):
                 res['err'].append('No new password')
             if not confirm_password:
                 res['err'].append('No password confirmation')
+            login_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})  # find user in db
+            if bcrypt.hashpw(old_password.encode('utf-8'), login_user['password']) != login_user['password']:
+                res['err'].append('Old password is wrong')
             if new_password != confirm_password:
                 res['err'].append('Passwords do not match')
             if new_password == old_password:
                 res['err'].append('New password is the same as old password')
-            if not f_name:
-                res['err'].append('No First Name')
-            if not l_name:
-                res['err'].append('No Last Name')
 
             if res['err']:
                 return jsonify(res)
 
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
 
-            users.update_one({'_id': session.get('user').get('_id')}, {
+            users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {
                 '$set': {
                     'password': hashed_password,
                 }
             })
             res['msg'].append('success')
+
             return jsonify(res)
         elif data.get('question'):
             # check if all the fields are filled out
             question = data.get('question')
-            answer = data.get('answer')
+            old_answer = data.get('oanswer')
+            new_answer = data.get('nanswer')
 
             if not question:
                 res['err'].append('No security question')
-            if not answer:
-                res['err'].append('No security question answer')
+            if not old_answer:
+                res['err'].append('No old security question answer')
+            if not new_answer:
+                res['err'].append('No new security question answer')
+            login_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})  # find user in db
+            if bcrypt.hashpw(old_answer.encode('utf-8'), login_user['answer']) != login_user['answer']:
+                res['err'].append('Old answer is wrong')
 
             if res['err']:
                 return jsonify(res)
 
-            hashed_answer = bcrypt.hashpw(answer.encode('utf-8'), bcrypt.gensalt())
+            hashed_answer = bcrypt.hashpw(new_answer.encode('utf-8'), bcrypt.gensalt())
 
-            users.update_one({'_id': session.get('user').get('_id')}, {
+            users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {
                 '$set': {
                     'question': question,
                     'answer': hashed_answer,
                 }
             })
+            res['msg'].append('success')
+
+            session['user']['question'] = question
+            return jsonify(res)
         elif data.get('groupID'): 
-            users.update_one({'_id': session.get('user').get('_id')}, {
+            users.update_one({'_id': ObjectId(session.get('user').get('_id'))}, {
                 '$push': {
                     'groupID': ObjectId(data.get('groupID'))
                 }
@@ -200,9 +213,10 @@ class User(Resource):
         }
 
         users = db.users
-        delete_user = users.delete_one({'_id': session.get('user').get('_id')})
-        if delete_room.deleted_count:
+        delete_user = users.delete_one({'_id': ObjectId(session.get('user').get('_id'))})
+        if delete_user.deleted_count:
             res['msg'].append('success')
+            session['user'] = None
         else:
             res['err'].append('Did not find user')
         return jsonify(res)
