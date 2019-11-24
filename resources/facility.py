@@ -43,6 +43,7 @@ class Facility(Resource):
 
     def post(self):
         facilities = db.facilities
+        users = db.users
         data = request.json
         if data.get('access_code'):
             return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
@@ -89,6 +90,9 @@ class Facility(Resource):
             'name': 'admin'
             }]
         })
+        users.update_one({'_id': session.get('user').get('_id')},
+                         {'$push': {'groupID': {'_id': 'takeID.groups._id',
+                                                'name': 'takeID.groups.name'}}})
         return jsonify({'_id': takeID.inserted_id})
 
     def put(self, f_id):
