@@ -3,7 +3,7 @@ from flask_restful import *
 from bson.json_util import loads, dumps
 import bcrypt
 from SeniorProject.database import conn_DB
-from SeniorProject.resources.reservation import Reservation
+from SeniorProject.resources.reservation import Reservation, UserReservations
 from SeniorProject.resources.user import User
 from SeniorProject.resources.facility import Facility
 from SeniorProject.resources.room import Room
@@ -116,27 +116,35 @@ def room_creation(f_id, b_id):
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'GET':
-        return render_template('Forgot_Password_Page.html')
+        return render_template('Forgot_Password.html')
     else:
         res = {
                 'msg': [],
                 'err': []
-            }
+        }
+        users = db.users
         data = request.json
-        if answer == None:
-            users = db.users
-            security_question = users.find_one({'email': data.get('email')})
-            return jsonify({'question': security_question.get('question')})
+        email = data.get('email')
+        answer = data.get('answer')
+
+        if email is None or email == "":
+            res['err'].append('No email')
+            return jsonify(res)
+
+        if answer is None or answer == "":
+            found_user = users.find_one({'email': email})
+            return jsonify({'question': found_user.get('question')})
         else:
-            login_user = users.find_one({'email': data.get('email')})  # find user in db
-            if bcrypt.hashpw(data.get('answer').encode('utf-8'), login_user['answer']) != login_user['answer']:
+            login_user = users.find_one({'email': email})  # find user in db
+            if bcrypt.hashpw(answer.encode('utf-8'), login_user['answer']) != login_user['answer']:
                 res['msg'].append('success')
             else:
-                res['err'].append('fail')
+                res['err'].append('Wrong answer')
+            return jsonify(res)
 
 @app.route('/changepassword', methods=['GET'])
 def change_password():
-    return render_template('Change_Password_Page.html')
+    return render_template('Change_Password.html')
 
 
 @app.route('/calendar', methods=['GET'])
@@ -151,6 +159,6 @@ api.add_resource(Reservation, '/api/facilities/<f_id>/buildings/<b_id>/rooms/<r_
 api.add_resource(User, '/api/users', '/api/users/<u_id>', endpoint='user')
 api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<m_id>', '/api/facilities/<f_id>/maintenance/room/<r_id>', endpoint='maintenance')
 api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id>/groups/<g_id>', endpoint='group')
-
+api.add_resource(UserReservations, '/api/user/reservations', endpoint='user reservations')
 if __name__ == '__main__':
     app.run()

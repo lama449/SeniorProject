@@ -6,6 +6,7 @@ import string
 import random
 from SeniorProject import database
 from SeniorProject.resources.building import Building
+from SeniorProject.resources.group import Group
 
 db = database.conn_DB()
 
@@ -68,6 +69,9 @@ class Facility(Resource):
             return 'Missing Facility Country'
         if not data.get('phone'):
             return 'Missing Facility Phone'
+
+        admin_group_id = ObjectId()
+
         takeID = facilities.insert_one({
         'name': data.get('name'),
         'private': data.get('private') == 'true',
@@ -86,14 +90,13 @@ class Facility(Resource):
         'attributes': {},
         'maintenance': [],
         'groups': [{
-            '_id': ObjectId(),
+            '_id': admin_group_id,
             'name': 'admin'
             }]
         })
         print(takeID)
-        users.update_one({'_id': session.get('user').get('_id')},
-                         {'$push': {'groupID': {'_id': 'takeID.groups._id',
-                                                'name': 'takeID.groups.name'}}})
+        users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
+                         {'$push': {'groupID': admin_group_id}})
         return jsonify({'_id': takeID.inserted_id})
 
     def put(self, f_id):
@@ -131,6 +134,7 @@ class Facility(Resource):
             for building in dbuildings:
                 print(building)
                 Building().delete(f_id, str(building.get('_id')))
+                Group().delete(f_id, str(group.get('_id')))
                 facilities.delete_one({'_id': ObjectId(f_id)})   
         else:
             return 'Invalid facility'
