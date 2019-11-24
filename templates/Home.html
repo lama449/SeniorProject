@@ -20,16 +20,16 @@
 				<div class="form-group">
 					<label for="zip">Zip Code</label>
 					<input type="text" name="zip" id="homepage--facility-zip" class="full-width" placeholder="Zip Code" v-model="zip_code">
-					<button @click.prevent="getFacilityList()" class="button">Submit</button>
 				</div>
+				<button @click.prevent="getFacilityList()" class="button">Submit</button>
 			</form>
 		</div>
 		OR
 		<div class="form-group">
 			<label for="code">Search for a Facility by Access Code</label>
 			<input type="text" name="code" id="homepage--access-code" class="full-width" placeholder="##########" v-model="access_code">
-			<button @click.prevent="getFacilityCode()" class="button">Submit</button>
 		</div>
+		<button @click.prevent="getFacilityCode()" class="button">Submit</button>
 		<div v-if="facilities.length" class="secondary-content container">
 			<table class="table">
 				<tr>
