@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
 import bcrypt
+from datetime import datetime
 from bson.objectid import ObjectId
 from SeniorProject import database
 from SeniorProject.resources.room import validate_room
@@ -42,16 +43,17 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
             res['err'].append('Missing User ID')
         if res['err']:
             return jsonify(res)
-
         rooms = db.rooms
         val = validate_room(f_id, b_id, r_id)
         if val[0]:
             reserv_id = ObjectId()
+            start_time = datetime.fromisoformat(data.get('start_time')
+            end_time = datetime.fromisoformat(data.get('end_time')
             new_reservation = rooms.update_one({'_id': ObjectId(r_id)},
                                             {'$push': {'reservations': {
                                                 '_id': reserv_id,
-                                                'start_time': data.get('start_time'),
-                                                'end_time': data.get('end_time'),
+                                                'start_time': start_time,
+                                                'end_time': end_time,
                                                 'userID': ObjectId(data.get('userID'))}}})
             return jsonify(reserv_id)
         else:
@@ -62,9 +64,11 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
         rooms = db.rooms
         val = validate_room(f_id,b_id,r_id)
         if val[0]:
+            start_time = datetime.fromisoformat(data.get('start_time'))
+            end_time = datetime.fromisoformat(date.get('end_time'))
             update_reservation = rooms.update_one({'_id': ObjectId(r_id), 'reservations._id': ObjectId(reserv_id)},
-                                    {'$set': {'reservations.$.start_time' : data.get('start_time'),
-                                            'reservations.$.end_time' : data.get('end_time')}})
+                                    {'$set': {'reservations.$.start_time' : start_time,
+                                            'reservations.$.end_time' : end_time)}})
             return jsonify(ObjectId(r_id))
         else:
             return {'err':val[1]}
