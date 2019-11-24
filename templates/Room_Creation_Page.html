@@ -115,9 +115,9 @@
         submitInfo: function() {
           axios.post("/api/facilities/" + this.f_id + "/buildings" + this.b_id + "/rooms" + this.room_id, {
             name: this.RoomName,
-            number: this.roomNum
-            capacity: this.roomCap
-            attributes: this.atSelect
+            number: this.roomNum,
+            capacity: this.roomCap,
+            attributes: this.atSelect,
             groupID: this.groupSelect
           })
           .then(getBuildingURL())
