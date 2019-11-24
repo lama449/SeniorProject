@@ -60,10 +60,6 @@ def logout():
     session['user'] = None
     return redirect(url_for('home'))
 
-@app.route('/forgot_password', methods=['GET'])
-def forgot_password():
-    return render_template('Forgot_Password.html')
-
 @app.route('/register', methods=['GET'])
 def register():
     return render_template('Registration.html')
