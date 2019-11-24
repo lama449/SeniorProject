@@ -78,7 +78,7 @@ class Group(Resource):
             facilities.update({'_id': ObjectId(f_id)},
                               {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
             users.update({'groupID': ObjectId(g_id)},
-                         {'$pull': {'groupID': {'_id': ObjectId(g_id)}}})
+                         {'$pull': {'groupID':  ObjectId(g_id)}})
             return 'Delete successful'
         else:
             return 'Invalid facility'
