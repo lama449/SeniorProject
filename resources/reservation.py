@@ -53,7 +53,7 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
                                                 'start_time': data.get('start_time'),
                                                 'end_time': data.get('end_time'),
                                                 'userID': ObjectId(data.get('userID'))}}})
-            return jsonify(new_reservation)
+            return jsonify(reserv_id)
         else:
             return {'err':val[1]}
 
@@ -82,4 +82,4 @@ tId(reserv_id)}}}, {'_id':0, 'reservations':1})'''
             else:
                 return {'err': 'failed'}
         else:
-            return {'err': val[1]}            
+            return {'err': val[1]}
