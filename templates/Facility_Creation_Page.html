@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head> 
+<head>
 <meta charset="utf-8">
 <title>Facility Creation</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
@@ -13,41 +13,47 @@
         <form>
           <h1> Facility Creation </h1>
 			<p>Looking a create a new facility? You can do so with this form!</p>
-			
+
           <label for="name">Facility Name:</label>
-          <input type="text" name="facilityName" id ="name" placeholder="Enter Facility Name" required>
-			
+          <input type="text" name="facilityName" id ="name" placeholder="Enter Facility Name" required v-model="name">
+
 		<br>
-			
+
           <label for="phoneNum">Phone Number:</label>
           <input type="tel" name="telphone" placeholder="123-456-7890" required pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
-          maxlength="12"  title="Ten digits code" >
-			
+          maxlength="12"  title="Ten digits code" v-model="phoneNum">
+
 		<br>
-			
+
           <!-- Location Information -->
-          <label for="address">Address:</label>
-          <input type="text" name="address" id ="address" placeholder="Enter Address" required>
-			
+          <label for="addressL1">Street Address:</label>
+          <input type="text" name="addressL1" id ="addressL1" placeholder="Enter Address" required v-model="addressL1">
+
 		<br>
-			
+
+          <label for="address">Address Line 2:</label>
+          <input type="text" name="addressL2" id ="addressL2" placeholder="Enter Address" required v-model="addressL2">
+
+<br>
+
+
           <label for="city">City:</label>
-          <input type="text" name="city" id ="city" placeholder="Enter City" required>
-			
+          <input type="text" name="city" id ="city" placeholder="Enter City" required v-model="city">
+
 		<br>
-			
+
           <label for="state">State:</label>
-          <input type="text" name="state" id ="state" placeholder="Enter State" required>
-			
+          <input type="text" name="state" id ="state" placeholder="Enter State" required v-model="state">
+
 		<br>
-			
+
           <label for="zip">Zip Code:</label>
-          <input type="number" name="zip" id ="zip" placeholder="Enter Zip Code" required>
-			
-		<br>	
-			
+          <input type="number" name="zip" id ="zip" placeholder="Enter Zip Code" required v-model="zipCode">
+
+		<br>
+
           <label for="countrySelect">Country:</label>
-          <select name="country" id="countrySelect">
+          <select name="country" id="countrySelect" v-model="countrySelect">
             <option value="">-- Please choose an country --</option>
             <option value="AFG">Afghanistan</option>
             <option value="ALA">Åland Islands</option>
@@ -306,16 +312,56 @@
 			  <option value="private">Private</option>
 			</select>
 			</p>
-			
-          <p>Description:</p>
-          <textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here"></textarea>
 
-          <input id="submit" type="submit">
+          <p>Description:</p>
+          <textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here" v-model="description"></textarea>
+
+          <!-- submit -->
+          <button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button>
         </form>
 
         {% include 'footer.html' %}
 
     </div>
 
+    <script>
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        f_id: {{ f_id | tojson }},
+        name: "",
+        phoneNum: "",
+        addressL1: "",
+        addressL2: "",
+        city:"",
+        state:"",
+        zipCode: "",
+        countrySelect:"",
+        description: ""
+
+      },
+      delimiters: ["[[", "]]"],
+      methods: {
+        submitInfo: function() {
+          axios.post("/api/facilities/" + this.f_id {
+            this.name: name
+            this.phone: phoneNum
+            this.address_L1: addressL1
+            this.address_L2: addressL2
+            this.city: city
+            this.state: state
+            this.zip: zipCode
+            this.country: countrySelect
+            this.description: description
+          })
+          .then(getFacilityURL())
+          .catch(error => console.log(error))
+        },
+        getBuildingURL: function() {
+                    return "/facility/" + this.f_id
+                  }
+      }
+    })
+    </script>
 </body>
 </html>
