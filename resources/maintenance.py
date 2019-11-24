@@ -12,6 +12,10 @@ db = database.conn_DB()
 
 class Maintenance(Resource):
     def get(self, f_id, r_id=None):
+        res = {
+            'msg': [],
+            'err': []
+        }
         facilities = db.facilities
         rooms = db.rooms
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -27,18 +31,24 @@ class Maintenance(Resource):
                     if current_req:
                         return jsonify(current_req)
                     else:
-                        return 'No maintenance requests for this room.'
+                        res['msg'].append('No maintenance requests for this room.')
+                        return jsonify(res)
                 else:
-                    return 'Invalid room'
+                    res['err'].append('Invalid room')
+                    return jsonify(res)
             else:
                 return jsonify(facilities.find_one({'_id': ObjectId(f_id)},
                                            {'_id': 0, 'access_code': 0, 'name': 0, 'private': 0, 'address': 0,
                                             'phone': 0, 'description': 0, 'presets': 0, 'attributes': 0}))
         else:
-            return 'Invalid facility'
-        pass
+            res['err'].append('Invalid facility')
+            return jsonify(res)
 
     def post(self, f_id, r_id):
+        res = {
+            'msg': [],
+            'err': []
+        }
         data = request.json
         user = session.get('user')
         facilities = db.facilities
@@ -50,14 +60,14 @@ class Maintenance(Resource):
                 current_room = rooms.find_one({'_id': ObjectId(r_id)}, {'number': 1, 'buildingID': 1, '_id': 1})
                 if current_room:
                     if not data.get('description'):
-                        return 'Missing maintenance request description'
+                        return jsonify(res['err'].append('Missing maintenance request description'))
                     if not data.get('date'):
-                        return 'Missing date submitted'
+                        return jsonify(res['err'].append('Missing date submitted'))
                     if not data.get('status'):
-                        return 'Missing maintenance request status'
+                        return jsonify(res['err'].append('Missing maintenance request status'))
                     current_building = buildings.find_one({'_id': current_room.get('buildingID')})
                     if not current_building: 
-                        return 'No building'
+                        return jsonify(res['err'].append('Invalid building'))
                     newReq = facilities.update({'_id': ObjectId(f_id)},
                                                {'$push': {'maintenance':
                                                               {'_id': ObjectId(),
@@ -72,13 +82,17 @@ class Maintenance(Resource):
                     if currentReq:
                         return jsonify(currentReq)
                 else:
-                    return 'Invalid room'
+                    return jsonify(res['err'].append('Invalid room'))
             else:
-                return 'Missing room'
+                return jsonify(res['err'].append('Missing room'))
         else:
-            return 'Invalid facility'
+            return jsonify(res['err'].append('Invalid facility'))
 
     def put(self, f_id, m_id, r_id):
+        res = {
+            'msg': [],
+            'err': []
+        }
         data = request.json
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -93,15 +107,19 @@ class Maintenance(Resource):
                                                             })
                     #updatedRequest = [req for req in updated_request]
                     #return jsonify(updated_request)
-                    return 'Update successful!' #will fix return later 
+                    return jsonify(res['msg'].append('Update successful!')) 
                 else:
-                    return 'Missing status update'
+                    return jsonify(res['err'].append('Missing status update'))
             else:
-                return 'Invalid maintenance request ID'
+                return jsonify(res['err'].append('Invalid maintenance request ID'))
         else:
-            return 'Invalid facility ID'
+            return jsonify(res['err'].append('Invalid facility ID'))
 
     def delete(self, f_id, m_id=None, r_id=None):
+        res = {
+            'msg': [],
+            'err': []
+        }
         facilities = db.facilities
         rooms = db.rooms
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -109,16 +127,16 @@ class Maintenance(Resource):
             if r_id is None:
                 facilities.update({'_id': ObjectId(f_id)},
                                   {'$pull': {'maintenance': {'_id': ObjectId(m_id)}}})
-                return 'Delete successful'
+                return jsonify(res['msg'].append('Delete successful'))
             elif m_id:
-                return 'Invalid maintenance request ID'
+                return jsonify(res['err'].append('Invalid maintenance request ID'))
             if m_id is None:
                 current_room = rooms.find_one({'_id': ObjectId(r_id)})
                 if current_room:
                     facilities.update({'_id': ObjectId(f_id)},
                                       {'$pull': {'maintenance': {'roomID': ObjectId(r_id)}}})
-                    return 'Delete successful'
+                    return jsonify(res['msg'].append('Delete successful'))
                 else:
-                    return 'Invalid room ID'
+                    return jsonify(res['err'].append('Invalid room ID'))
         else:
             return 'Invalid facility'
