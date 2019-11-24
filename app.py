@@ -117,7 +117,26 @@ def room_creation(f_id, b_id):
     # TODO: check if user is an admin first. if not, send back to management page?
     return render_template('Room_Creation_Page.html', f_id=f_id, b_id=b_id)
 
-
+@app.route('/forgotpassword', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'GET':
+        return render_template('Forgot_Password_Page.html')
+    else:
+        res = {
+                'msg': [],
+                'err': []
+            }
+        data = request.json
+        if answer == None:
+            users = db.users
+            security_question = users.find_one({'email': data.get('email')})
+            return jsonify({'question': security_question.get('question')})
+        else:
+            login_user = users.find_one({'email': data.get('email'))})  # find user in db
+            if bcrypt.hashpw(data.get('answer').encode('utf-8'), login_user['answer']) != login_user['answer']:
+                res['msg'].append('success')
+            else:
+                res['err'].append('fail')
 
 @app.route('/calendar', methods=['GET'])
 def calendar():
