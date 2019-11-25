@@ -118,7 +118,7 @@
         {% if admin %}
 		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Facility Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
-
+	{% endif %}
         </div>
             <div v-if="buildings.length">
 			    <table class="table">
@@ -126,11 +126,19 @@
                         <th>Building</th>
                         <th>Location</th>
                         <th>Phone Number</th>
+			{% if admin %}
+			<th>Delete?</th>
+			{% endif %}
                     </tr>
                     <tr v-for="building in buildings">
                         <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
-                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]] [[ building.address.address_L2]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td v-if="building.address.address_L2 != ''"><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]] [[ building.address.address_L2]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
+			<td v-else><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
+
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
+			{% if admin %}
+			<td><a> </a></td>
+			{% endif %}
                     </tr>
                 </table>
             </div>
@@ -145,11 +153,13 @@
                         <td></td>
                         <td></td>
                         <td></td>
+			<td></td>
                     </tr>
                 </table>
             </div>
-
-	    <button class="submitbtn" v-bind:href="getBuildingCreationURL()"> Create A New Building </button>
+	{% if admin %}
+	<button class="submitbtn" v-bind:href="getBuildingCreationURL()"> Create A New Building </button>
+	{% endif %}
         </div>	
     </div>
 

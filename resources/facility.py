@@ -87,7 +87,7 @@ class Facility(Resource):
         'phone': data.get('phone'),
         'description': data.get('description'),
         'presets': {},
-        'attributes': {},
+        'attributes': [],
         'maintenance': [],
         'groups': [{
             '_id': admin_group_id,
