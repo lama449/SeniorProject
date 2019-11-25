@@ -158,7 +158,7 @@
                 </table>
             </div>
 	{% if admin %}
-	<button class="submitbtn" v-bind:href="getBuildingCreationURL()"> Create A New Building </button>
+	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
 	{% endif %}
         </div>	
     </div>
@@ -195,7 +195,8 @@
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
 		},
 		getBuildingCreationURL: function() {
-		    return "/facility/" + this.f_id + "/building_creation"	    
+		    window.location.href="/facility/" + this.f_id + "/building_creation"
+		    return	    
 		},
 		editBtn: function() {		    
 		    document.getElementById("savebtn").style.display = "inline";
