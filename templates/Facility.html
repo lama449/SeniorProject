@@ -115,11 +115,11 @@
 				<option value="true">Private</option>
 				<option value="false">Public</option></select></td></tr>
 		</table>
-
+        {% if admin %}
 		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Facility Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
 
-            </div>
+        </div>
             <div v-if="buildings.length">
 			    <table class="table">
                     <tr>
@@ -134,6 +134,21 @@
                     </tr>
                 </table>
             </div>
+            <div v-else>
+                <table class="table">
+                    <tr>
+                        <th>Building</th>
+                        <th>Location</th>
+                        <th>Phone Number</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
 	    <button class="submitbtn" v-bind:href="getBuildingCreationURL()"> Create A New Building </button>
         </div>	
     </div>
