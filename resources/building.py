@@ -37,29 +37,44 @@ class Building(Resource):
         facilities = db.facilities
         buildings = db.buildings
         users = db.users
-        current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id')), 'groupID.name': 'admin'})
-        if current_user is None: 
-            return 'You do not have the permissions to create a new building.'
-        else: 
-            current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        res = {
+            'msg': [],
+            'err': []
+        }
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        groups = current_facility.get('groups')
+        admin_id = next(g for g in groups if g['name'] == 'admin')['_id']
+        current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id')), 'groupID': ObjectId(admin_id)})
+        if current_user is None:
+            res['msg'].append('You do not have the permissions to create a new building.')
+            return jsonify(res)
+        else:
             if current_facility:
                 data = request.json
                 if not data.get('name'):
-                    return 'Missing Building Name'
+                    res['err'].append('Missing Building Name')
+                    return jsonify(res)
                 if not data.get('address_L1'):
-                    return 'Missing Building Address Line'
+                    res['err'].append('Missing Building Address Line')
+                    return jsonify(res)
                 if not data.get('city'):
-                    return 'Missing Building City'
+                    res['err'].append('Missing Building City')
+                    return jsonify(res)
                 if not data.get('state'):
-                    return 'Missing Building State'
+                    res['err'].append('Missing Building State')
+                    return jsonify(res)
                 if not data.get('zip'):
-                    return 'Missing Building Zip'
+                    res['err'].append('Missing Building Zip')
+                    return jsonify(res)
                 if not data.get('country'):
-                    return 'Missing Building Country'
+                    res['err'].append('Missing Building Country')
+                    return jsonify(res)
                 if not data.get('phone'):
-                    return 'Missing Building Phone'
+                    res['err'].append('Missing Building Phone')
+                    return jsonify(res)
                 if not data.get('description'):
-                    return 'Missing Building Description'
+                    res['err'].append('Missing Building Description')
+                    return jsonify(res)
                 takeID = buildings.insert_one({
                     'name': data.get('name'),
                     'address': {
@@ -74,9 +89,8 @@ class Building(Resource):
                     'facilityID': ObjectId(f_id)
                 })
                 return jsonify({'_id': takeID.inserted_id})
-                #return 'Building created'
             else:
-                return 'Invalid facility'
+                return jsonify(res['err'].append('Invalid facility'))
 
     def put(self, f_id, b_id):
         data = request.json
@@ -90,7 +104,8 @@ class Building(Resource):
         }
 
         if current_user is None:
-            return 'You do not have the permissions to create a new building.'
+            res['msg'].append('You do not have the permissions to create a new building.')
+            return jsonify(res)
         else:
             current_facility = facilities.find_one({'_id': ObjectId(f_id)})
             if current_facility:
