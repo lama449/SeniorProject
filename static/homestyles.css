@@ -7,10 +7,10 @@ body, html{
     margin: auto;
     font-family: Arial;
     background-image: -webkit-linear-gradient(rgba(0,0,0,.25),white), url("Buildings.jpg");
-    background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("Buildings.jpg");
+    opacity: .5;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
+    background-size: 100% 100%;
 }
 
 html {
