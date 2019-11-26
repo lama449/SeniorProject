@@ -28,7 +28,7 @@
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
                     </div>
                     <div class="container" style="background-color: white">
-                        <div class="errorbox" v-for="e2 in error">[[e2]]</div>
+                        <div class="errorbox" v-for="e2 in error2">[[e2]]</div>
                         <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "opsw">
                         <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "npsw">
                         <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "cpsw">
@@ -44,7 +44,7 @@
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Security Details</h1>
                     </div>
                     <div class="container" style="background-color: white">
-                        <div class="errorbox" v-for="e3 in error">[[e3]]</div>
+                        <div class="errorbox" v-for="e3 in error3">[[e3]]</div>
                         <select v-model="question">
                             <option value="What is your favorite book?">What is your favorite book?</option>
                             <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
@@ -101,7 +101,10 @@
             question: "",
             oanswer: "",
             nanswer: '',
-            error: []
+            error: [],
+            error2: [],
+            error3: []
+
         },
         mounted(){
             axios
@@ -128,6 +131,8 @@
                             window.location.reload(false);
                         } else {
                             this.error = res.data.err;
+                            this.error2 = res.data.err;
+                            this.error3 = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
