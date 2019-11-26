@@ -131,8 +131,6 @@
                             window.location.reload(false);
                         } else {
                             this.error = res.data.err;
-                            this.error2 = res.data.err;
-                            this.error3 = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
@@ -149,7 +147,7 @@
                         if ("msg" in res.data && res.data.msg.length) {
                             window.location.reload(false);
                         } else {
-                            this.error = res.data.err;
+                            this.error2 = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
@@ -166,7 +164,7 @@
                         if ("msg" in res.data && res.data.msg.length) {
                             window.location.reload(false);
                         } else {
-                            this.error = res.data.err;
+                            this.error3 = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
