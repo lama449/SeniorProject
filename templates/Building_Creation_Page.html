@@ -396,7 +396,7 @@
               this.error = res.data.err
             } else {
               this.b_id = res.data._id;
-              location.href = ("/facility/" + this.f_id +"/buildings/" + this.b_id)
+              location.href = ("/facility/" + this.f_id +"/building/" + this.b_id)
             }
           })
           .catch(error => console.log(error))
