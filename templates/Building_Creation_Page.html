@@ -359,7 +359,7 @@
 	{% include 'footer.html' %}
 
 
-    <script>
+<script>
     var vm = new Vue({
       el: "#app",
       data: {
@@ -373,7 +373,8 @@
         state:"",
         zipCode: "",
         countrySelect:"",
-        description: ""
+        description: "",
+        error: []
 
       },
       delimiters: ["[[", "]]"],
@@ -391,14 +392,17 @@
             description: this.description
           })
           .then(res => {
-            this.b_id = res.data._id;
-            location.href = ("/facility/" + this.f_id +"/building/" + this.b_id)
-            })
+            if("err" in res.data && res.data.err.length) {
+              this.error = res.data.err
+            } else {
+              this.b_id = res.data._id;
+              location.href = ("/facility/" + this.f_id +"/buildings/" + this.b_id)
+            }
+          })
           .catch(error => console.log(error))
         }
       }
     })
-
     </script>
 
 </body>
