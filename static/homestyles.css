@@ -143,8 +143,20 @@ a.nav--item:hover {
  * Forms
  */
 
+
 /* Text input fields */
-input[type=text], input[type=password], input[type=email] {
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea,
+select {
     border-radius: 15px;
     padding: 15px;
     margin: 5px 0 22px 0;
@@ -154,20 +166,23 @@ input[type=text], input[type=password], input[type=email] {
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, "sans-serif"
 }
 
-input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus{
     background-color: #ddd;
     outline: none;
 }
 
-input[type=password]{
-    border-radius: 15px;
-    padding: 15px;
-    margin: 5px 0 22px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, "sans-serif"
-}
+
 
 /* Full-width input fields */
 .full-width {
