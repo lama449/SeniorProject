@@ -15,6 +15,7 @@
         {% if session.get('user') %}
         <h4 style="padding-left: 5em">Profile</h4>
         <div style="padding-left: 10em">
+            <div class="errorbox" v-for="e in error">[[e]]</div>
             <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"></h6>
             <h6><b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"></h6>
             <h6><b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"></h6>
@@ -26,6 +27,7 @@
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
                     </div>
                     <div class="container" style="background-color: white">
+                        <div class="errorbox" v-for="e in error">[[e]]</div>
                         <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "opsw">
                         <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "npsw">
                         <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "cpsw">
@@ -41,6 +43,7 @@
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Security Details</h1>
                     </div>
                     <div class="container" style="background-color: white">
+                        <div class="errorbox" v-for="e in error">[[e]]</div>
                         <select v-model="question">
                             <option value="What is your favorite book?">What is your favorite book?</option>
                             <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
@@ -97,6 +100,7 @@
             question: "",
             oanswer: "",
             nanswer: '',
+            error: []
         },
         mounted(){
             axios
