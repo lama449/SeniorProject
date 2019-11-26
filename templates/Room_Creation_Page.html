@@ -17,8 +17,8 @@
           <h1> Room Creation </h1>
 
           <!--Room Information -->
-          <label for="name">Room Name (Optional):</label>
-          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name" v-model = "roomName">
+          <label for="name">Room Name:</label>
+          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name" required v-model = "roomName">
 
           <label for="roomNum">Room Number:</label>
           <input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required v-model="roomNum">
@@ -124,7 +124,7 @@
       },
       methods: {
         submitInfo: function() {
-          axios.post("/api/facilities/" + this.f_id + "/buildings" + this.b_id + "/rooms", {
+          axios.post("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms", {
             name: this.roomName,
             number: this.roomNum,
             capacity: this.roomCap,
