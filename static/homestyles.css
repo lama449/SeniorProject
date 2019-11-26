@@ -51,6 +51,7 @@ hr {
     border-style: solid;
     border-width: medium;
     text-align: center;
+    padding: 10px;
 }
 
 .center-text {
