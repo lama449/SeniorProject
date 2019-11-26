@@ -51,10 +51,10 @@ def login():
             res['msg'].append('success')
             return jsonify(res)
         else:
-            res['err'].append('Invalid username/password combination1')
+            res['err'].append('Invalid username/password combination')
             return jsonify(res)
     else:
-        res['err'].append('Invalid username/password combination2')
+        res['err'].append('Invalid username/password combination')
         return jsonify(res)
 
 @app.route('/logout', methods=['GET'])
@@ -162,6 +162,9 @@ def forgot_password():
 
         if answer is None or answer == "":
             found_user = users.find_one({'email': email})
+            if found_user is None:
+                res['err'].append('Invalid email')
+                return jsonify(res)
             return jsonify({'question': found_user.get('question')})
         else:
             login_user = users.find_one({'email': email})  # find user in db
