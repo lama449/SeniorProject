@@ -5,7 +5,7 @@ from flask import session
 db = database.conn_DB()
 
 def check_logged_in():
-    pass
+    return ( session.get('user') is not None )
 
 def check_admin(f_id):
     facilities = db.facilities

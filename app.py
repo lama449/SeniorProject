@@ -87,7 +87,7 @@ def room_update_page(f_id, b_id, r_id):
     if check_admin(f_id):
         return render_template('Room_Update.html', f_id=f_id, b_id=b_id, r_id=r_id)
     else:
-        return redirect(url_for('building_page', f_id, b_id))
+        return redirect(url_for('building_page', f_id=f_id, b_id=b_id))
 
 
 @app.route('/facility/<f_id>/maintenance', methods=['GET'])
@@ -95,7 +95,7 @@ def maintenance_page(f_id):
     if check_admin(f_id):
         return render_template('Maintenance.html', f_id=f_id)
     else:
-        return redirect(url_for('facility_page', f_id))
+        return redirect(url_for('facility_page', f_id=f_id))
 
 @app.route('/reservations', methods=['GET'])
 def reservations():
@@ -131,7 +131,7 @@ def building_creation(f_id):
     if check_admin(f_id):
         return render_template('Building_Creation_Page.html', f_id=f_id)
     else:
-        return redirect(url_for('facility_page', f_id))
+        return redirect(url_for('facility_page', f_id=f_id))
 
 @app.route('/facility/<f_id>/building/<b_id>/room_creation', methods=['GET'])
 def room_creation(f_id, b_id):
@@ -139,7 +139,7 @@ def room_creation(f_id, b_id):
     if check_admin(f_id):
         return render_template('Room_Creation_Page.html', f_id=f_id, b_id=b_id)
     else:
-        return redirect(url_for('building_page', f_id, b_id))
+        return redirect(url_for('building_page', f_id=f_id, b_id=b_id))
 
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
