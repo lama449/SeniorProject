@@ -233,7 +233,7 @@
 		    	axios
 				.delete("/api/facilities/" + this.f_id + "/buildings/" + b_id)
 				.then(  
-					(alert("Successfully deleted facility: " + b_name), 
+					(alert("Successfully deleted building: " + b_name), 
 					reload()))
 				.catch(error => console.log(error))
 		    }			
