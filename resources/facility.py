@@ -7,6 +7,7 @@ import random
 from SeniorProject import database
 from SeniorProject.resources.building import Building
 from SeniorProject.resources.group import Group
+from SeniorProject.user_check import *
 
 db = database.conn_DB()
 
@@ -102,7 +103,15 @@ class Facility(Resource):
     def put(self, f_id):
         data = request.json
         facilities = db.facilities
+        res = {
+            'msg': [],
+            'res': []
+        }
+
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to edit this facility.')
+            return jsonify(res)
         if current_facility:
             updated_facility = facilities.update_one({'_id': ObjectId(f_id)},
                 {'$set':
@@ -117,8 +126,11 @@ class Facility(Resource):
                       'phone': data.get('phone'),
                       'description': data.get('description')}
                 })
+            res['msg'].append('success')
+            return jsonify(res)
         else:
-            return 'Invalid facility'
+            res['err'].append('Invalid facility')
+            return jsonify(res)
 
     def delete(self, f_id):
         facilities = db.facilities
