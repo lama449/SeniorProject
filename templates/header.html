@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="container" style="background-color: white">
-				<div class="errorbox" v-for="e in error">[[e]]</div>
+				<div class="errorbox full-width" v-for="e in error">[[e]]</div>
 				<input type="email" class = "full-width" placeholder="Enter Email" name = "email" v-model = "email">
 				<input type="password" class = "full-width"  placeholder="Enter Password" name = "psw" v-model = "password">
 				<button type="submit" class="button" style="margin: 0 auto; display: block" @click.prevent="submitLogin()">Login</button>
