@@ -14,13 +14,19 @@ db = database.conn_DB()
 class Facility(Resource):
     def get(self, f_id=None):
         facilities = db.facilities
+        res = {
+            'msg': [],
+            'res': []
+        }
+
         if (f_id):
             # get one facility based on the facility_id
             current_facility = facilities.find_one({'_id': ObjectId(f_id)})
             if current_facility:
                 return jsonify(current_facility)
             else:
-                return 'Invalid facility'
+                res['err'].append('Invalid Facility')
+                return jsonify(res)
         else:
             # search for facilities based on a query string (q) and zip code
             # this is for the search on the home page
@@ -47,6 +53,11 @@ class Facility(Resource):
         facilities = db.facilities
         users = db.users
         data = request.json
+        res = {
+            'msg': [],
+            'res': []
+        }
+
         if data.get('access_code'):
             return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
         while data.get('private') == 'true':
@@ -55,21 +66,24 @@ class Facility(Resource):
             if check_facility is None:
                 break
         if not data.get('name'):
-            return 'Missing Facility Name'
+            res['err'].append('Missing Facility Name Field')
         if data.get('private') is None:
-            return 'Missing Facility Private Field'
+            res['err'].append('Missing Facility Private Field')
         if not data.get('address_L1'):
-            return 'Missing Facility Address Line'
+            res['err'].append('Missing Facility Address Line')
         if not data.get('city'):
-            return 'Missing Facility City'
+            res['err'].append('Missing Facility City')
         if not data.get('state'):
-            return 'Missing Facility State'
+            res['err'].append('Missing Facility State')
         if not data.get('zip'):
-            return 'Missing Facility Zip'
+            res['err'].append('Missing Facility Zip')
         if not data.get('country'):
-            return 'Missing Facility Country'
+            res['err'].append('Missing Facility Country')
         if not data.get('phone'):
-            return 'Missing Facility Phone'
+            res['err'].append('Missing Facility Phone')
+
+        if res['err']:
+            return jsonify(res)
 
         admin_group_id = ObjectId()
 
@@ -107,7 +121,6 @@ class Facility(Resource):
             'msg': [],
             'res': []
         }
-
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if not check_admin(f_id):
             res['err'].append('You do not have the permissions to edit this facility.')
@@ -136,6 +149,10 @@ class Facility(Resource):
         facilities = db.facilities
         buildings = db.buildings
         rooms = db.rooms
+        res = {
+            'msg': [],
+            'res': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             dbuildings = buildings.find({'facilityID': ObjectId(f_id)})
@@ -148,5 +165,6 @@ class Facility(Resource):
                 Group().delete(f_id, str(group.get('_id')))
                 facilities.delete_one({'_id': ObjectId(f_id)})   
         else:
-            return 'Invalid facility'
+            res['err'].append('Invalid facility')
+            return jsonify(res)
 
