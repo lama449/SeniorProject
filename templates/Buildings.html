@@ -114,9 +114,10 @@
 			<td><label for="zip">Building Zip Code:</label></td>
                         <td><input type="text" name="buidlingZip" id="zip" v-bind:disabled="isDisabled" v-model="building.address.zip"></td></tr>
 		</table>            
-		
-		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Facility Information </button>
-		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
+		{% if admin %}
+		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Building Information </button>
+		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Building Information </button>
+		{% endif %}
 
             </div>				
 		</div>
@@ -132,8 +133,8 @@
             el: "#app",
             data: {
                 isDisabled: true,
-		b_id: {{ b_id | tojson }},
-		f_id: {{ f_id | tojson }},
+				b_id: {{ b_id | tojson }},
+				f_id: {{ f_id | tojson }},
                 building: [],
                 rooms: []                
             },
@@ -150,38 +151,35 @@
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingURL: function(building_id) {
-                    return "/facilities/" + this.f_id "/buildings/" + building_id 
-                },
-		editBtn: function() {		    
-		    document.getElementById("savebtn").style.display = "inline";
+				editBtn: function() {		    
+		    		document.getElementById("savebtn").style.display = "inline";
                     document.getElementById("editbtn").style.display = "none";
-		    this.isDisabled = false;
-		    return
-		},
-		saveBtn: function() {
-	 	    document.getElementById("savebtn").style.display = "none";
+		    		this.isDisabled = false;
+		    		return
+				},
+				saveBtn: function() {
+	 	    		document.getElementById("savebtn").style.display = "none";
                     document.getElementById("editbtn").style.display = "inline";
-	 	    this.isDisabled = true;
+	 	    		this.isDisabled = true;
 
-  		    axios
-			.put("/api/facilities/" + this.f_id + "", {
-				name: this.building.name,
-				phone: this.building.phone,
-				description: this.building.description,
-				zip: this.facility.building.zip,
-				address_L1: this.building.address.address_L1,
-				address_L2: this.building.address.address_L2,
-				city: this.building.address.city,
-				state: this.building.address.state,
-				country: this.building.address.country
-			})
-			.then( alert("Successfully updated facility"))
-			.catch(error => console.log(error))
-		    return
-		}			
-            }
-        })
+  		    		axios
+						.put("/api/facilities/" + this.f_id + "/buildings/" + this.b_id, {
+							name: this.building.name,
+							phone: this.building.phone,
+							description: this.building.description,
+							zip: this.facility.building.zip,
+							address_L1: this.building.address.address_L1,
+							address_L2: this.building.address.address_L2,
+							city: this.building.address.city,
+							state: this.building.address.state,
+							country: this.building.address.country
+						})
+						.then( alert("Successfully updated facility"))
+						.catch(error => console.log(error))
+		    		return
+				}			
+			}
+		})
         
     </script>
 </body>
