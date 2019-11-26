@@ -11,6 +11,7 @@ from SeniorProject.resources.building import Building
 from SeniorProject.resources.maintenance import Maintenance
 from SeniorProject.new_json_encoder import New_JSON_Encoder
 from SeniorProject.resources.group import Group
+from SeniorProject.user_check import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -67,51 +68,78 @@ def register():
 
 @app.route("/facility/<f_id>", methods=['GET'])
 def facility_page(f_id):
-    return render_template("Facility.html", f_id=f_id) #allows us to use f_id in the html template
+    return render_template("Facility.html", f_id=f_id, admin=check_admin(f_id)) #allows us to use f_id in the html template
 
 @app.route('/management', methods=['GET'])
 def management_page():
-    return render_template('Management.html')
+    if check_logged_in():
+        return render_template('Management.html')
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/facility/<f_id>/building/<b_id>', methods=['GET'])
 def building_page(f_id, b_id):
-    return render_template('Buildings.html', f_id=f_id, b_id=b_id)
+    return render_template('Buildings.html', f_id=f_id, b_id=b_id, admin=check_admin(f_id))
 
 @app.route('/facility/<f_id>/building/<b_id>/room/<r_id>', methods=['GET'])
 def room_update_page(f_id, b_id, r_id):
-    # TODO: check if user is an admin first. if not, send back to building page?
-    return render_template('Room_Update.html', f_id=f_id, b_id=b_id, r_id=r_id)
+    # check if user is an admin first. if not, send back to building page?
+    if check_admin(f_id):
+        return render_template('Room_Update.html', f_id=f_id, b_id=b_id, r_id=r_id)
+    else:
+        return redirect(url_for('building_page', f_id, b_id))
 
 
 @app.route('/facility/<f_id>/maintenance', methods=['GET'])
 def maintenance_page(f_id):
-    return render_template('Maintenance.html', f_id=f_id)
+    if check_admin(f_id):
+        return render_template('Maintenance.html', f_id=f_id)
+    else:
+        return redirect(url_for('facility_page', f_id))
 
 @app.route('/reservations', methods=['GET'])
 def reservations():
-    return render_template('Reservations.html')
+    if check_logged_in():
+        return render_template('Reservations.html')
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/reservations/<res_id>', methods=['GET'])
 def reservtions_info(res_id):
-    return render_template('Reservations_Info.html', res_id=res_id)
+    if check_logged_in():
+        return render_template('Reservations_Info.html', res_id=res_id)
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/profile', methods=['GET'])
 def profile():
-    return render_template('Profile_Page.html')
+    if check_logged_in():
+        return render_template('Profile_Page.html')
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/facility_creation', methods=['GET'])
 def facility_creation():
-    return render_template('Facility_Creation_Page.html')
+    if check_logged_in():
+        return render_template('Facility_Creation_Page.html')
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/facility/<f_id>/building_creation', methods=['GET'])
 def building_creation(f_id):
-    # TODO: check if user is an admin first. if not, send back to management page?
-    return render_template('Building_Creation_Page.html', f_id=f_id)
+    # check if user is an admin first. if not, send back to facility page
+    if check_admin(f_id):
+        return render_template('Building_Creation_Page.html', f_id=f_id)
+    else:
+        return redirect(url_for('facility_page', f_id))
 
 @app.route('/facility/<f_id>/building/<b_id>/room_creation', methods=['GET'])
 def room_creation(f_id, b_id):
-    # TODO: check if user is an admin first. if not, send back to management page?
-    return render_template('Room_Creation_Page.html', f_id=f_id, b_id=b_id)
+    # check if user is an admin first. if not, send back to building page
+    if check_admin(f_id):
+        return render_template('Room_Creation_Page.html', f_id=f_id, b_id=b_id)
+    else:
+        return redirect(url_for('building_page', f_id, b_id))
 
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
