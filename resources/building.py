@@ -9,6 +9,7 @@ import bcrypt
 from SeniorProject import database
 from bson.objectid import ObjectId
 from SeniorProject.resources.room import Room
+from SeniorProject.user_check import *
 
 db = database.conn_DB()
 
@@ -36,19 +37,15 @@ class Building(Resource):
     def post(self, f_id):
         facilities = db.facilities
         buildings = db.buildings
-        users = db.users
         res = {
             'msg': [],
             'err': []
         }
-        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
-        groups = current_facility.get('groups')
-        admin_id = next(g for g in groups if g['name'] == 'admin')['_id']
-        current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id')), 'groupID': ObjectId(admin_id)})
-        if current_user is None:
-            res['msg'].append('You do not have the permissions to create a new building.')
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to create a new building.')
             return jsonify(res)
         else:
+            current_facility = facilities.find_one({'_id': ObjectId(f_id)})
             if current_facility:
                 data = request.json
                 if not data.get('name'):
@@ -96,15 +93,13 @@ class Building(Resource):
         data = request.json
         facilities = db.facilities
         buildings = db.buildings
-        users = db.users
-        current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id')), 'groupID.name': 'admin'})
         res = {
             'msg': [],
             'err': []
         }
 
-        if current_user is None:
-            res['msg'].append('You do not have the permissions to create a new building.')
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to create a new building.')
             return jsonify(res)
         else:
             current_facility = facilities.find_one({'_id': ObjectId(f_id)})
