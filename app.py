@@ -11,6 +11,7 @@ from SeniorProject.resources.building import Building
 from SeniorProject.resources.maintenance import Maintenance
 from SeniorProject.new_json_encoder import New_JSON_Encoder
 from SeniorProject.resources.group import Group
+from SeniorProject.resources.userGroup import UserGroup
 from SeniorProject.user_check import *
 
 app = Flask(__name__)
@@ -190,5 +191,6 @@ api.add_resource(User, '/api/users', '/api/users/<u_id>', endpoint='user')
 api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facilities/<f_id>/maintenance/<m_id>', '/api/facilities/<f_id>/maintenance/room/<r_id>', endpoint='maintenance')
 api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id>/groups/<g_id>', endpoint='group')
 api.add_resource(UserReservations, '/api/user/reservations', endpoint='user reservations')
+api.add_resource(UserGroup, '/api/facilities/<f_id>/users/<u_id>/groups/<g_id>', endpoint='user group')
 if __name__ == '__main__':
     app.run()
