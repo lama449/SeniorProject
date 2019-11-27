@@ -180,54 +180,6 @@
                         }
                     })
                     .catch(error => console.log(error))
-            },
-            confirmPassword: function() {
-                opsw = this.opsw;
-                npsw = this.npsw;
-                cpsw = this.cpsw;
-                // If old password not entered
-                if (opsw == '') {
-                    alert("Please enter password");
-                    return false
-                }
-                // If new password not entered
-                else if (npsw == '') {
-                    alert("Please enter new password");
-                    return false;
-                }
-                 // If confirm password not entered
-                else if (cpsw == '') {
-                    alert("Please enter confirm password");
-                    return false;
-                }
-                // If Not same return False.
-                else if (npsw != cpsw) {
-                    alert("New password did not match: Please try again.");
-                    return false;
-                }
-                return true;
-            },
-            confirmAnswer: function() {
-                question = this.question;
-                oanswer = this.oanswer;
-                nanswer = this.nanswer
-
-                // If there is no question
-                if (question.trim() == "") {
-                    alert("Please select a security question.");
-                    return false
-                }
-                // If old answer not entered
-                else if (oanswer.trim() == "") {
-                    alert("Please input the old answer for previous security question.");
-                    return false;
-                }
-                // If new answer not entered
-                else if (nanswer.trim() == "") {
-                    alert("Please input an answer for the new security question.");
-                    return false;
-                }
-                return true;
             }
         }
     })
