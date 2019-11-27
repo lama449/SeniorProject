@@ -11,14 +11,14 @@
 </head>
 <body>
 	{% include 'header.html' %}
-	<div class="content">
+	<div class="content" id="app">
     <div class="container">
         <h1>Account Registration</h1>
         <div class="errorbox" v-for="e in error">[[e]]</div>
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
 
-        <form id="app">
+        <form>
             <label for="fname"><b>First Name</b></label>
             <input type="text" placeholder="First Name" name="fname" class="full-width" required v-model="fname">
 
