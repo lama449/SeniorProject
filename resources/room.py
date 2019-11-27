@@ -45,7 +45,7 @@ class Room(Resource):
         if not data.get('name'):
             res['err'].append('Missing name')
         if not data.get('capacity'):
-            res['err'].apppend('Missing room capacity')
+            res['err'].append('Missing room capacity')
         if not data.get('number'):
             res['err'].append('Missing room number')
         if res['err']:

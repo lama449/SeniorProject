@@ -32,9 +32,11 @@ class UserFacility(Resource):
                     if admin_id == userGroup:
                         res['facilities'].append(current_facility)
         else:
-            return jsonify(res['err'].append('Invalid user'))
+            res['err'].append('Invalid user')
+            return jsonify(res)
         if not res['facilities']:
-            return jsonify(res['msg'].append('User is not an admin for any facilities'))
+            res['msg'].append('User is not an admin for any facilities')
+            return jsonify(res)
         else:
             return jsonify(res)
         
