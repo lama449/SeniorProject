@@ -142,7 +142,11 @@
 
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
 			{% if admin %}
-			<td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" id="delete">
+                        <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="deleteBuilding = building"></td>
+
+			{% endif %}
+                    </tr>
+                </table>
                 <div id = "modalwrapper" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
@@ -150,13 +154,10 @@
                             <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Building?</h1>
                             <h6><center>All data related to this building will be removed after deletion.</center></h6>
                             <h6><center>Are you sure you would like to delete this building?</center></h6>
-                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteBuilding(building._id, building.name)">Delete Building</button>
+                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteBuilding()">Delete Building</button>
                         </div>
                     </form>
                 </div>
-			{% endif %}
-                    </tr>
-                </table>
             </div>
             <div v-else>
                 <table class="table">
@@ -186,9 +187,10 @@
             el: "#app",
             data: {
                 f_id: {{ f_id | tojson }},
-		isDisabled: true,
+		        isDisabled: true,
                 facility: [],
-                buildings:[]                
+                buildings:[],
+                deleteBuilding: {}
             },
             mounted(){
                 const requestBuildingURL = axios.get("/api/facilities/" + this.f_id + "/buildings");
@@ -241,8 +243,10 @@
 			.catch(error => console.log(error))
 		    return
 		},
-		deleteBuilding: function(b_id, b_name) {
+		deleteBuilding: function() {
 
+            var b_name = deleteBuilding.name
+            var b_id = deleteBuilding._id
 		    var deleteConfirm = confirm("Click Okay to confirm the deletion of building: " + b_name);
 		    if( deleteConfirm == true){
 		    	axios
