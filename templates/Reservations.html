@@ -34,10 +34,10 @@
                         <th>Maintenance Request</th>
                     </tr>
                     <tr v-for="building in buildings">
-                        <td></td>
-                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
-                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"> <a v-bind:href="getFacilityURL(facility._id)"> [[ facility.name ]] </a></td>
+                        <td>[[ reservation.start_date ]]</td>
+                        <td><a v-bind:href="">[[ building.name ]]</a></td>
+                        <td><a v-bind:href="">[[ building.address.city ]], [[ building.address.state ]] </a></td>
+                        <td style="text-align: center"> <a v-bind:href=""> [[ facility.name ]] </a></td>
                         <td style="text-align: center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img src="{{url_for('static', filename='requesticon.png')}}"></a>
                             <div id = "modalwrapper" class = "modal">
                                 <form class="modal-content animate">
@@ -64,19 +64,17 @@
             var vc = new Vue({
                 el: "#app",
                 data: {
+                    reservations: [],
                     buildings:[],
-		    facility:[]                
+                    facility:[]                
                 },
                 mounted(){
-                    const requestBuildingURL = axios.get("{{ url_for('building', f_id='5dd81b02c3fe0ffb0e9e2950') }}");
-                    const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5dd81b02c3fe0ffb0e9e2950') }}");
-
-                    axios.all([requestBuildingURL, requestFacilityURL])
-  	                .then(axios.spread((res1, res2) => {
-               		        this.buildings = res1.data;
-		                this.facility = res2.data;
-                        }))
-                        .catch(error => console.log(error))     
+                    axios
+                        .get("/api/user/reservations")
+                        .then(res => {
+                            this.reservations = res.data;
+                        })
+                        .catch(err => console.log(err))                        
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
