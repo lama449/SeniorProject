@@ -134,9 +134,10 @@
 		{% endif %}
 		
 		<div id="calendar">
-			<button class="submitbtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
-			<button class="submitbtn" > Submit Time Slot </button>
-			<button class="gobackbtn" >Go Back</button>			
+			{% if admin %}
+			<button class="gobackbtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
+			{% endif %}
+			<button class="submitbtn" v-on:click="submitReservation()"> Submit Time Slot </button>
 		</div>
 		
             </div>				
@@ -194,27 +195,45 @@
 			getRoomCreationURL: function() {
 				 location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
 		  	         return	
+			},
+			submitReservation: function() {
+				console.log(start);
+				console.log(end);
+				axios
+					.post("/api/facilities/" + this.f_id +"/buildings/" + this.b_id + "/rooms/" + room_id + "/reservations",{
+						start_time: start,
+						end_time: end
+					})
+					.then( )
+					.catch(err => console.log(err))				
 			}			
 		}
 	}); 
 	   
 	   var f_id = {{ f_id | tojson }};
 	   var b_id = {{ b_id | tojson }};
+	   var calendarE1;
+	   var calendar;
+	   var start;
+	   var end;
+	   var room_id;
 	   
 	   axios
 		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
 		   .then(res => {
 			   var rooms = [];
 			   rooms = res.data;
+			   rooms.forEach( room => {
+				room['name'] = room['name'] + " " + room['number'];				
+			   });
 			   str = JSON.stringify(rooms);
 			   str = str.replace(/\"_id\":/g, "\"id\":");
 			   str = str.replace(/\"name\":/g, "\"title\":");
-			   rooms = JSON.parse(str);	  
-	   
+			   rooms = JSON.parse(str);	  	   
    
-		   var calendarEl = document.getElementById('calendar');
+		   calendarEl = document.getElementById('calendar');
    
-		   var calendar = new FullCalendar.Calendar(calendarEl, {
+		   calendar = new FullCalendar.Calendar(calendarEl, {
 			   plugins: [ 'resourceTimeline', 'interaction' ],
 			   header: {
 			   left: 'today prev,next',
@@ -224,9 +243,8 @@
 			   schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
 			   defaultView: 'resourceTimelineDay',
 			   selectable: true,
-			   height: 450,
-			   refetchResourcesOnNavigate: true,
-			   resources: rooms,
+			   height: 450,	
+			   resources: rooms,			   
 			   events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
 					   {"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
 					   {"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
@@ -258,20 +276,16 @@
 			   minTime: '6:30',
 			   maxTime: '24:30',
 			   slotMinutes: '30',
+			   selectOverlap: false,
 			   selectConstraint: 'businessHours',
 			   nowIndicator: true,
 			   resourceLabelText: 'Rooms',
 			   aspectRatio: 1.5,
-			   // select: function(start, end) {
-			   // 	var title = $("#resource:selected").val();
-			   // 	var eventData;
-			   // 	if(title){
-			   // 		eventData = {title:title, start: start, end: end};
-			   // 		var calendar_datetime = $('#calendar').fullCalender('renderEvent', eventData, true);
-			   // 		alert(calendar_datetime);
-			   // 	}
-			   // },
-				  
+			   select: function(info) {
+     				 start = info.startStr;
+				 end = info.endStr;
+				 room_id = info.resource.id;	 
+			   },				  
 			   resourceRender: function(info) {
 				   var questionMark = document.createElement('strong');
 				   questionMark.innerText = ' (?) ';
@@ -285,9 +299,31 @@
 						  trigger: 'hover',
 						  container: 'body',
 				   });
+				   {% if admin %}
+				   var roomUpdatebtn = document.createElement("BUTTON");
+				   roomUpdatebtn.textContent = "Edit Room";
+				   roomUpdatebtn.className = "submitbtn";				   
+				   roomUpdatebtn.onclick = function(){
+					rooms.forEach(room => {
+						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
+							location.href="/facility/" + f_id + "/building/" + b_id + "/room/" + room.id;
+						}
+					})
+				   }
+				   info.el.querySelector('.fc-cell-text')
+					  .appendChild(roomUpdatebtn);
+				   var roomDeletebtn = document.createElement("BUTTON");
+				   roomDeletebtn.textContent = "Delete Room";
+				   roomDeletebtn.className = "submitbtn";
+				   info.el.querySelector('.fc-cell-text')
+					.appendChild(roomDeletebtn);
+				   roomDeletebtn.onclick = function() {
+						prompt("THIS IS NOT DONE YET");}
+				   {% endif %}
 			   },
    
-			   eventRender: function(info) {
+			   eventRender: function(info) {					
+				
 				   var tooltip = new Tooltip(info.el, {
 						 title: "",
 						 placement: 'top',
