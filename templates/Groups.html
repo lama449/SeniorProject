@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Groups</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content" id="app">
+        <form>
+            <center><h1>Update Groups for Facility:
+                <label name="facilityName" id ="facilityName" v-model=""></label>
+            </h1></center>
+
+            <!--Group List and Options-->
+            <select id="groupSelect" size="8" multiple>
+                <option v-for="" v-bind:value="">[[]]</option>
+            </select>
+            <input type="text" name="groups" id="feature">
+            <button type="button" class="button" onclick="addGroup()">Add Group</button>
+            <button type="button" class="button" id="deleteGroup" onclick="removeGroup()">Remove Group</button>
+
+
+            <!--User List and Options-->
+            <select id="userSelect" size="8" multiple>
+                <option v-for="" v-bind:value="">[[]]</option>
+            </select>
+            <input type="text" name="users" id="group">
+            <button type="button" onclick="addUser()">Add User</button>
+            <button type="button" id="deleteUser" onclick="removeUser()">Remove User</button>
+
+            <button class="button" id="submit" type="submit">Save Changes</button>
+        </form>
+    </div>
+    {% include 'footer.html' %}
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+            f_id: {{ f_id | tojson }},
+            groupSelect: [],
+            userSelect: [],
+            error: []
+        },
+        delimiters: ["[[", "]]"],
+            mounted: function() {
+            axios.get("/api/facilities/" + this.f_id)
+                .then(res => {
+                    if ("err" in res.data && res.data.err.length) {
+                        this.error = res.data.err
+                    } else {
+
+                    }
+                })
+                .catch(error => console.log(error))
+    </script>
+</body>
+</html>
