@@ -415,7 +415,7 @@
           })
               .then (res => {
                 if ("err" in res.data && res.data.err.length) {
-                    this.error = res.data.error
+                    this.error = res.data.err
                 }
                 else {
                     this.f_id = res.data._id;
