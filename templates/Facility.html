@@ -245,8 +245,8 @@
 		},
 		deleteBuilding: function() {
 
-            var b_name = buildingToBeDeleted.name
-            var b_id = buildingToBeDeleted._id
+            var b_name = this.buildingToBeDeleted.name
+            var b_id = this.buildingToBeDeleted._id
 		    var deleteConfirm = confirm("Click Okay to confirm the deletion of building: " + b_name);
 		    if( deleteConfirm == true){
 		    	axios
