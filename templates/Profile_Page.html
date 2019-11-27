@@ -153,7 +153,6 @@
                     .catch(error => console.log(error))
             },
             checkAnswer: function () {
-                this.confirmAnswer();
                 axios
                     .put("{{ url_for('user') }}", {
                         question: this.question,
