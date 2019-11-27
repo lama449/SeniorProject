@@ -35,7 +35,7 @@
             <input type="password" placeholder="Repeat Password" name="password2" class="full-width" required v-model="password2">
 
             <label for="question"><b>Security Question</b></label>
-            <select v-model="question">
+            <br><select v-model="question">
                 <option selected value="What is your favorite book?">What is your favorite book?</option>
                 <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
                 <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
@@ -47,7 +47,7 @@
                 <option value="What city were you born in?">What city were you born in?</option>
                 <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
             </select>
-
+            <br>
             <label for="answer"><b>Answer</b></label>
             <input type="text" placeholder="Enter Security Answer" name="answer" class="full-width" required v-model="answer">
 			
@@ -73,12 +73,11 @@
             password2: "",
             question: "",
             answer: "",
-            err: []
+            error: []
         },
         delimiters: ["[[", "]]"],
         methods: {
             submitReg: function() {
-                this.checkEntries();
                 axios
                     .post("{{ url_for('user')}}", {
                         fname: this.fname,
@@ -93,29 +92,10 @@
                         if ("msg" in res.data && res.data.msg.length) {
                             location.href = ("{{ url_for('home')}}");
                         } else {
-                            this.err = res.data.err;
+                            this.error = res.data.err;
                         }
                     })
                     .catch(error => console.log(error))
-            },
-
-            checkEntries: function() {
-                password1 = this.password1;
-                password2 = this.password2;
-                answer = this.answer;
-                if ((password1 != password2) & (answer.trim() == "")){
-                    alert("Passwords did not match, and invalid security answer");
-                    return false;
-                }
-                else if (password1 != password2) {
-                    alert ("Password did not match: Please try again.");
-                    return false;
-                }
-                else if (answer.trim() == "") {
-                    alert("Please answer security question");
-                    return false;
-                }
-                return true;
             }
         }
     })
