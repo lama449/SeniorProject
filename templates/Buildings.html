@@ -222,14 +222,32 @@
 		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
 		   .then(res => {
 			   var rooms = [];
+			   var reservations = [];
+			   var temp;
+			   var i = 0;
 			   rooms = res.data;
 			   rooms.forEach( room => {
 				room['name'] = room['name'] + " " + room['number'];				
+				if(room['reservations'].length > 0){
+				    reservations[i] = room['reservations'];
+				    reservations[i][0].resourceId = (room['_id']);
+				    reservations[i][0]['title'] = "Reserved";
+				    i++;
+				}
 			   });
+			
 			   str = JSON.stringify(rooms);
 			   str = str.replace(/\"_id\":/g, "\"id\":");
 			   str = str.replace(/\"name\":/g, "\"title\":");
-			   rooms = JSON.parse(str);	  	   
+			   rooms = JSON.parse(str);
+			   
+			   str2 = JSON.stringify(reservations);		   
+			   str2 = str2.replace(/\"start_time":/g, "\"start\":");
+			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
+			   str2 = str2.replace(/\"_id":/g, "\"id\":");
+			   reservations = JSON.parse(str2);
+			   console.log(reservations);
+			   
    
 		   calendarEl = document.getElementById('calendar');
    
@@ -245,13 +263,7 @@
 			   selectable: true,
 			   height: 450,	
 			   resources: rooms,			   
-			   events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
-					   {"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
-					   {"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
-					   {"id":"4", "resourceId":"c", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
-					   {"id":"5", "resourceId":"d", "title":"Reserved", "start":"2019-11-09T11:30:00", "end":"2019-11-01T12:30:00"}
-					], 
-					   //url:'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/events.json',
+			   events: reservations,
 			   eventBackgroundColor: 'red',
 			   
 			   titleFormat: {
