@@ -145,117 +145,7 @@
 	</div>	
 
     {% include 'footer.html' %}
-    
-
-    <script>
-	   
-	var f_id = {{ f_id | tojson }};
-	var b_id = {{ b_id | tojson }};
-	
-         axios
-            .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
-            .then(res => {
-                 var rooms = [];
-                 rooms = res.data;
-                 str = JSON.stringify(rooms);
-                 str = str.replace(/\"_id\":/g, "\"id\":");
-                 str = str.replace(/\"name\":/g, "\"title\":");
-                 rooms = JSON.parse(str);	  
-	
-
-	    var calendarEl = document.getElementById('calendar');
-
-	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	        plugins: [ 'resourceTimeline', 'interaction' ],
-	        header: {
-		    left: 'today prev,next',
-	            center: 'title',
-	            right: ''
-        	},
-	        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-        	defaultView: 'resourceTimelineDay',
-			selectable: true,
-			height: 450,
-			refetchResourcesOnNavigate: true,
-			resources: rooms,
-			events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
-					{"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
-					{"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
-					{"id":"4", "resourceId":"c", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
-					{"id":"5", "resourceId":"d", "title":"Reserved", "start":"2019-11-09T11:30:00", "end":"2019-11-01T12:30:00"}
-				 ], 
-					//url:'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/events.json',
-			eventBackgroundColor: 'red',
-			
-        	titleFormat: {
-	            year: 'numeric',
-	            month: 'short',
-	            day: 'numeric',
-	            weekday: 'long'
-        	},
-	        businessHours: [            
-        		{
-                	daysOfWeek: [1,2,3,4,5],
-	                startTime: '7:30',
-        	        endTime: '23:30'  
-	        	},
-	        	{
-        	        daysOfWeek: [6,0],
-                	startTime: '8:00',
-	                endTime: '17:00'           
-            	}
-			],
-	        slotLabelFormat: { hour:'numeric'},
-        	minTime: '6:30',
-	        maxTime: '24:30',
-        	slotMinutes: '30',
-	        selectConstraint: 'businessHours',
-	        nowIndicator: true,
-        	resourceLabelText: 'Rooms',
-			aspectRatio: 1.5,
-			// select: function(start, end) {
-			// 	var title = $("#resource:selected").val();
-			// 	var eventData;
-			// 	if(title){
-			// 		eventData = {title:title, start: start, end: end};
-			// 		var calendar_datetime = $('#calendar').fullCalender('renderEvent', eventData, true);
-			// 		alert(calendar_datetime);
-			// 	}
-			// },
-		       
-			resourceRender: function(info) {
-            	var questionMark = document.createElement('strong');
-		        questionMark.innerText = ' (?) ';
-
-        	    info.el.querySelector('.fc-cell-text')
-                   .appendChild(questionMark);
-				
-				var tooltip = new Tooltip(questionMark, {
-		   			title: info.resource.extendedProps.features,
-		   			placement: 'top',
-		   			trigger: 'hover',
-		   			container: 'body',
-				});
-			},
-
-			eventRender: function(info) {
-        		var tooltip = new Tooltip(info.el, {
-          			title: "",
-          			placement: 'top',
-          			trigger: 'hover',
-          			container: 'body'
-				});
-			}
-			
-		});
-		
-  	   	calendar.render();
-	}).catch(err => console.log(err))
-	
-	});
-
-    </script>
-    
+       
     <script>
 
 	var vc = new Vue({
@@ -307,7 +197,109 @@
 			}			
 		}
 	});
-        
+	   
+	   var f_id = {{ f_id | tojson }};
+	   var b_id = {{ b_id | tojson }};
+	   
+	   axios
+		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
+		   .then(res => {
+			   var rooms = [];
+			   rooms = res.data;
+			   str = JSON.stringify(rooms);
+			   str = str.replace(/\"_id\":/g, "\"id\":");
+			   str = str.replace(/\"name\":/g, "\"title\":");
+			   rooms = JSON.parse(str);	  
+	   
+   
+		   var calendarEl = document.getElementById('calendar');
+   
+		   var calendar = new FullCalendar.Calendar(calendarEl, {
+			   plugins: [ 'resourceTimeline', 'interaction' ],
+			   header: {
+			   left: 'today prev,next',
+				   center: 'title',
+				   right: ''
+			   },
+			   schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+			   defaultView: 'resourceTimelineDay',
+			   selectable: true,
+			   height: 450,
+			   refetchResourcesOnNavigate: true,
+			   resources: rooms,
+			   events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
+					   {"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
+					   {"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
+					   {"id":"4", "resourceId":"c", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
+					   {"id":"5", "resourceId":"d", "title":"Reserved", "start":"2019-11-09T11:30:00", "end":"2019-11-01T12:30:00"}
+					], 
+					   //url:'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/events.json',
+			   eventBackgroundColor: 'red',
+			   
+			   titleFormat: {
+				   year: 'numeric',
+				   month: 'short',
+				   day: 'numeric',
+				   weekday: 'long'
+			   },
+			   businessHours: [            
+				   {
+					   daysOfWeek: [1,2,3,4,5],
+					   startTime: '7:30',
+					   endTime: '23:30'  
+				   },
+				   {
+					   daysOfWeek: [6,0],
+					   startTime: '8:00',
+					   endTime: '17:00'           
+				   }
+			   ],
+			   slotLabelFormat: { hour:'numeric'},
+			   minTime: '6:30',
+			   maxTime: '24:30',
+			   slotMinutes: '30',
+			   selectConstraint: 'businessHours',
+			   nowIndicator: true,
+			   resourceLabelText: 'Rooms',
+			   aspectRatio: 1.5,
+			   // select: function(start, end) {
+			   // 	var title = $("#resource:selected").val();
+			   // 	var eventData;
+			   // 	if(title){
+			   // 		eventData = {title:title, start: start, end: end};
+			   // 		var calendar_datetime = $('#calendar').fullCalender('renderEvent', eventData, true);
+			   // 		alert(calendar_datetime);
+			   // 	}
+			   // },
+				  
+			   resourceRender: function(info) {
+				   var questionMark = document.createElement('strong');
+				   questionMark.innerText = ' (?) ';
+   
+				   info.el.querySelector('.fc-cell-text')
+					  .appendChild(questionMark);
+				   
+				   var tooltip = new Tooltip(questionMark, {
+						  title: info.resource.extendedProps.features,
+						  placement: 'top',
+						  trigger: 'hover',
+						  container: 'body',
+				   });
+			   },
+   
+			   eventRender: function(info) {
+				   var tooltip = new Tooltip(info.el, {
+						 title: "",
+						 placement: 'top',
+						 trigger: 'hover',
+						 container: 'body'
+				   });
+			   }
+			   
+		   });		
+				calendar.render();
+	   }).catch(err => console.log(err))
+   
     </script>
 </body>
 </html>
