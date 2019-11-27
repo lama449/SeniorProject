@@ -146,7 +146,10 @@ def room_creation(f_id, b_id):
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'GET':
-        return render_template('Forgot_Password.html')
+        if not check_logged_in():
+            return render_template('Forgot_Password.html')
+        else:
+            return redirect(url_for('home'))
     else:
         res = {
                 'msg': [],
@@ -169,22 +172,24 @@ def forgot_password():
             return jsonify({'question': found_user.get('question')})
         else:
             login_user = users.find_one({'email': email})  # find user in db
-            if bcrypt.hashpw(answer.encode('utf-8'), login_user['answer']) != login_user['answer']:
-                res['msg'].append('success')
+            if login_user is None:
+                res['err'].append('Invalid email')
+                return jsonify(res)
+            if bcrypt.hashpw(answer.encode('utf-8'), login_user['answer']) == login_user['answer']:
                 session['email'] = email
                 session['change_password'] = True
+                res['msg'].append('success')
+                return jsonify(res)
             else:
                 res['err'].append('Wrong answer')
-            return jsonify(res)
+                return jsonify(res)
 
 @app.route('/changepassword', methods=['GET'])
 def change_password():
-    return render_template('Change_Password.html')
-
-
-@app.route('/calendar', methods=['GET'])
-def calendar():
-    return render_template('calendar.html')
+    if not check_logged_in():
+        return render_template('Change_Password.html')
+    else:
+        return redirect(url_for('home'))
 
 
 api.add_resource(Facility, '/api/facilities', '/api/facilities/<f_id>', endpoint='facility')
