@@ -1,7 +1,6 @@
 <div class="nav">
 	<a class="nav--item" href="{{ url_for('home') }}">Home</a>
 	{% if session.get('user') %}
-		<a class="nav--item" href="{{ url_for('calendar') }}">Calendar</a>
 		<a class="nav--item" href="{{ url_for('profile')}}">Profile</a>
 		<a class="nav--item" href="{{ url_for('reservations') }}">Reservations</a>
 		<a class="nav--item" href="{{ url_for('management_page') }}">Management</a>
