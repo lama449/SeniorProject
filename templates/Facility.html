@@ -242,6 +242,9 @@
 		    return
 		},
 		deleteBuilding: function(b_id, b_name) {
+
+		    var deleteConfirm = confirm("Click Okay to confirm the deletion of building: " + b_name);
+		    if( deleteConfirm == true){
 		    	axios
 				.delete("/api/facilities/" + this.f_id + "/buildings/" + b_id)
 				.then( function(b_name){
