@@ -136,7 +136,6 @@
                     .catch(error => console.log(error))
             },
             checkPassword: function () {
-                this.confirmPassword();
                 axios
                     .put("{{ url_for('user') }}", {
                         opsw: this.opsw,
