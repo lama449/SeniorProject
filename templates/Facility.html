@@ -142,7 +142,18 @@
 
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
 			{% if admin %}
-			<td style="text-align: center"><a @click.prevent="deleteBuilding(building._id, building.name)"><img src="{{url_for('static', filename='deleteicon.png')}}"></a>
+			<td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}"></a>
+                <div id = "modalwrapper" class = "modal">
+                    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                            <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Building?</h1>
+                            <h6><center>All data related to this building will be removed after deletion.</center></h6>
+                            <h6><center>Are you sure you would like to delete your account?</center></h6>
+                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteBuilding(building._id, building.name)">Delete Building</button>
+                        </div>
+                    </form>
+                </div>
 			{% endif %}
                     </tr>
                 </table>
