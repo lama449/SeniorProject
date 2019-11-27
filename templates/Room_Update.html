@@ -93,8 +93,8 @@
             axios.get("/api/facilities/" + this.f_id + "/buildings" + this.building_id + "/rooms" + this.room_id)
             .then(res => this.room = res.data)
             .catch(error => console.log(error))
-          }
-          delimiters: ["[[", "]]"],
+          },
+          delimiters: ["[[", "]]"]
         })
     </script>
 
