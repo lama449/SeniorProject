@@ -43,7 +43,8 @@ class Facility(Resource):
                             {'attributes': {'$elemMatch': {'$regex': q, '$options': 'i'}}}
                         ]
                     },
-                    {'address.zip': zip_code}
+                    {'address.zip': zip_code},
+                    {'private': False}
                 ]
             })
             found_facilities = [facility for facility in found_facilities]
