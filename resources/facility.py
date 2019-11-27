@@ -110,7 +110,6 @@ class Facility(Resource):
             'name': 'admin'
             }]
         })
-        print(takeID)
         users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
                          {'$push': {'groupID': admin_group_id}})
         return jsonify({'_id': takeID.inserted_id})
@@ -157,14 +156,13 @@ class Facility(Resource):
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             dbuildings = buildings.find({'facilityID': ObjectId(f_id)})
-            if dbuildings:
-                print(dbuildings)
-            else:
-                print("no buildings")
             for building in dbuildings:
                 Building().delete(f_id, str(building.get('_id')))
+            dgroups = current_facility.get('groups')
+            for group in dgroups:
                 Group().delete(f_id, str(group.get('_id')))
-                facilities.delete_one({'_id': ObjectId(f_id)})   
+            facilities.delete_one({'_id': ObjectId(f_id)})   
+            res['msg'].append('success')
         else:
             res['err'].append('Invalid facility')
             return jsonify(res)

@@ -29,9 +29,11 @@ class Group(Resource):
                 if current_group:
                     return jsonify(current_group)
                 else: 
-                    return 'No groups to display'
+                    res['err'].append('No groups to display')
+                    return jsonify(res)
         else: 
-            return 'Invalid facility ID'
+            res['err'].append('Invalid facility ID')
+            return jsonify(res)
 
 
     def post(self, f_id):
@@ -40,14 +42,17 @@ class Group(Resource):
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
             if not data.get('name'):
-                return 'Missing group name'
+                res['err'].append('Missing group name')
+                return jsonify(res)
             else:
                 facilities.update({'_id': ObjectId(f_id)},
                                               {'$push': {'groups': {'_id': ObjectId(),
                                                                    'name': data.get('name')}}})
-                return 'Added group'
+                res['msg'].append('success')
+                return jsonify(res)
         else:
-            return 'Invalid facility'
+            res['err'].append('Invalid facility')
+            return jsonify(res)
 
     def put(self, f_id, g_id):
         data = request.form
@@ -62,13 +67,17 @@ class Group(Resource):
                                                                     'groups.$.name': data.get('name')
                                                                 }
                                                             })
-                    return 'Updated the group name' 
+                    res['msg'].append('Updated the group name')
+                    return jsonify(res)
                 else:
-                    return 'Missing new name'
+                    res['err'].append('Missing new name')
+                    return jsonify(res)
             else:
-                return 'Missing group ID'
+                res['err'].append('Missing group ID')
+                return jsonify(res)
         else:
-            return 'Invalid facility ID'
+            res['err'].append('Invalid facility ID')
+            return jsonify(res)
 
     def delete(self, f_id, g_id):
         facilities = db.facilities
@@ -79,6 +88,8 @@ class Group(Resource):
                               {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
             users.update({'groupID': ObjectId(g_id)},
                          {'$pull': {'groupID':  ObjectId(g_id)}})
-            return 'Delete successful'
+            res['msg'].append('Delete successful')
+            return jsonify(res)
         else:
-            return 'Invalid facility'
+            res['err'].append('Invalid facility')
+            return jsonify(res)

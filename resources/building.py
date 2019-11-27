@@ -5,7 +5,6 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
 import bcrypt
-# from bson.json_util import dumps
 from SeniorProject import database
 from bson.objectid import ObjectId
 from SeniorProject.resources.room import Room
@@ -17,6 +16,10 @@ class Building(Resource):
     def get(self, f_id, b_id=None):  # return a list of rooms for building
         facilities = db.facilities
         buildings = db.buildings
+        res = {
+            'msg': [],
+            'err': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
             if b_id is None:  
@@ -30,9 +33,11 @@ class Building(Resource):
                     return jsonify(current_building)
                     # return dumps(current_room)
                 else:
-                    return 'Invalid building'
+                    res['err'].append('Invalid building')
+                    return jsonify(res)
         else:
-            return 'Invalid facility'
+            res['err'].append('Invalid facility')
+            return jsonify(res)
 
     def post(self, f_id):
         facilities = db.facilities
@@ -50,28 +55,24 @@ class Building(Resource):
                 data = request.json
                 if not data.get('name'):
                     res['err'].append('Missing Building Name')
-                    return jsonify(res)
                 if not data.get('address_L1'):
                     res['err'].append('Missing Building Address Line')
-                    return jsonify(res)
                 if not data.get('city'):
                     res['err'].append('Missing Building City')
-                    return jsonify(res)
                 if not data.get('state'):
                     res['err'].append('Missing Building State')
-                    return jsonify(res)
                 if not data.get('zip'):
                     res['err'].append('Missing Building Zip')
-                    return jsonify(res)
                 if not data.get('country'):
                     res['err'].append('Missing Building Country')
-                    return jsonify(res)
                 if not data.get('phone'):
                     res['err'].append('Missing Building Phone')
-                    return jsonify(res)
                 if not data.get('description'):
                     res['err'].append('Missing Building Description')
+
+                if res['err']:
                     return jsonify(res)
+
                 takeID = buildings.insert_one({
                     'name': data.get('name'),
                     'address': {
@@ -87,7 +88,8 @@ class Building(Resource):
                 })
                 return jsonify({'_id': takeID.inserted_id})
             else:
-                return jsonify(res['err'].append('Invalid facility'))
+                res['err'].append('Invalid facility')
+                return jsonify(res)
 
     def put(self, f_id, b_id):
         data = request.json

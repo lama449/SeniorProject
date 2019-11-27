@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect, url_for, session, j
 from flask_restful import Resource, request
 import bcrypt
 from bson.objectid import ObjectId
-#from bson.json_util import dumps
 from SeniorProject import database
 from SeniorProject.resources.maintenance import Maintenance
 
@@ -10,6 +9,10 @@ db = database.conn_DB()
 
 class Room(Resource):
     def get(self, f_id, b_id, r_id=None): # return a list of rooms for building
+        res =   {
+                'msg': [],
+                'err': []
+                }
         
         validation = validate_room(f_id, b_id, r_id)
         if validation[0] is True:
@@ -25,9 +28,11 @@ class Room(Resource):
                 if current_room:
                     return jsonify(current_room)
                 else:
-                    return {'err': 'Invalid room'}
+                    res['err'].append('Invalid room')
+                    return jsonify(res)
         else:
-            return {'err': validation[1]}
+            res['err'].append(validation[1])
+            return jsonify(res)
 
 
     def post(self, f_id, b_id):
@@ -62,7 +67,8 @@ class Room(Resource):
             })
             return jsonify({'_id': takeID.inserted_id})
         else:
-            return {'err': validation[1]}
+            res['err'].append(validation[1])
+            return jsonify(res)
 
 
     def put(self, f_id, b_id, r_id):
@@ -77,8 +83,12 @@ class Room(Resource):
             'capacity': data.get('capacity'),
             'attributes': {data.get('attributes')}, 
             'groupID': data.get('groupID')}})
+
+            res['msg'].append('success')
+            return jsonify(res)
         else:
-            return {'err': validation[1]}
+            res['err'].append(validation[1])
+            return jsonify(res)
 
 
     def delete(self, f_id, b_id, r_id):
@@ -88,11 +98,14 @@ class Room(Resource):
             Maintenance().delete(f_id, r_id=r_id)
             delete_room = rooms.delete_one({'_id': ObjectId(r_id)})
             if delete_room:
-                return {'msg': 'success'}
+                res['msg'].append('success')
+                return jsonify(res)
             else:
-                return {'err': 'failure'}
+                res['err'].append('failure')
+                return jsonify(res)
         else:
-            return {'err': validation[1]}
+            res['err'].append(validation[1])
+            return jsonify(res)
 
 
 
