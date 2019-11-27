@@ -14,7 +14,9 @@
 
         <!-- Building Creation Form -->
         <form>
-          <h1> Building Creation </h1>
+          <center><h1> Building Creation </h1></center>
+
+          <div class="errorbox" v-for="e in error">[[e]]</div>
 
           <label for="name">Building Name:</label>
           <input type="text" name="buildingName" id ="name" placeholder="Enter Building Name" required v-model= "buildingName">
