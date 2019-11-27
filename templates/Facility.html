@@ -39,7 +39,7 @@
 			<td><input type="text" name="facilityAddressL1" id="addressL1" v-bind:disabled="isDisabled" v-model="facility.address.address_L1"></td>
 			<td><label for="addressL2">Facility Address Line 2:</label></td>
 			<td><input type="text" name="facilityAddressL2" id="addressL2" v-bind:disabled="isDisabled" v-model="facility.address.address_L2"></td>
-			<td><label for="addressState">Building Address State:</label></td>
+			<td><label for="addressState">Facility Address State:</label></td>
 			<td><select name= "state" id="stateSelect" required v-bind:disabled="isDisabled" v-model="facility.address.state">
 		            <option disabled selected value="">--Please choose an option--</option>
 		            <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
@@ -58,7 +58,7 @@
 	                   <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></td></tr>
 
 		<tr>
-			<td><label for="addressCountry">Building Country:</label></td>
+			<td><label for="addressCountry">Facility Country:</label></td>
 			<td><select name="country" id="countrySelect" required v-bind:disabled="isDisabled" v-model="facility.address.country">
             <option value="">--Please choose an option--</option><option value="AFG">Afghanistan</option><option value="ALA">Åland Islands</option><option value="ALB">Albania</option>
             <option value="DZA">Algeria</option><option value="ASM">American Samoa</option><option value="AND">Andorra</option><option value="AGO">Angola</option>
@@ -109,11 +109,16 @@
             <option value="VIR">Virgin Islands, U.S.</option><option value="WLF">Wallis and Futuna</option><option value="ESH">Western Sahara</option><option value="YEM">Yemen</option><option value="ZMB">Zambia</option><option value="ZWE">Zimbabwe</option></select> </td>
 			<td><label for="zip">Facility Zip Code:</label></td>
                         <td><input type="text" name="facilityZip" id="zip" v-bind:disabled="isDisabled" v-model="facility.address.zip"></td>
-			<td><label for="private">Faciilty Private:</label></td>
+			<td><label for="private">Facility Private:</label></td>
 			<td><select name="private" id="privateSelect" required v-bind:disabled="isDisabled" v-model="facility.private">
 				<option disabled selectedvalue=""> --Please choose an option-- </option>
 				<option value="true">Private</option>
-				<option value="false">Public</option></select></td></tr>
+				<option value="false">Public</option></select></td>
+		   <tr v-if="facility.private == true">
+			<td></td>
+			<td><label for="accessCode">Facility Access Code:</label></td>
+		       	<td><input type="textbox" name="facilityAccess" id="accessCode" disabled="true" v-model="facility.access_code"></td>
+			<td></td></tr>
 		</table>
         {% if admin %}
 		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Facility Information </button>
@@ -153,7 +158,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-			<td></td>
                     </tr>
                 </table>
             </div>
@@ -195,7 +199,7 @@
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
 		},
 		getBuildingCreationURL: function() {
-		    window.location.href="/facility/" + this.f_id + "/building_creation"
+		    location.href="/facility/" + this.f_id + "/building_creation"
 		    return	    
 		},
 		editBtn: function() {		    
@@ -232,15 +236,15 @@
 		    if( deleteConfirm == true){
 		    	axios
 				.delete("/api/facilities/" + this.f_id + "/buildings/" + b_id)
-				.then(  
-					(alert("Successfully deleted building: " + b_name), 
-					reload()))
+				.then( function(b_name){
+					alert("Successfully deleted building :(");
+					location.reload();
+				})
 				.catch(error => console.log(error))
 		    }			
 		    return
 		}
-				
-            }
+	    }
         })
     </script>
     

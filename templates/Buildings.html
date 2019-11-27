@@ -129,16 +129,14 @@
                         <td><input type="text" name="buidlingZip" id="zip" v-bind:disabled="isDisabled" v-model="building.address.zip"></td></tr>
 		</table>            
 		{% if admin %}
-		<button class="submitbtn" id="editbtn" v-on.click="editBtn()"> Edit Building Information </button>
+		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Building Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="display:none;"> Save Building Information </button>
 		{% endif %}
 		
 		<div id="calendar">
-			
+			<button class="submitbtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
 			<button class="submitbtn" > Submit Time Slot </button>
-			<button class="gobackbtn" >Go Back</button>
-			<button class="submitbtn" @click.prevent="getRoomCreationURL()"> Add New Room </button>
-			
+			<button class="gobackbtn" >Go Back</button>			
 		</div>
 		
             </div>				
@@ -150,9 +148,22 @@
     
 
     <script>
-	document.addEventListener('DOMContentLoaded', function() {
-  
-    	var calendarEl = document.getElementById('calendar');
+	   
+	var f_id = {{ f_id | tojson }};
+	var b_id = {{ b_id | tojson }};
+	
+         axios
+            .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
+            .then(res => {
+                 var rooms = [];
+                 rooms = res.data;
+                 str = JSON.stringify(rooms);
+                 str = str.replace(/\"_id\":/g, "\"id\":");
+                 str = str.replace(/\"name\":/g, "\"title\":");
+                 rooms = JSON.parse(str);	  
+	
+
+	    var calendarEl = document.getElementById('calendar');
 
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
 	        plugins: [ 'resourceTimeline', 'interaction' ],
@@ -166,21 +177,7 @@
 			selectable: true,
 			height: 450,
 			refetchResourcesOnNavigate: true,
-			resources: function(fetchInfo, successCallback, failureCallback) {
-				var buildings = [];
-				var f_id = {{ f_id | tojson }};
-				var b_id = {{ b_id | tojson }};
-
-
-				axios
-					.get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
-					.then(res => { 
-						this.buildings = res.data;
-						successCallback(res)						
-					})
-					.catch(err => console.log(err))	
-			},
-			//resources: 'http://ec2-35-170-202-37.compute-1.amazonaws.com/static/resource.json',
+			resources: rooms,
 			events: [ 	{"id":"1", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T10:30:00", "end":"2019-11-01T12:30:00"},
 					{"id":"2", "resourceId":"b", "title":"Reserved", "start":"2019-11-09T9:30:00", "end":"2019-11-01T12:30:00"},
 					{"id":"3", "resourceId":"a", "title":"Reserved", "start":"2019-11-09T1:30:00", "end":"2019-11-01T14:30:00"},
@@ -250,12 +247,10 @@
 				});
 			}
 			
-			});
+		});
 		
   	   	calendar.render();
-	});
-
-
+	}).catch(err => console.log(err))
 
     </script>
     
@@ -267,19 +262,13 @@
                 isDisabled: true,
 				b_id: {{ b_id | tojson }},
 				f_id: {{ f_id | tojson }},
-                building: [],
-                rooms: []                
+                building: []
             },
             mounted(){
-                const requestBuildingURL = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id );
-                const requestRoomURL = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms");
-
-                axios.all([requestBuildingURL, requestRoomURL])
-	  	            .then(axios.spread((res1, res2) => {
-                        this.building = res1.data;
-			            this.rooms= res2.data;
-                    }))
-                    .catch(error => console.log(error))                        
+                 axios
+			.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id )
+	  	        .then(res => { this.building = res.data })
+	                .catch(error => console.log(error))                        
             },
             delimiters: ["[[", "]]"],
             methods: {
@@ -311,7 +300,7 @@
 		    		return
 			},
 			getRoomCreationURL: function() {
-				 window.location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
+				 location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
 		  	         return	 
 			}			
 		}
