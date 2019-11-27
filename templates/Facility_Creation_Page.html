@@ -13,7 +13,8 @@
 	<div class = "content" id="app">
 
         <form>
-          <h1> Facility Creation </h1>
+            <center><h1> Facility Creation </h1></center>
+            <div class="errorbox" v-for="e in error">[[e]]</div>
 			<p>Looking a create a new facility? You can do so with this form!</p>
 
           <label for="name">Facility Name:</label>
