@@ -16,7 +16,7 @@ class Facility(Resource):
         facilities = db.facilities
         res = {
             'msg': [],
-            'res': []
+            'err': []
         }
 
         if (f_id):
@@ -56,7 +56,7 @@ class Facility(Resource):
         data = request.json
         res = {
             'msg': [],
-            'res': []
+            'err': []
         }
 
         if data.get('access_code'):
@@ -119,7 +119,7 @@ class Facility(Resource):
         facilities = db.facilities
         res = {
             'msg': [],
-            'res': []
+            'err': []
         }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if not check_admin(f_id):
@@ -151,7 +151,7 @@ class Facility(Resource):
         rooms = db.rooms
         res = {
             'msg': [],
-            'res': []
+            'err': []
         }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
