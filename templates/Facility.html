@@ -142,7 +142,7 @@
 
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
 			{% if admin %}
-			<td style="text-align: center"><button img src="{{url_for('static', filename='deleteicon.png')}}"></a>
+			<td style="text-align: center"><a img src="{{url_for('static', filename='deleteicon.png')}}"></a>
                 <div id = "modalwrapper" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
@@ -242,9 +242,6 @@
 		    return
 		},
 		deleteBuilding: function(b_id, b_name) {
-		
-		    var deleteConfirm = confirm("Click Okay to confirm the deletion of building: " + b_name);
-		    if( deleteConfirm == true){
 		    	axios
 				.delete("/api/facilities/" + this.f_id + "/buildings/" + b_id)
 				.then( function(b_name){
