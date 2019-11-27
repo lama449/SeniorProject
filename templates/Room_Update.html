@@ -18,20 +18,20 @@
 
           <!--Room Information -->
           <label for="name">Room Name (Optional):</label>
-          <input type="text" name="roomName" id ="name" placeholder="Enter Room Name">[[room.name]]</input>
+          <input type="text" name="roomName" id ="name" v-model="room.name">
 
           <label for="roomNum">Room Number:</label>
-          <input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required>[[room.number]]</input>
+          <input type="text" name="roomNumber" id ="roomNum" v-model="room.number" required>
 
           <label for="roomCap">Room Capacity:</label>
-          <input type="number" name="Room Capacity" id ="roomCap" placeholder="Enter Room Capacity" required>[[room.capacity]]</input>
+          <input type="number" name="Room Capacity" id ="roomCap" v-model="room.capacity" required>
 
           <p>Click the button to add an option at the end of the list.
             <br>  Control+click (command on mac) to select multiple features.
             <br> To remove a feature select it and press "Remove Feature"
           </p>
           <select id="mySelect" size="8" multiple>
-            <option v-for="roomAttributes in room.attributes" selected>[[roomAttributes]]</option>
+              <option v-for="roomAttributes in room.attributes" v-bind:value="roomAttributes">[[roomAttributes]]</option>
           </select>
 
           <input type="text" name="newFeature" id="feature">
@@ -40,7 +40,7 @@
           <button type="button" id="deleteButton" onclick="removeFeature()">Remove Feature</button>
 
           <select id="groupSelect" size="8" multiple>
-            <option v-for="roomGroups in room.groupID" selected>[[roomGroups]]</option>
+            <option v-for="roomGroups in room.groupID" v-bind:value="roomGroups">[[roomGroups]]</option>
           </select>
 
           <input type="text" name="newFeature" id="group">
