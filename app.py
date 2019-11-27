@@ -109,7 +109,7 @@ def reservations():
 @app.route('/reservations/<res_id>', methods=['GET'])
 def reservtions_info(res_id):
     if check_logged_in():
-        return render_template('Reservations_Info.html', res_id=res_id)
+        return render_template('Reservation_Info.html', res_id=res_id)
     else:
         return redirect(url_for('home'))
 
