@@ -413,10 +413,16 @@
             description: this.description,
             private: this.private
           })
-          .then(res => {
-            this.f_id = res.data._id;
-            location.href = ("/facility/" + this.f_id)
-            }) .catch(error => console.log(error))
+              .then (res => {
+                if ("err" in res.data && res.data.err.length) {
+                    this.error = res.data.error
+                }
+                else {
+                    this.f_id = res.data._id;
+                    location.href = ("/facility/" + this.f_id)
+                })
+              .catch(error => console.log(error))
+
         }
       }
     })
