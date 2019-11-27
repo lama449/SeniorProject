@@ -142,7 +142,7 @@
 
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
 			{% if admin %}
-			<td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}"></a>
+			<td style="text-align: center"><button img src="{{url_for('static', filename='deleteicon.png')}}"></a>
                 <div id = "modalwrapper" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
