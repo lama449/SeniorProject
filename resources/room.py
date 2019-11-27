@@ -60,7 +60,7 @@ class Room(Resource):
             'number': data.get('number'),
             'reservations': []
             })
-            return jsonify(takeID.inserted_id)
+            return jsonify({'_id': takeID.inserted_id})
         else:
             return {'err': validation[1]}
 
