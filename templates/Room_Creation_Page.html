@@ -14,7 +14,8 @@
 
         <!-- Room Creation Form -->
         <form>
-          <h1> Room Creation </h1>
+            <center><h1> Room Creation </h1></center>
+            <div class="errorbox" v-for="e in error">[[e]]</div>
 
           <!--Room Information -->
           <label for="name">Room Name:</label>
