@@ -61,10 +61,10 @@ class Maintenance(Resource):
                 if current_room:
                     if not data.get('description'):
                         return jsonify(res['err'].append('Missing maintenance request description'))
-                    if not data.get('date'):
-                        return jsonify(res['err'].append('Missing date submitted'))
-                    if not data.get('status'):
-                        return jsonify(res['err'].append('Missing maintenance request status'))
+                    # if not data.get('date'):
+                        # return jsonify(res['err'].append('Missing date submitted'))
+                    # if not data.get('status'):
+                        # return jsonify(res['err'].append('Missing maintenance request status'))
                     current_building = buildings.find_one({'_id': current_room.get('buildingID')})
                     if not current_building: 
                         return jsonify(res['err'].append('Invalid building'))
@@ -76,8 +76,10 @@ class Maintenance(Resource):
                                                                'roomNum': current_room.get('number'),
                                                                'description': data.get('description'),
                                                                #'userID': user.get('_id'),
-                                                               'date': data.get('date'), 
-                                                               'status': data.get('status')}}})
+                                                               #'date': data.get('date'), 
+                                                               'date': datetime.datetime.now(), 
+                                                               #'status': data.get('status')}}})
+                                                               'status': "Submitted"}}})
                     currentReq = [req for req in newReq]
                     if currentReq:
                         return jsonify(currentReq)
