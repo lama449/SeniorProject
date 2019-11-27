@@ -244,6 +244,7 @@
 		    return
 		},
 		deleteBuilding: function() {
+
             var b_name = this.buildingToBeDeleted.name
             var b_id = this.buildingToBeDeleted._id
 		    	axios
@@ -252,8 +253,7 @@
 					location.reload();
 				})
 				.catch(error => console.log(error))
-		    }			
-		    return
+		    }
 		}
 	    }
         })
