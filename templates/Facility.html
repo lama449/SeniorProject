@@ -142,7 +142,7 @@
 
                         <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
 			{% if admin %}
-                        <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="deleteBuilding = building"></td>
+                        <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="buildingToBeDeleted = building"></td>
 
 			{% endif %}
                     </tr>
@@ -190,7 +190,7 @@
 		        isDisabled: true,
                 facility: [],
                 buildings:[],
-                deleteBuilding: {}
+                buildingToBeDeleted: {}
             },
             mounted(){
                 const requestBuildingURL = axios.get("/api/facilities/" + this.f_id + "/buildings");
@@ -245,8 +245,8 @@
 		},
 		deleteBuilding: function() {
 
-            var b_name = deleteBuilding.name
-            var b_id = deleteBuilding._id
+            var b_name = buildingToBeDeleted.name
+            var b_id = buildingToBeDeleted._id
 		    var deleteConfirm = confirm("Click Okay to confirm the deletion of building: " + b_name);
 		    if( deleteConfirm == true){
 		    	axios
