@@ -48,6 +48,10 @@ class Room(Resource):
             res['err'].append('Missing room capacity')
         if not data.get('number'):
             res['err'].append('Missing room number')
+        if not data.get('attributes'):
+            res['err'].append('Missing room attributes')
+        if not data.get('groupID'):
+            res['err'].append('Missing room groupID')
         if res['err']:
             return jsonify(res)
         
@@ -65,6 +69,13 @@ class Room(Resource):
             'number': data.get('number'),
             'reservations': []
             })
+
+            # update the facility's list of attributes with any new attributes
+            db.facilities.update(
+                {'_id': ObjectId(f_id)},
+                {'$addToSet': { 'attributes': {'$each': data.get('attributes')}}}
+            )
+
             return jsonify({'_id': takeID.inserted_id})
         else:
             res['err'].append(validation[1])
