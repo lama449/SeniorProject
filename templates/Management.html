@@ -25,22 +25,36 @@
 
         <!-- Table -->
         <div v-if="facilities.length" class="secondary-content container">
-			<table class="table">
-                    <tr>
-                        <th>Facility</th>
-                        <th>Location</th>
-                        <th>Description</th> 
-                        <th>Phone Number</th>
-                    </tr>
+			<table v-if="facilities.length" class="table">
+                <tr>
+                    <th>Facility</th>
+                    <th>Location</th>
+                    <th>Description</th> 
+                    <th>Phone Number</th>
+                </tr>
                     <tr v-for="facility in facilities">
                         <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.name ]]</a></td>
                         <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.address.city ]], [[ facility.address.state ]], [[ facility.address.zip ]] </a></td>
                         <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.description ]] </a></td>
                         <td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.phone ]]</a></td>
                     </tr>
-                </table>
+            </table>
+            <table v-else class="table">
+                <tr>
+                    <th>Facility</th>
+                    <th>Location</th>
+                    <th>Description</th> 
+                    <th>Phone Number</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
             <button class="submitbtn" onclick=""> Add A New Facility </button>
-            </div>		
+        </div>		
 	</div>	
 
     {% include 'footer.html' %}
@@ -53,13 +67,9 @@
                 facilities: []                
             },
             mounted(){
-                const requestFacilityURL = axios.get("{{ url_for('facility', f_id='5d9a7446bc65c324386edcd6') }}");
-
-                axios.all([requestFacilityURL])
-	  	    .then((res1) => {
-                        this.facilities = res1.data;			            
-                    })
-                    .catch(error => console.log(error))                        
+                axios
+                    .get("/api/user/facilities")               
+                    .then(res => {this.facilities = res.data;})
             },
             delimiters: ["[[", "]]"],
             methods: {
