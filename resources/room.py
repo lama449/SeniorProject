@@ -48,6 +48,10 @@ class Room(Resource):
             res['err'].append('Missing room capacity')
         if not data.get('number'):
             res['err'].append('Missing room number')
+        if data.get('attributes') is None:
+            res['err'].append('Missing room attributes')
+        if data.get('groupID') is None:
+            res['err'].append('Missing room groupID')
         if res['err']:
             return jsonify(res)
         
@@ -65,6 +69,13 @@ class Room(Resource):
             'number': data.get('number'),
             'reservations': []
             })
+
+            # update the facility's list of attributes with any new attributes
+            db.facilities.update(
+                {'_id': ObjectId(f_id)},
+                {'$addToSet': { 'attributes': {'$each': data.get('attributes')}}}
+            )
+
             return jsonify({'_id': takeID.inserted_id})
         else:
             res['err'].append(validation[1])
@@ -72,17 +83,42 @@ class Room(Resource):
 
 
     def put(self, f_id, b_id, r_id):
+        res =   {
+                'msg': [],
+                'err': []
+                }
+              
         data = request.json
         rooms = db.rooms
+        
+        if not data.get('name'):
+            res['err'].append('Missing name')
+        if not data.get('capacity'):
+            res['err'].append('Missing room capacity')
+        if not data.get('number'):
+            res['err'].append('Missing room number')
+        if data.get('attributes') is None:
+            res['err'].append('Missing room attributes')
+        if data.get('groupID') is None:
+            res['err'].append('Missing room groupID')
+        if res['err']:
+            return jsonify(res)
         
         validation = validate_room(f_id, b_id, r_id)
         if validation[0] is True:
             updated_room = rooms.update_one({'_id': ObjectId(r_id)}, 
-            {'$set': {'number': data.get('number'),
-            'name': data.get('name'),
-            'capacity': data.get('capacity'),
-            'attributes': {data.get('attributes')}, 
-            'groupID': data.get('groupID')}})
+            {'$set': {
+                'number': data.get('number'),
+                'name': data.get('name'),
+                'capacity': data.get('capacity'),
+                'attributes': data.get('attributes'), 
+                'groupID': data.get('groupID')}})
+
+            # update the facility's list of attributes with any new attributes
+            db.facilities.update(
+                {'_id': ObjectId(f_id)},
+                {'$addToSet': { 'attributes': {'$each': data.get('attributes')}}}
+            )
 
             res['msg'].append('success')
             return jsonify(res)
@@ -92,6 +128,11 @@ class Room(Resource):
 
 
     def delete(self, f_id, b_id, r_id):
+        res =   {
+                'msg': [],
+                'err': []
+                }
+              
         validation = validate_room(f_id, b_id, r_id)
         if validation[0] is True:
             rooms = db.rooms
