@@ -13,6 +13,10 @@ db = database.conn_DB()
 class Group(Resource):
     def get(self, f_id, g_id=None):
         facilities = db.facilities
+        res = {
+            'msg': [],
+            'err': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
             if g_id is None:
@@ -39,6 +43,10 @@ class Group(Resource):
     def post(self, f_id):
         data = request.json
         facilities = db.facilities
+        res = {
+            'msg': [],
+            'err': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
             if not data.get('name'):
@@ -57,6 +65,10 @@ class Group(Resource):
     def put(self, f_id, g_id):
         data = request.form
         facilities = db.facilities
+        res = {
+            'msg': [],
+            'err': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:  # if facility exists
             if g_id:
@@ -82,6 +94,10 @@ class Group(Resource):
     def delete(self, f_id, g_id):
         facilities = db.facilities
         users = db.users
+        res = {
+            'msg': [],
+            'err': []
+        }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             facilities.update({'_id': ObjectId(f_id)},
