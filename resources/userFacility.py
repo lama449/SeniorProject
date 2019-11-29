@@ -20,7 +20,7 @@ class UserFacility(Resource):
         }
         facilities = db.facilities
         users = db.users
-        current_user = users.find_one({'_id': ObjectId(session.get('user').get('id'))})
+        current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
         #current_user = users.find_one({'_id': ObjectId(u_id)})
         current_facilities = facilities.find({})
         userGroups = current_user.get('groupID')
