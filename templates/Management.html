@@ -32,12 +32,12 @@
                     <th>Description</th> 
                     <th>Phone Number</th>
                 </tr>
-                    <tr v-for="f in facilities">
-                        <td><a >[[ f.facilities.name ]]</a></td>
-                        <td><a >[[ f.facilities.address.city ]], [[ f.facilities.address.state ]], [[ f.facilities.address.zip ]] </a></td>
-                        <td><a >[[ f.facilities.description ]] </a></td>
-                        <td><a >[[ f.facilities.phone ]]</a></td>
-                    </tr>
+                <tr v-for="f in facilities">
+                        <td><a v-bind:href="getFacilityURL(f._id)" > [[ f.name ]]</a></td>
+                        <td><a > [[ f.address.city ]], [[ f.address.state ]], [[ f.address.zip ]] </a></td>
+                        <td><a >[[ f.description ]] </a></td>
+                        <td><a >[[ f.phone ]]</a></td>
+                </tr>
             </table>
             <!--<table v-else class="table">
                 <tr>
@@ -64,26 +64,27 @@
         var vc = new Vue({
             el: "#app",
             data: {
+		buildings: [],
                 facilities: []                
             },
             mounted(){
                 axios
                     .get("/api/facilities/users")               
                     .then(res => {
-			this.facilities = res.data;}
-		     )
+			this.facilities = res.data.facilities
+		    })
+		    .catch(err=>console.log(err))
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingList: function() {
-                    axios
-                        .get("{{ url_for('building', f_id='5d9a7446bc65c324386edcd6') }}")
-                        .then(res => { this.buildings = res.data; })
-                        .catch(error => console.log(error))
+		getTelephone: function(phone) {
+		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
+		},
+                getFacilityURL: function(f_id) {
+                    return "/facility/" + f_id
                 },
-                getBuildingURL: function(building_id) {
-                    return "/api/facilities/5d9a7446bc65c324386edcd6/buildings" + building_id
-                }
+		deleteFacility: function() {
+		}
             }
         })
     
