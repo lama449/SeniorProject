@@ -75,7 +75,7 @@ def facility_page(f_id):
 @app.route('/management', methods=['GET'])
 def management_page():
     if check_logged_in():
-        return render_template('Management.html')
+        return render_template('Management.html', admin=True)
     else:
         return redirect(url_for('home'))
 

@@ -19,8 +19,8 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Management Page</h1>	
-			<h4 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h4>
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Management Page</h1>	
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h4>
 		</div>    
 
         <!-- Table -->
@@ -31,6 +31,7 @@
                     <th>Location</th>
                     <th>Description</th> 
                     <th>Phone Number</th>
+		    <th>Access Code</th>
                     {% if admin %}
                     <th>Delete?</th>
                     {% endif %}
@@ -42,6 +43,8 @@
                         <td v-else><a v-bind:href="getFacilityURL(f._id)">[[ f.address.address_L1 ]], [[ f.address.city ]], [[ f.address.state ]], [[ f.address.zip ]] </a></td>
                         <td><a v-bind:href="getFacilityURL(f._id)">[[ f.description ]] </a></td>
                         <td><a v-bind:href="getTelephone(f.phone)">[[ f.phone ]]</a></td>
+			<td v-if="f.access_code != ''"><a v-bind:href="getFacilityURL(f._id)">[[ f.access_code ]]</a></td>
+			<td v-else>N/A</td>
                         {% if admin %}
                         <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="facilityToBeDeleted = f"></td>
                         {% endif %}
@@ -81,9 +84,9 @@
                 </tr>
             </table>
         </div>
-        {% if admin %}
+        
         <button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Add A New Facility </button>
-        {% endif %}
+        
         </div>		
 	</div>	
 
