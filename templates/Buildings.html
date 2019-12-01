@@ -34,8 +34,8 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>	
-            <h6 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>	
+            <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
 
 		</div>    
 
@@ -135,7 +135,7 @@
 		
 		<div id="calendar">
 			{% if admin %}
-			<button class="gobackbtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
+			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
 			{% endif %}
 			<button class="submitbtn" v-on:click="submitReservation()"> Submit Time Slot </button>
 		</div>
@@ -204,7 +204,7 @@
 						start_time: start,
 						end_time: end
 					})
-					.then( )
+					.then(res => location.href="/reservations/" + res.data._id)
 					.catch(err => console.log(err))				
 			}			
 		}
@@ -239,6 +239,7 @@
 			   str = JSON.stringify(rooms);
 			   str = str.replace(/\"_id\":/g, "\"id\":");
 			   str = str.replace(/\"name\":/g, "\"title\":");
+			   str = str.replace(/\"attributes":/g, "\"features\":");
 			   rooms = JSON.parse(str);
 			   
 			   str2 = JSON.stringify(reservations);		   
@@ -246,6 +247,7 @@
 			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
 			   str2 = str2.replace(/\"_id":/g, "\"id\":");
 			   reservations = JSON.parse(str2);
+			   console.log(typeof reservations);
 			   console.log(reservations);
 			   
    
@@ -264,7 +266,7 @@
 			   height: 450,	
 			   resources: rooms,			   
 			   events: reservations,
-			   eventBackgroundColor: 'red',
+			   //eventBackgroundColor: 'red',
 			   
 			   titleFormat: {
 				   year: 'numeric',
@@ -314,7 +316,7 @@
 				   {% if admin %}
 				   var roomUpdatebtn = document.createElement("BUTTON");
 				   roomUpdatebtn.textContent = "Edit Room";
-				   roomUpdatebtn.className = "submitbtn";				   
+				   roomUpdatebtn.className = "updateroombtn";				   
 				   roomUpdatebtn.onclick = function(){
 					rooms.forEach(room => {
 						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
@@ -322,27 +324,30 @@
 						}
 					})
 				   }
+				   var br = document.createElement("br");
+				   info.el.querySelector('.fc-cell-text')
+					  .appendChild(br);
 				   info.el.querySelector('.fc-cell-text')
 					  .appendChild(roomUpdatebtn);
 				   var roomDeletebtn = document.createElement("BUTTON");
 				   roomDeletebtn.textContent = "Delete Room";
-				   roomDeletebtn.className = "submitbtn";
+				   roomDeletebtn.className = "updateroombtn";
 				   info.el.querySelector('.fc-cell-text')
 					.appendChild(roomDeletebtn);
 				   roomDeletebtn.onclick = function() {
-						prompt("THIS IS NOT DONE YET");}
+					prompt("THIS IS NOT DONE YET");}
 				   {% endif %}
 			   },
    
-			   eventRender: function(info) {					
+			   //eventRender: function(info) {					
 				
-				   var tooltip = new Tooltip(info.el, {
-						 title: "",
-						 placement: 'top',
-						 trigger: 'hover',
-						 container: 'body'
-				   });
-			   }
+				//   var tooltip = new Tooltip(info.el, {
+				//		 title: "",
+				//		 placement: 'top',
+				//		 trigger: 'hover',
+				//		 container: 'body'
+				  // });
+			  // }
 			   
 		   });		
 				calendar.render();

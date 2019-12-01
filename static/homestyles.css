@@ -305,25 +305,48 @@ select:focus{
     background-color: #212529;
 }
 
-.gobackbtn {
+.newroombtn{
     display: block;
     line-height: 1.5;
-    margin: -10px auto auto 0px; 
-    background-color: #2c3e50; 
-    color: #fff; 
+    margin: 5px auto 0px 0px;
+    background-color: #2c3e50;
+    color: #fff;
     font-family: Arial;
-    font-size: 16px; 
-    border-radius: 4px; 
-    border: 1px solid; 
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid;
     padding: 6.4px 10.4px;
     -webkit-transition-duration: .2s;
     transition-duration: .2s;
 }
 
-.gobackbtn:hover{
+.newroombtn:hover{
     cursor: pointer;
     background-color: #212529;
 }
+
+
+.updateroombtn{
+    display: inline-block;
+    line-height: 1;
+    margin: auto;
+    background-color: #2c3e50;
+    color: #fff;
+    font-family: Arial;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid;
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+}
+
+.updateroombtn:hover{
+    cursor: pointer;
+    background-color: #212529;
+}
+
+
 /* Tooltip for Calendar */
 .popper,
 .tooltip {
