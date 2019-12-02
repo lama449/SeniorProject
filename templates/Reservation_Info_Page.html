@@ -17,8 +17,8 @@
 
 		<!-- Center Text -->
 		<div>
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;"> Room Confirmation Page</h1>
-			<p style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;"> Room Confirmation Page</h1>
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">
         You're all set! Below is the confirmation information for your reservation.
         <br> If for any reason you need to cancel your reservation, please do so on the Reservations page.
       </p>
@@ -27,9 +27,9 @@
 		<!-- Confirmation Text -->
 		<div style="background:white; background:white; text-align: justify; width:60%; height:auto; margin: 50px auto 10px auto; padding: 10px;  border: 1px solid transparent; border-radius: 5px;">
 
-        <p style="padding: 15px 20px 0">Address: [[building.address]]</p>
+        <p style="padding: 15px 20px 0">Address: [[building.address.addres_L1]] [[building.address.address_L2]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
 
-        <p style="padding: 15px 20px 0">Date: [[reservation.date]] </p>
+        <p style="padding: 15px 20px 0">Date: [[reserve.date]] </p>
 
         <p style="padding: 15px 20px 0">Facility: [[facility.name]]</p>
 
@@ -55,8 +55,9 @@
         f_id: {{ f_id | tojson }},
         building_id: {{ b_id | tojson}},
         room_id: {{ r_id | tojson}},
-        reserve_id: {{ reserve_id | tojson}},
-        buildings: [],
+        res_id: {{ res_id | tojson}},
+	reserve: [],
+        building: [],
         facility: [],
         room: {}
 
@@ -66,7 +67,7 @@
 
         //Will be changed
         const requestReservationEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id "/rooms/" + this.r_id + "/reservations" + this.reserve_id)
-        const requestRoomsEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id "/rooms/" + this.r_id)
+        const requestRoomsEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id)
         const requestBuildingEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id)
         const requestFacilityEnd = axios.get("/api/facilities/" + this.f_id)
 
