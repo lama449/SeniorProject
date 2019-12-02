@@ -24,22 +24,22 @@
 		</div>    
 
         <!-- Table -->
-        <div class="secondary-content container">
+        <div v-if="ures.length" class="secondary-content container">
 		<table class="table">
                     <tr>
                         <th>Start Date</th>
                         <th>End Date </th>
-			<th>Room Name </th>
-			<th>Building Name </th>
-			<th>Facility Name </th>
+			            <th>Room Name </th>
+			            <th>Building Name </th>
+			            <th>Facility Name </th>
                         <th>Maintenance Request</th>
                     </tr>
                     <tr v-for="resv in ures">
                         <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
                         <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
-			<td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
-			<td style="text-align:center">[[ resv.building.name ]]</td>
-			<td style="text-align:center">[[ resv.facility.name ]]</td>
+			            <td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
+			            <td style="text-align:center">[[ resv.building.name ]]</td>
+			            <td style="text-align:center">[[ resv.facility.name ]]</td>
                         <td style="text-align:center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img style="cursor:pointer" src="{{url_for('static', filename='requesticon.png')}}"></a>
                             <div id = "modalwrapper" class = "modal">
                                 <form class="modal-content animate">
@@ -72,21 +72,21 @@
                     axios
                         .get("/api/user/reservations")
                         .then(res => {
-			    ures = res.data
-			    //console.log(reservations);
+			                ures = res.data
+                            console.log(ures.length);
                         })
                         .catch(err => console.log(err))                        
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
-		    submitRequest: function() {
-			axios
-			   .post("/api/facilities/" + this.f_id + "/maintenance/" + this.r_id, {
-				description: this.description
-			   })
-			   .then(location.reload())
-			   .catch(err => console.log(err))
-		    }
+		            submitRequest: function() {
+			          axios
+			            .post("/api/facilities/" + this.f_id + "/maintenance/" + this.r_id, {
+				            description: this.description
+			            })
+			            .then(location.reload())
+                        .catch(err => console.log(err))
+		            }
                 }
             })
     
