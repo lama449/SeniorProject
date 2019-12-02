@@ -19,26 +19,28 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-			<h1 style="background:lightgrey; text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page:</h1>	
-			<h6 style="background:lightgrey; text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a maintenance request please click the icon next to the building of the reservation.</h6>
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page:</h1>	
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a maintenance request please click the icon next to the building of the reservation.</h6>
 		</div>    
 
         <!-- Table -->
-        <div v-if="buildings.length" class="secondary-content container">
+        <div class="secondary-content container">
 		<table class="table">
                     <tr>
-                        <th>Date</th>
-                        <th>Building</th>
-                        <th>Location</th>
-                        <th>Facility</th> 
+                        <th>Start Date</th>
+                        <th>End Date </th>
+			<th>Room Name </th>
+			<th>Building Name </th>
+			<th>Facility Name </th>
                         <th>Maintenance Request</th>
                     </tr>
-                    <tr v-for="building in buildings">
-                        <td>[[ reservation.start_date ]]</td>
-                        <td><a v-bind:href="">[[ building.name ]]</a></td>
-                        <td><a v-bind:href="">[[ building.address.city ]], [[ building.address.state ]] </a></td>
-                        <td style="text-align: center"> <a v-bind:href=""> [[ facility.name ]] </a></td>
-                        <td style="text-align: center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img src="{{url_for('static', filename='requesticon.png')}}"></a>
+                    <tr v-for="resv in ures">
+                        <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
+                        <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
+			<td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
+			<td style="text-align:center">[[ resv.building.name ]]</td>
+			<td style="text-align:center">[[ resv.facility.name ]]</td>
+                        <td style="text-align:center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img style="cursor:pointer" src="{{url_for('static', filename='requesticon.png')}}"></a>
                             <div id = "modalwrapper" class = "modal">
                                 <form class="modal-content animate">
                                     <div class="imgcontainer" style="background-color: white">
@@ -64,26 +66,27 @@
             var vc = new Vue({
                 el: "#app",
                 data: {
-                    reservations: [],
-                    buildings:[],
-                    facility:[]                
+                    ures:[]
                 },
-                mounted(){
+                mounted(){			
                     axios
                         .get("/api/user/reservations")
                         .then(res => {
-                            this.reservations = res.data;
+			    ures = res.data
+			    //console.log(reservations);
                         })
                         .catch(err => console.log(err))                        
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
-                    getFacilityURL: function(facility_id) {
-                        return "/api/facilities/" + facility_id
-                    },
-                    getBuildingURL: function(building_id) {
-                        return "/api/facilities/5d9a7446bc65c324386edcd6/buildings/" + building_id
-                    }
+		    submitRequest: function() {
+			axios
+			   .post("/api/facilities/" + this.f_id + "/maintenance/" + this.r_id, {
+				description: this.description
+			   })
+			   .then(location.reload())
+			   .catch(err => console.log(err))
+		    }
                 }
             })
     

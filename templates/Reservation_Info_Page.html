@@ -13,7 +13,7 @@
 
 	{% include 'header.html' %}
 
-	<div class="content">
+	<div class="content" id="app">
 
 		<!-- Center Text -->
 		<div>
@@ -21,21 +21,22 @@
 			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">
         You're all set! Below is the confirmation information for your reservation.
         <br> If for any reason you need to cancel your reservation, please do so on the Reservations page.
-      </p>
+      </h6>
 		</div>
 
 		<!-- Confirmation Text -->
 		<div style="background:white; background:white; text-align: justify; width:60%; height:auto; margin: 50px auto 10px auto; padding: 10px;  border: 1px solid transparent; border-radius: 5px;">
 
-        <p style="padding: 15px 20px 0">Address: [[building.address.addres_L1]] [[building.address.address_L2]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
+        <p v-if="building.address.address_L2 != ''" style="padding: 15px 20px 0">Address: [[building.address.address_L1]] [[building.address.address_L2]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
 
-        <p style="padding: 15px 20px 0">Date: [[reserve.date]] </p>
+	<p v-else style="padding:15px 20px 0"> Address: [[building.address.address_L1]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
+        <p style="padding: 15px 20px 0">Date: [[reserve.start_time]] to [[reserve.end_time]] </p>
 
         <p style="padding: 15px 20px 0">Facility: [[facility.name]]</p>
 
 				<p style="padding: 15px 20px 0">Building: [[building.name]]</p>
 
-				<p style="padding: 15px 20px 0">Room: [[room.name]]</p>
+				<p style="padding: 15px 20px 0">Room: [[room.name]] [[room.number]]</p>
 
 				<p style="padding: 15px 20px 0">Features: [[room.attributes]]</p>
 
@@ -43,6 +44,19 @@
 				<!-- Add button later -->
 			<!--	<button class="submitbtn"> Reservations Page </button> -->
 		</div>
+
+	<button class="submitbtn" onclick="document.getElementById('modalwrapper').style.display='block'">Cancel this Reservation</button>
+
+	<div id = "modalwrapper" class = "modal">
+                    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                            <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Cancel Reservation?</h1>                        
+                            <h6><center>Are you sure you would like to cancel this reservation?</center></h6>
+                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteReservation()">Cancel Reservation</button>
+                        </div>
+                    </form>
+            </div>
 
 	</div>
 
@@ -53,8 +67,8 @@
     el: "#app",
       data: {
         f_id: {{ f_id | tojson }},
-        building_id: {{ b_id | tojson}},
-        room_id: {{ r_id | tojson}},
+        b_id: {{ b_id | tojson}},
+        r_id: {{ r_id | tojson}},
         res_id: {{ res_id | tojson}},
 	reserve: [],
         building: [],
@@ -65,22 +79,33 @@
 
       mounted(){
 
-        //Will be changed
-        const requestReservationEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id "/rooms/" + this.r_id + "/reservations" + this.reserve_id)
+        const requestReservationEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
         const requestRoomsEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id)
         const requestBuildingEnd = axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id)
         const requestFacilityEnd = axios.get("/api/facilities/" + this.f_id)
 
         axios.all([requestReservationEnd, requestRoomsEnd, requestBuildingEnd, requestFacilityEnd])
         .then(axios.spread((res1, res2, res3, res4) => {
-          this.reserve = res1.data;
+          res1.data.start_time = res1.data.start_time.split("T")[0];
+	  res1.data.end_time = res1.data.end_time.split("T")[0];
+	  this.reserve = res1.data;
           this.room = res2.data;
           this.building = res3.data;
           this.facility = res4.data;
         }))
         .catch(error => console.log(error))
-      }
+      },
       delimiters: ["[[", "]]"],
+      methods: {
+	deleteReservation: function(){
+		axios
+		   .delete("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
+		   .then( function(){
+		       location.href="/reservations";
+		   })
+		   .catch(error => console.log(error))
+	}
+      }
     })
   </script>
 </body>

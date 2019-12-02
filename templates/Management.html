@@ -20,7 +20,7 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Management Page</h1>	
-			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h4>
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h6>
 		</div>    
 
         <!-- Table -->
@@ -102,7 +102,7 @@
             },
             mounted(){
                 axios
-                    .get("/api/facilities/users")               
+                    .get("/api/users/facilities")               
                     .then(res => {
 			this.facilities = res.data.facilities
 		    })

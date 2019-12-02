@@ -137,7 +137,11 @@
 			{% if admin %}
 			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
 			{% endif %}
+			{% if session.get('user') %}
 			<button class="submitbtn" v-on:click="submitReservation()"> Submit Time Slot </button>
+			{% else %}
+			<h6 style="text-align: center;">Please sign in to select a time slot. </h6>
+			{% endif %}
 		</div>
 		
             </div>				
@@ -197,14 +201,15 @@
 		  	         return	
 			},
 			submitReservation: function() {
-				console.log(start);
-				console.log(end);
+				//console.log(start);
+				//console.log(end);
 				axios
-					.post("/api/facilities/" + this.f_id +"/buildings/" + this.b_id + "/rooms/" + room_id + "/reservations",{
+					.post("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + room_id + "/reservations",{
 						start_time: start,
 						end_time: end
 					})
-					.then(res => location.href="/reservations/" + res.data._id)
+					//.then(res => console.log(res.data._id))
+					.then(res => location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id)
 					.catch(err => console.log(err))				
 			}			
 		}
@@ -216,22 +221,27 @@
 	   var calendar;
 	   var start;
 	   var end;
+	   var reservations;
 	   var room_id;
 	   
 	   axios
 		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
 		   .then(res => {
 			   var rooms = [];
-			   var reservations = [];
+			   reservations = [];
 			   var temp;
 			   var i = 0;
+			   var j = 0;
 			   rooms = res.data;
 			   rooms.forEach( room => {
 				room['name'] = room['name'] + " " + room['number'];				
 				if(room['reservations'].length > 0){
-				    reservations[i] = room['reservations'];
-				    reservations[i][0].resourceId = (room['_id']);
-				    reservations[i][0]['title'] = "Reserved";
+                                    reservations[i] = room['reservations'];
+				    j = 0;
+				    reservations[i].forEach( r => { 			
+                                    	reservations[i][j]['resourceId'] = (room['_id']);
+	                                reservations[i][j]['title'] = "Reserved";
+					j++;});
 				    i++;
 				}
 			   });
@@ -247,7 +257,7 @@
 			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
 			   str2 = str2.replace(/\"_id":/g, "\"id\":");
 			   reservations = JSON.parse(str2);
-			   console.log(typeof reservations);
+			   //console.log(rooms);
 			   console.log(reservations);
 			   
    
@@ -263,10 +273,13 @@
 			   schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
 			   defaultView: 'resourceTimelineDay',
 			   selectable: true,
-			   height: 450,	
+			   height: 450,
+			   timeZone: 'UTC',
 			   resources: rooms,			   
-			   events: reservations,
-			   //eventBackgroundColor: 'red',
+			   //events: reservations,
+			   eventSources: reservations,
+			   //events: [{"id":"5de42ba621871123555d397d", "title":"Reserved","resourceId":"5ddd9b0508472f8282ac14ac", "end":"2019-12-01T12:30:00","start":"2019-12-01T10:00:00","userID":"5ddc051884f0db0daa9172ce"}],
+			   eventBackgroundColor: 'red',
 			   
 			   titleFormat: {
 				   year: 'numeric',
@@ -335,22 +348,36 @@
 				   info.el.querySelector('.fc-cell-text')
 					.appendChild(roomDeletebtn);
 				   roomDeletebtn.onclick = function() {
-					prompt("THIS IS NOT DONE YET");}
+					 //var room_name = this.buildingToBeDeleted.name;
+					 rooms.forEach(room => {
+						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
+							var a = confirm("Press okay to delete room: " + room.title + ". Press Cancel to close the window.");
+							if(a == true){
+				    				axios
+								.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
+								.then( function(b_name){
+									location.reload();
+								})
+								.catch(error => console.log(error));
+							}else{ return false;}	
+						}
+					})
+				   }
 				   {% endif %}
 			   },
    
-			   //eventRender: function(info) {					
+			   eventRender: function(info) {					
 				
-				//   var tooltip = new Tooltip(info.el, {
-				//		 title: "",
-				//		 placement: 'top',
-				//		 trigger: 'hover',
-				//		 container: 'body'
-				  // });
-			  // }
+				   var tooltip = new Tooltip(info.el, {
+						 title: "",
+						 placement: 'top',
+						 trigger: 'hover',
+						 container: 'body'
+				   });
+			   }
 			   
 		   });		
-				calendar.render();
+				calendar.render();				
 	   }).catch(err => console.log(err))
    
     </script>
