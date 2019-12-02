@@ -106,10 +106,10 @@ def reservations():
     else:
         return redirect(url_for('home'))
 
-@app.route('/reservations/<res_id>', methods=['GET'])
-def reservtions_info(res_id):
+@app.route('/facility/<f_id>/building/<b_id>/room/<r_id>/reservation/<res_id>', methods=['GET'])
+def reservtions_info(f_id, b_id, r_id, res_id):
     if check_logged_in():
-        return render_template('Reservation_Info_Page.html', res_id=res_id)
+        return render_template('Reservation_Info_Page.html', f_id=f_id, b_id=b_id, r_id=r_id, res_id=res_id)
     else:
         return redirect(url_for('home'))
 
@@ -201,7 +201,7 @@ api.add_resource(Maintenance, '/api/facilities/<f_id>/maintenance', '/api/facili
 api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id>/groups/<g_id>', endpoint='group')
 api.add_resource(UserReservations, '/api/user/reservations', endpoint='user reservations')
 api.add_resource(UserGroup, '/api/facilities/<f_id>/users/<u_id>/groups/<g_id>', '/api/facilities/<f_id>/users/groups/<g_id>', endpoint='user group')
-api.add_resource(UserFacility, '/api/facilities/users', endpoint='user facility')
+api.add_resource(UserFacility, '/api/users/facilities', endpoint='user facility')
 
 if __name__ == '__main__':
     app.run()
