@@ -48,8 +48,7 @@
           el: "#app",
           data: {
               f_id: {{ f_id | tojson }},
-              buildings: [],
-              b_name: "", 
+              buildings: [],               
               maintenanceRequest: []
           },
           mounted(){
@@ -66,9 +65,16 @@
                   .catch(error => console.log(error))
           },
           delimiters: ["[[", "]]"],
-          methods: { }
-          
-      })
+          methods: { 
+            submitUpdate: function() {
+              this.maintenanceRequest.forEach( mr => {
+                axios.put("/api/facilities/" + this.f_id + "/maintenance/" + mr._id)
+                .then(location.reload())
+                .catch(err => console.log(err))
+              })
+            }
+          }
+  })
   </script>
 </body>
 </html>
