@@ -12,7 +12,7 @@ import datetime
 db = database.conn_DB()
 
 class Maintenance(Resource):
-    def get(self, f_id, r_id=None):
+    def get(self, f_id, m_id=None, r_id=None):
         res = {
             'msg': [],
             'err': []
@@ -38,9 +38,17 @@ class Maintenance(Resource):
                     res['err'].append('Invalid room')
                     return jsonify(res)
             else:
-                return jsonify(facilities.find_one({'_id': ObjectId(f_id)},
+                current_maintenance = facilities.find_one({'_id': ObjectId(f_id)},
                                            {'_id': 0, 'access_code': 0, 'name': 0, 'private': 0, 'address': 0,
-                                            'phone': 0, 'description': 0, 'presets': 0, 'attributes': 0}))
+                                            'phone': 0, 'description': 0, 'presets': 0, 'attributes': 0})
+                if m_id:  # return specific maintenance request
+                    for x in current_maintenance['maintenance']:
+                        if ObjectId(x['_id']) == ObjectId(m_id):
+                            return jsonify(x)
+                    res['err'].append('Invalid maintenance ID')
+                    return jsonify(res)
+                else:  # return all maintenance requests
+                    return jsonify(current_maintenance)
         else:
             res['err'].append('Invalid facility')
             return jsonify(res)
@@ -91,7 +99,7 @@ class Maintenance(Resource):
         else:
             return jsonify(res['err'].append('Invalid facility'))
 
-    def put(self, f_id, m_id, r_id):
+    def put(self, f_id, m_id, r_id=None):
         res = {
             'msg': [],
             'err': []
