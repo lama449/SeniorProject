@@ -20,28 +20,28 @@
         </div>
 
         <div class="secondary-content container" v-if="maintenanceRequest.length">
-          <table id="table">
+          <table class="table">
             <tr>
               <th>Date Submitted</th>
               <th>Building Name</th>
               <th>Room Name and Number</th>
               <th>Description</th>
-              <th>Status<th>
+              <th>Status</th>
             </tr>
 
             <tr v-for="maintenanceInfo in maintenanceRequest">
-              <td>[[maintenanceRequest.maintenance.date]]</td>
-              <td>[[maintenanceRequest.maintenance.buildingName]]</td>
-              <td>[[maintenanceRequest.maintenance.roomNum]]</td>
-              <td>[[maintenanceRequest.maintenance.description]]</td>
-              <td style="text-align: center" v-model="maintenanceRequest.maintenance.status"><a v-bind:href=""><select><option> Submitted </option> <option>In Progress</option><option>Completed</option></select></a></td>
+              <td style="text-align: center">[[maintenanceInfo.date]]</td>
+              <td style="text-align: center">[[maintenanceInfo.buildingName]]</td>
+              <td style="text-align: center">[[maintenanceInfo.roomNum]]</td>
+              <td style="text-align: center">[[maintenanceInfo.description]]</td>
+              <td style="text-align: center"><select v-model="maintenanceInfo.status"><option> Submitted </option> <option>In Progress</option><option>Completed</option></select</td>
             </tr>
           </table>
-          <button type="submit">Submit</button>
-        </div>
-
-        {% include 'footer.html' %}
+          <button class="submitbtn" @click.prevent="submitUpdate()">Submit Update</button>
+        
+	</div>
       </div>
+  {% include 'footer.html' %}
   <script>
 
   var vc = new Vue({
@@ -54,22 +54,20 @@
           },
           mounted(){
               const getFacilityMaintenanceRequest = axios.get("/api/facilities/" + this.f_id + "/maintenance");
-              const getBuildingInfo = axios.get("/api/facilities/" + this.f_id + "/buildings")
-              axios.all[(getFacilityMaintenanceRequest, getBuildingInfo)]
-                .then((res1, res2) => {
-                      this.maintenanceRequest = res1.data;
-                      this.maintenanceRequest.maintenace.forEach( mr => {
+              const getBuildingInfo = axios.get("/api/facilities/" + this.f_id + "/buildings");
+              axios.all([getFacilityMaintenanceRequest, getBuildingInfo])
+                .then(axios.spread((res1, res2) => {
+                      this.maintenanceRequest = res1.data.maintenance;
+                      this.maintenanceRequest.forEach( mr => {
                          mr.date = new Date(mr.date);
-                      })
+                      });
                       this.buildings = res2.data;                      
-                  })
+                  }))
                   .catch(error => console.log(error))
           },
           delimiters: ["[[", "]]"],
-          methods: {
-
-              }
-          }
+          methods: { }
+          
       })
   </script>
 </body>

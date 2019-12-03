@@ -38,9 +38,9 @@
                         <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
                         <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
 			            <td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
-			            <td style="text-align:center">[[ resv.building.name ]]</td>
-			            <td style="text-align:center">[[ resv.facility.name ]]</td>
-                        <td style="text-align:center"><a onclick="document.getElementById('modalwrapper').style.display='block'"><img style="cursor:pointer" src="{{url_for('static', filename='requesticon.png')}}"></a>
+			            <td style="text-align:center"><a v-bind:href="getBuildingURL(resv.facility._id, resv.building._id)">[[ resv.building.name ]]</a></td>
+			            <td style="text-align:center"><a v-bind:href="getFacilityURL(resv.facility._id)">[[ resv.facility.name ]]</a></td>
+                        <td style="text-align:center"><a @click="reservation = resv" onclick="document.getElementById('modalwrapper').style.display='block'"><img style="cursor:pointer" src="{{url_for('static', filename='requesticon.png')}}"></a>
                             <div id = "modalwrapper" class = "modal">
                                 <form class="modal-content animate">
                                     <div class="imgcontainer" style="background-color: white">
@@ -48,7 +48,7 @@
                                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Maintenance </h1>
                                     </div>
                                     <div class="container" style="background-color: white">
-                                        <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "text">
+                                        <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "description">
                                         <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="submitRequest()">Submit Request</button>
                                     </div>
                                 </form>
@@ -56,7 +56,7 @@
                         </td>
                     </tr>
                 </table>
-            </div>		
+            </div>	
 	</div>	
 
     {% include 'footer.html' %}
@@ -66,27 +66,41 @@
             var vc = new Vue({
                 el: "#app",
                 data: {
-                    ures:[]
+                    ures:[],
+		    reservation: [],
+		    description:""
                 },
                 mounted(){			
                     axios
                         .get("/api/user/reservations")
                         .then(res => {
-			                ures = res.data
-                            console.log(ures.length);
+			                this.ures = res.data;
+					this.ures = (this.ures.reverse());
+					this.ures.forEach( resv => {
+						resv.reservations.start_time = new Date(resv.reservations.start_time);
+						resv.reservations.end_time = new Date(resv.reservations.end_time);
+					});
                         })
                         .catch(err => console.log(err))                        
                 },
                 delimiters: ["[[", "]]"],
                 methods: {
 		            submitRequest: function() {
+				var f_id = this.reservation.facility._id;
+				var r_id = this.reservation._id;
 			          axios
-			            .post("/api/facilities/" + this.f_id + "/maintenance/" + this.r_id, {
+			            .post("/api/facilities/" + f_id + "/maintenance/room/" + r_id, {
 				            description: this.description
 			            })
-			            .then(location.reload())
+			            .then(document.getElementById('modalwrapper').style.display='none')
                         .catch(err => console.log(err))
-		            }
+		            },
+			    getBuildingURL: function(f_id, b_id) {
+				  return "/facility/" + f_id + "/building/" + b_id;
+			   },
+			   getFacilityURL: function(f_id) {
+				  return "/facility/" + f_id;
+			   }
                 }
             })
     

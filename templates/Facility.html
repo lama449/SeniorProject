@@ -175,6 +175,7 @@
             </div>
 	{% if admin %}
 	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
+	<button class="submitbtn" @click.prevent="getMaintenanceURL()"> Go to Maintenance Page </button>
 	{% endif %}
         </div>	
     </div>
@@ -208,6 +209,9 @@
                 getBuildingURL: function(b_id) {                    
                     return ("/facility/" + this.f_id + "/building/" + b_id)
                 },
+		getMaintenanceURL: function(){
+		    return ("/facility/" + this.f_id + "/building/" + b_id)
+		},
 		getTelephone: function(phone) {
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
 		},
