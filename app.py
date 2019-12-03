@@ -143,6 +143,15 @@ def room_creation(f_id, b_id):
     else:
         return redirect(url_for('building_page', f_id=f_id, b_id=b_id))
 
+@app.route('/facility/<f_id>/groups', methods=['GET'])
+def facility_groups(f_id):
+    # check if user is an admin first. if not, send back to facility page
+    if check_admin(f_id):
+        return render_template('Groups.html', f_id=f_id)
+    else:
+        return redirect(url_for('facility_page', f_id=f_id))
+
+
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     if request.method == 'GET':

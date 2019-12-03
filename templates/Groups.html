@@ -12,28 +12,24 @@
     {% include 'header.html' %}
     <div class = "content" id="app">
         <form>
-            <center><h1>Update Groups for Facility:
-                <label name="facilityName" id ="facilityName" v-model=""></label>
-            </h1></center>
+            <center><h1>Update Groups for Facility</h1></center>
 
             <!--Group List and Options-->
-            <select id="groupSelect" size="8" multiple>
-                <option v-for="" v-bind:value="">[[]]</option>
+            <select id="groupSelect" size="8" v-model="groupSelect">
+                <option v-for="group in groups" v-bind:value="group._id">[[ group.name ]]</option>
             </select>
-            <input type="text" name="groups" id="feature">
-            <button type="button" class="button" onclick="addGroup()">Add Group</button>
-            <button type="button" class="button" id="deleteGroup" onclick="removeGroup()">Remove Group</button>
+            <input type="text" name="group" id="groupInput">
+            <button type="button" class="button" @click.prevent="addGroup()">Add Group</button>
+            <button type="button" class="button" @click.prevent="removeGroup()">Remove Group</button>
 
 
             <!--User List and Options-->
-            <select id="userSelect" size="8" multiple>
-                <option v-for="" v-bind:value="">[[]]</option>
+            <select id="userSelect" size="8" v-model="userSelect" multiple>
+                <option v-for="user in users" v-bind:value="user._id">[[ user.email ]]</option>
             </select>
             <input type="text" name="users" id="group">
-            <button type="button" onclick="addUser()">Add User</button>
-            <button type="button" id="deleteUser" onclick="removeUser()">Remove User</button>
-
-            <button class="button" id="submit" type="submit">Save Changes</button>
+            <button type="button" class="button" @click.prevent="addUser()">Add User</button>
+            <button type="button" class="button" @click.prevent="removeUser()">Remove User</button>
         </form>
     </div>
     {% include 'footer.html' %}
@@ -42,22 +38,43 @@
         var vm = new Vue({
             el: "#app",
             data: {
-            f_id: {{ f_id | tojson }},
-            groupSelect: [],
-            userSelect: [],
-            error: []
-        },
-        delimiters: ["[[", "]]"],
+                f_id: {{ f_id | tojson }},
+                groupSelect: [],
+                userSelect: [],
+                groups: [],
+                users: [],
+                error: []
+            },
+            delimiters: ["[[", "]]"],
             mounted: function() {
             axios.get("/api/facilities/" + this.f_id)
                 .then(res => {
                     if ("err" in res.data && res.data.err.length) {
                         this.error = res.data.err
                     } else {
-
+                        this.groups = res.data.groups
                     }
                 })
                 .catch(error => console.log(error))
+	    },
+            methods: {
+                getUsers: function() {
+                //
+                },
+                addGroup: function() {
+                //
+                },
+                removeGroup: function() {
+                //
+                },
+                addUser: function() {
+                //
+                },
+                removeUser: function() {
+                //
+                }
+            }
+	}
     </script>
 </body>
 </html>
