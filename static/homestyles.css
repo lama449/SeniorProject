@@ -158,7 +158,7 @@ input[type="url"],
 textarea,
 select {
     border-radius: 15px;
-    padding: 15px;
+    padding: 12px;
     margin: 5px 0 22px 0;
     display: inline-block;
     border: 1px solid #ccc;
