@@ -121,8 +121,9 @@
 			<td></td></tr>
 		</table>
         {% if admin %}
-		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Facility Information </button>
+		<button class="submitbtn" id="editbtn" v-on:click="editBtn()" style="display:inline-block;"> Edit Facility Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
+		<button class="submitbtn" style="display:inline-block;" @click.prevent="getMaintenanceURL()"> Go to Maintenance Page </button>
 	{% endif %}
         </div>
             <div v-if="buildings.length">
@@ -175,7 +176,6 @@
             </div>
 	{% if admin %}
 	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
-	<button class="submitbtn" @click.prevent="getMaintenanceURL()"> Go to Maintenance Page </button>
 	{% endif %}
         </div>	
     </div>
@@ -210,7 +210,8 @@
                     return ("/facility/" + this.f_id + "/building/" + b_id)
                 },
 		getMaintenanceURL: function(){
-		    return ("/facility/" + this.f_id + "/building/" + b_id)
+		    location.href="/facility/" + this.f_id + "/maintenance"
+		    return
 		},
 		getTelephone: function(phone) {
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
@@ -220,14 +221,14 @@
 		    return	    
 		},
 		editBtn: function() {		    
-		    document.getElementById("savebtn").style.display = "inline";
+		    document.getElementById("savebtn").style.display = "inline-block";
                     document.getElementById("editbtn").style.display = "none";
 		    this.isDisabled = false;
 		    return
 		},
 		saveBtn: function() {
 	 	    document.getElementById("savebtn").style.display = "none";
-                    document.getElementById("editbtn").style.display = "inline";
+                    document.getElementById("editbtn").style.display = "inline-block";
 	 	    this.isDisabled = true;
 
   		    axios
