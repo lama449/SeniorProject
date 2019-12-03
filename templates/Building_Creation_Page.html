@@ -17,26 +17,38 @@
           <center><h1> Building Creation </h1></center>
 
           <div class="errorbox" v-for="e in error">[[e]]</div>
+        <table class ="table class">
+          <tr> </tr>
+          <tr>
+            <td><label for="name">Building Name:</label></td>
+            <td><input type="text" name="buildingName" id ="name" placeholder="Enter Building Name" required v-model= "buildingName"></td>
+          </tr>
 
-          <label for="name">Building Name:</label>
-          <input type="text" name="buildingName" id ="name" placeholder="Enter Building Name" required v-model= "buildingName">
-
-          <label for="phoneNum">Phone Number:</label>
-          <input type="tel" name="telphone" id= phoneNum placeholder="123-456-7890" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          maxlength="12"  title="Ten digits code" v-model="phoneNum">
+          <tr>
+          <td><label for="phoneNum">Phone Number:</label></td>
+          <td><input type="tel" name="telphone" id= phoneNum placeholder="123-456-7890" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          maxlength="12"  title="Ten digits code" v-model="phoneNum"></td>
+          </tr>
 
           <!-- Location Information -->
-          <label for="addressL1">Street Address:</label>
-          <input type="text" name="addressL1" id ="addressL1" placeholder="Enter Address" required v-model="addressL1">
+          <tr>
+          <td><label for="addressL1">Street Address:</label></td>
+          <td><input type="text" name="addressL1" id ="addressL1" placeholder="Enter Address" required v-model="addressL1"></td>
+          </tr>
 
-          <label for="addressL2">Address Line 2 (Optional):</label>
-          <input type="text" name="addressL2" id ="addressL2" placeholder="" v-model="addressL2">
+          <tr>
+          <td><label for="addressL2">Address Line 2 (Optional):</label></td>
+          <td><input type="text" name="addressL2" id ="addressL2" placeholder="" v-model="addressL2"></td>
+          </tr>
 
-          <label for="city">City:</label>
-          <input type="text" name="city" id ="city" placeholder="Enter City" required v-model="city">
+          <tr>
+          <td><label for="city">City:</label></td>
+          <td><input type="text" name="city" id ="city" placeholder="Enter City" required v-model="city"></td>
+          </tr>
 
-          <label for="state">State:</label>
-          <select name= "state" id="stateSelect" required v-model="state">
+          <tr>
+          <td><label for="state">State:</label></td>
+          <td><select name= "state" id="stateSelect" required v-model="state">
             <option disabled selected value="">--Please choose an option--</option>
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
@@ -89,14 +101,18 @@
             <option value="WV">West Virginia</option>
             <option value="WI">Wisconsin</option>
             <option value="WY">Wyoming</option>
-          </select>
+          </select></td>
+          </tr>
 
 
-          <label for="zip">Zip Code:</label>
-          <input type="number" name="zip" id ="zip" placeholder="Enter Zip" required v-model=zipCode>
+          <tr>
+          <td><label for="zip">Zip Code:</label></td>
+          <td><input type="number" name="zip" id ="zip" placeholder="Enter Zip" required v-model=zipCode></td>
+          </tr>
 
-          <label for="countrySelect">Country:</label>
-          <select name="countrySelect" id="countrySelect" required v-model= countrySelect>
+          <tr>
+          <td><label for="countrySelect">Country:</label></td>
+          <td><select name="countrySelect" id="countrySelect" required v-model= countrySelect>
             <option disabled selected value="">--Please choose an option--</option>
             <option value="AFG">Afghanistan</option>
             <option value="ALA">Åland Islands</option>
@@ -347,13 +363,19 @@
             <option value="YEM">Yemen</option>
             <option value="ZMB">Zambia</option>
             <option value="ZWE">Zimbabwe</option>
-          </select>
+          </select></td>
+          </tr>
 
           <!-- Building Information -->
-          <p>Description:</p>
-          <textarea rows="4" cols="50" maxlength="288" required v-model="description">  </textarea>
+          <tr>
+          <td><p>Description:</p></td>
+          <td><textarea rows="4" cols="50" maxlength="288" required v-model="description">  </textarea></td>
+          </tr>
 
-          <button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button>
+          <tr>
+          <td><button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button></td>
+          </tr>
+          </table class> 
         </form>
 
 
