@@ -75,7 +75,11 @@
                         .get("/api/user/reservations")
                         .then(res => {
 			                this.ures = res.data;
-					this.ures = (this.ures.reverse());
+					//ures.sort(function compare(a,b){
+				//		var dateA = new Date(a.date);
+				//		var dateB = new Date(b.date);
+				//		return dateB - dateA; 
+				//	});
 					this.ures.forEach( resv => {
 						resv.reservations.start_time = new Date(resv.reservations.start_time);
 						resv.reservations.end_time = new Date(resv.reservations.end_time);
@@ -87,7 +91,7 @@
                 methods: {
 		            submitRequest: function() {
 				var f_id = this.reservation.facility._id;
-				var r_id = this.reservation._id;
+				var r_id = this.reservation._id;				
 			          axios
 			            .post("/api/facilities/" + f_id + "/maintenance/room/" + r_id, {
 				            description: this.description

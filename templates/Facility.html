@@ -201,6 +201,7 @@
 	  	            .then(axios.spread((res1, res2) => {
                        	    this.buildings = res1.data;
 		            this.facility = res2.data;
+			    this.facility.private = this.facility.private.toString();
                     }))
                     .catch(error => console.log(error))                        
             },

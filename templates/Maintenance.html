@@ -34,7 +34,7 @@
               <td style="text-align: center">[[maintenanceInfo.buildingName]]</td>
               <td style="text-align: center">[[maintenanceInfo.roomNum]]</td>
               <td style="text-align: center">[[maintenanceInfo.description]]</td>
-              <td style="text-align: center"><select v-model="maintenanceInfo.status"><option> Submitted </option> <option>In Progress</option><option>Completed</option></select</td>
+              <td style="text-align: center"><select v-model="maintenanceInfo.status"><option> Submitted </option> <option>In Progress</option><option>Completed</option></select></td>
             </tr>
           </table>
           <button class="submitbtn" @click.prevent="submitUpdate()">Submit Update</button>
@@ -68,8 +68,11 @@
           methods: { 
             submitUpdate: function() {
               this.maintenanceRequest.forEach( mr => {
-                axios.put("/api/facilities/" + this.f_id + "/maintenance/" + mr._id)
-                .then(location.reload())
+		console.log(mr.status);
+                axios.put("/api/facilities/" + this.f_id + "/maintenance/" + mr._id, {
+			status: mr.status
+		})
+                .then()
                 .catch(err => console.log(err))
               })
             }
