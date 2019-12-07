@@ -124,6 +124,7 @@
 		<button class="submitbtn" id="editbtn" v-on:click="editBtn()" style="display:inline-block;"> Edit Facility Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
 		<button class="submitbtn" style="display:inline-block;" @click.prevent="getMaintenanceURL()"> Go to Maintenance Page </button>
+		<button class="submitbtn" style="display:inline-block;" @click.prevent="getGroupsURL()"> Edit Groups </button>
 	{% endif %}
         </div>
             <div v-if="buildings.length">
@@ -212,6 +213,10 @@
                 },
 		getMaintenanceURL: function(){
 		    location.href="/facility/" + this.f_id + "/maintenance"
+		    return
+		},
+		getGroupsURL: function(){
+		    location.href="/facility/" + this.f_id + "/groups"
 		    return
 		},
 		getTelephone: function(phone) {
