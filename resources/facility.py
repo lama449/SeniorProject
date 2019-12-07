@@ -59,13 +59,17 @@ class Facility(Resource):
             'err': []
         }
 
+        # searching by access code
         if data.get('access_code'):
             return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
-        while data.get('private') == 'true':
+
+        # generate new access code for new facility
+        while True:
             access_code = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
             check_facility = facilities.find_one({'access_code': access_code})
             if check_facility is None:
                 break
+
         if not data.get('name'):
             res['err'].append('Missing Facility Name Field')
         if data.get('private') is None:
@@ -91,7 +95,7 @@ class Facility(Resource):
         takeID = facilities.insert_one({
         'name': data.get('name'),
         'private': data.get('private') == 'true',
-        'access_code': access_code if (data.get('private') == 'true') else '',
+        'access_code': access_code,
         'address': {
             'address_L1': data.get('address_L1'),
             'address_L2': data.get('address_L2'),
@@ -127,24 +131,9 @@ class Facility(Resource):
         if not check_admin(f_id):
             res['err'].append('You do not have the permissions to edit this facility.')
             return jsonify(res)
-        if current_facility:
-            access_code = ""
 
-            if current_facility.get('private'):
-                if data.get('private'):
-                    access_code = current_facility.get('access_code')
-                else:
-                    access_code = ""
-            else:
-                if data.get('private'):
-                    while True:
-                        access_code = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-                        check_facility = facilities.find_one({'access_code': access_code})
-                        if check_facility is None:
-                            break
-                else:
-                    access_code = ""
-            print(data.get('private') == 'true')
+        if current_facility:
+            access_code = current_facility.get('access_code')
 
             updated_facility = facilities.update_one({'_id': ObjectId(f_id)},
                 {'$set':
