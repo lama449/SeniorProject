@@ -29,23 +29,24 @@ class UserGroup(Resource):
         else:
             return jsonify(res['err'].append('Invalid facility ID'))
 
-    def post(self, f_id, u_id, g_id):  # adds group to user entry
+    def post(self, f_id, g_id):  # adds group to user entry
         res = {
             'msg': [],
             'err': []
         }
+        data = request.json
         users = db.users
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
-            current_user = users.find_one({'_id': ObjectId(u_id)})
+            current_user = users.find_one({'email': data.get('email')})
             if current_user:
-                users.update_one({'_id': ObjectId(u_id)},
+                users.update_one({'email': data.get('email')},
                                  {'$push': {'groupID': ObjectId(g_id)}})
                 res['msg'].append('User has been added to the group.')
                 return jsonify(res)
             else:
-                res['err'].append('Invalid user ID')
+                res['err'].append('Invalid user email address')
                 return jsonify(res)
         else:
             res['err'].append('Invalid facility ID')
