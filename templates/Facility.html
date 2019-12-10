@@ -5,10 +5,10 @@
 <title>Penguin's Building Management</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
-	
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
-    
+
 </head>
 
 <body>
@@ -19,9 +19,11 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
+			<a class="button" id="gbBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goBackBtn()">Go Back</a>
+
             <h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page: </h1>
 			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h6>
-		</div>    
+		</div>
 
         <!-- Table -->
         <div class="secondary-content container">
@@ -179,13 +181,13 @@
 	{% if admin %}
 	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
 	{% endif %}
-        </div>	
+        </div>
     </div>
 
     {% include 'footer.html' %}
 
     <script>
-	
+
 	var vc = new Vue({
             el: "#app",
             data: {
@@ -205,11 +207,11 @@
 		            this.facility = res2.data;
 			    this.facility.private = this.facility.private.toString();
                     }))
-                    .catch(error => console.log(error))                        
+                    .catch(error => console.log(error))
             },
             delimiters: ["[[", "]]"],
             methods: {
-                getBuildingURL: function(b_id) {                    
+                getBuildingURL: function(b_id) {
                     return ("/facility/" + this.f_id + "/building/" + b_id)
                 },
 		getMaintenanceURL: function(){
@@ -225,13 +227,16 @@
 		},
 		getBuildingCreationURL: function() {
 		    location.href="/facility/" + this.f_id + "/building_creation"
-		    return	    
+		    return
 		},
-		editBtn: function() {		    
+		editBtn: function() {
 		    document.getElementById("savebtn").style.display = "inline-block";
                     document.getElementById("editbtn").style.display = "none";
 		    this.isDisabled = false;
 		    return
+		},
+		goBackBtn: function(){
+				return "/home/";
 		},
 		saveBtn: function() {
 	 	    document.getElementById("savebtn").style.display = "none";
@@ -269,7 +274,7 @@
 	    }
         })
     </script>
-    
-    
+
+
 </body>
 </html>
