@@ -46,11 +46,11 @@
 				<!-- Add button later -->
 			<!--	<button class="submitbtn"> Reservations Page </button> -->
 		</div>
-
-	<button class="submitbtn" onclick="document.getElementById('modalwrapper').style.display='block'">Cancel this Reservation</button>
-	<a class="submitbtn" id="gtbBtn" style="text-align: center; margin: 0 auto; display=inline-block;" v-bind:href="goToBuilding()">Go To Buildings Page</a>
-	<a class="submitbtn" id="gtrBtn" style="text-align: center; margin: 0 auto; display=inline-block;" v-bind:href="goToReservations()">Go To Reservations Page</a>
-
+		<center>
+			<button class="submitbtn" style="display: inline-block" onclick="document.getElementById('modalwrapper').style.display='block'">Cancel this Reservation</button>
+			<a class="submitbtn" id="gtbBtn" style="text-align: center; margin: 0 auto; display=inline-block; width: 160px" v-bind:href="goToBuilding()">Go To Buildings Page</a>
+			<a class="submitbtn" id="gtrBtn" style="text-align: center; margin: 0 auto; display=inline-block; width: 185px;" v-bind:href="goToReservations()">Go To Reservations Page</a>
+		</center>
 	<div id = "modalwrapper" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
@@ -103,14 +103,14 @@
       methods: {
 	deleteReservation: function(){
 		axios
-		   .delete("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
+		   .delete("/api/facility/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
 		   .then( function(){
 		       location.href="/reservations";
 		   })
 		   .catch(error => console.log(error))
 	},
 	goToBuilding: function(){
-			return "/facilities/"+ this.f_id + "/buildings/" + this.b_id;
+			return "/facility/"+ this.f_id + "/building/" + this.b_id;
 	},
 	goToReservations: function(){
 			return "/reservations";
