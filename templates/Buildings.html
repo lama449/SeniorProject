@@ -36,7 +36,7 @@
 
 			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>
             <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
-						<div class="button" style="text-align: center; margin: 0 auto;">Go Back</div>
+						<div class="button" id="gbBtn" style="text-align: center; margin: 0 auto;" v-on:click="goBackBtn">Go Back</div>
 
 		</div>
 
@@ -196,6 +196,12 @@
 					.then( alert("Successfully updated building."))
 					.catch(error => console.log(error))
 		    		return
+			},
+			goBackBtn: function(){
+				document.getElementById("gbBtn").style.display = "none";
+					res => location.href="/facility/" + this.f_id;
+					.catch(err => console.log(err));
+
 			},
 			getRoomCreationURL: function() {
 				 location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
