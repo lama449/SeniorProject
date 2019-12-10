@@ -8,6 +8,7 @@ import bcrypt
 from SeniorProject import database
 from bson.objectid import ObjectId
 import datetime 
+from SeniorProject.user_check import *
 
 db = database.conn_DB()
 
@@ -84,10 +85,8 @@ class Maintenance(Resource):
                                                                'roomID': current_room.get('_id'),
                                                                'roomNum': current_room.get('number'),
                                                                'description': data.get('description'),
-                                                               #'userID': user.get('_id'),
-                                                               #'date': data.get('date'), 
+                                                               'userID': user.get('_id'),
                                                                'date': datetime.datetime.now(), 
-                                                               #'status': data.get('status')}}})
                                                                'status': "Submitted"}}})
                     currentReq = [req for req in newReq]
                     if currentReq:
@@ -104,6 +103,9 @@ class Maintenance(Resource):
             'msg': [],
             'err': []
         }
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to edit this facility.')
+            return jsonify(res)
         data = request.json
         facilities = db.facilities
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
@@ -116,15 +118,17 @@ class Maintenance(Resource):
                                                                     'maintenance.$.status': data.get('status')
                                                                 }
                                                             })
-                    #updatedRequest = [req for req in updated_request]
-                    #return jsonify(updated_request)
-                    return jsonify(res['msg'].append('Update successful!')) 
+                    res['msg'].append('Update successful!')
+                    return jsonify(res)
                 else:
-                    return jsonify(res['err'].append('Missing status update'))
+                    res['err'].append('Missing status update')
+                    return jsonify(res)
             else:
-                return jsonify(res['err'].append('Invalid maintenance request ID'))
+                res['err'].append('Invalid maintenance request ID')
+                return jsonify(res)
         else:
-            return jsonify(res['err'].append('Invalid facility ID'))
+            res['err'].append('Invalid facility ID')
+            return jsonify(res)
 
     def delete(self, f_id, m_id=None, r_id=None):
         res = {
