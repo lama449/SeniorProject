@@ -31,7 +31,7 @@
 
 	<p v-else style="padding:15px 20px 0"> Address: [[building.address.address_L1]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
         <p style="padding: 15px 20px 0"> Start Time: [[reserve.start_time]] </p>
-	
+
 	<p style="padding: 15px 20px 0"> End Time: [[reserve.end_time]] </p>
 
         <p style="padding: 15px 20px 0">Facility: [[facility.name]]</p>
@@ -48,12 +48,14 @@
 		</div>
 
 	<button class="submitbtn" onclick="document.getElementById('modalwrapper').style.display='block'">Cancel this Reservation</button>
+	<button class="submitbtn" id="gtbBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goToBuilding()">Go To Buildings Page</button>
+	<button class="submitbtn" id="gtrBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goToReservations()">Go To Reservations Page</button>
 
 	<div id = "modalwrapper" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
                             <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
-                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Cancel Reservation?</h1>                        
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Cancel Reservation?</h1>
                             <h6><center>Are you sure you would like to cancel this reservation?</center></h6>
                             <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteReservation()">Cancel Reservation</button>
                         </div>
@@ -106,6 +108,12 @@
 		       location.href="/reservations";
 		   })
 		   .catch(error => console.log(error))
+	},
+	goToBuilding: function(){
+			return "/facilities/"+ this.f_id + "/buildings/" + this.b_id;
+	},
+	goToReservations: function(){
+			return "/reservations";
 	}
       }
     })
