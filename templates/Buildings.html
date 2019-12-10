@@ -133,6 +133,8 @@
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="display:none;"> Save Building Information </button>
 		{% endif %}
 
+		<div class="errorbox" v-for="e in error">[[e]]</div>
+
 		<div id="calendar">
 			{% if admin %}
 			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
@@ -159,7 +161,8 @@
                 isDisabled: true,
 				b_id: {{ b_id | tojson }},
 				f_id: {{ f_id | tojson }},
-                building: []
+                building: [],
+		error: []
             },
             mounted(){
                  axios
@@ -213,7 +216,13 @@
 						end_time: end
 					})
 					//.then(res => console.log(res.data._id))
-					.then(res => location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id)
+					.then(res => {
+						if ("msg" in res.data && res.data.msg.length) {
+						    location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;			                         
+                        			} else {
+			                            this.error = res.data.err;
+			                        }
+			                 })
 					.catch(err => console.log(err))
 			}
 		}
