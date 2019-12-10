@@ -217,10 +217,10 @@
 					})
 					//.then(res => console.log(res.data._id))
 					.then(res => {
-						if ("msg" in res.data && res.data.msg.length) {
-						    location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;			                         
-                        			} else {
-			                            this.error = res.data.err;
+						if ("err" in res.data) {
+						    this.error = res.data.err;						    		                         
+                        			} else if("_id" in res.data){
+			                            location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;	
 			                        }
 			                 })
 					.catch(err => console.log(err))
