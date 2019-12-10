@@ -15,39 +15,41 @@
         <form>
             <center><h1> Facility Creation </h1></center>
             <div class="errorbox" v-for="e in error">[[e]]</div>
-			<p>Looking a create a new facility? You can do so with this form!</p>
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Looking to create a new facility? You can do so with this form!</h6>
+      
+      <table class ="table class">
+          <tr> </tr>
+          <tr>
+          <td><label for="name">Facility Name:</label></td>
+          <td><input type="text" name="facilityName" id ="name" placeholder="Enter Facility Name" required v-model="name"></td>
+          </tr>
 
-          <label for="name">Facility Name:</label>
-          <input type="text" name="facilityName" id ="name" placeholder="Enter Facility Name" required v-model="name">
+          <tr>
+          <td><label for="phoneNum">Phone Number:</label></td>
+          <td><input type="tel" name="telphone" placeholder="123-456-7890" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          maxlength="12"  title="Ten digits code" v-model="phoneNum"></td>
+          </tr>
 
-		<br>
-
-          <label for="phoneNum">Phone Number:</label>
-          <input type="tel" name="telphone" placeholder="123-456-7890" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          maxlength="12"  title="Ten digits code" v-model="phoneNum">
-
-		<br>
-
+          <tr>
           <!-- Location Information -->
-          <label for="addressL1">Street Address:</label>
-          <input type="text" name="addressL1" id ="addressL1" placeholder="Enter Address" required v-model="addressL1">
+          <td><label for="addressL1">Street Address:</label></td>
+          <td><input type="text" name="addressL1" id ="addressL1" placeholder="Enter Address" required v-model="addressL1"></td>
+          </tr>
 
-		<br>
+          <tr>
+          <td><label for="address">Address Line 2:</label></td>
+          <td><input type="text" name="addressL2" id ="addressL2" placeholder="Enter Address" v-model="addressL2"></td>
+          </tr>
 
-          <label for="address">Address Line 2:</label>
-          <input type="text" name="addressL2" id ="addressL2" placeholder="Enter Address" v-model="addressL2">
-
-		<br>
-
-
-          <label for="city">City:</label>
-          <input type="text" name="city" id ="city" placeholder="Enter City" required v-model="city">
-
-		<br>
-
-	<label for="state">State:</label>
-	<select name= "state" id="stateSelect" required v-model="state">
-			<option disabled selected value="">--Please choose an option--</option>
+          <tr>
+          <td><label for="city">City:</label></td>
+          <td><input type="text" name="city" id ="city" placeholder="Enter City" required v-model="city"></td>
+          </tr>
+          
+          <tr>
+	<td><label for="state">State:</label></td>
+	<td><select name= "state" id="stateSelect" required v-model="state">
+	<option disabled selected value="">--Please choose an option--</option>
 			<option value="AL">Alabama</option>
 			<option value="AK">Alaska</option>
 			<option value="AZ">Arizona</option>
@@ -99,19 +101,18 @@
 			<option value="WV">West Virginia</option>
 			<option value="WI">Wisconsin</option>
 			<option value="WY">Wyoming</option>
-		</select>
+		</select></td>
+   </tr>
+   
+      <tr>
+          <td><label for="zip">Zip Code:</label></td>
+          <td><input type="number" name="zip" id ="zip" placeholder="Enter Zip Code" required v-model="zipCode"></td>
+      </tr>
 
-
-		<br>
-
-          <label for="zip">Zip Code:</label>
-          <input type="number" name="zip" id ="zip" placeholder="Enter Zip Code" required v-model="zipCode">
-
-		<br>
-
-          <label for="countrySelect">Country:</label>
-          <select name="country" id="countrySelect" v-model="countrySelect">
-            <option value="">-- Please choose an country --</option>
+      <tr>
+          <td><label for="countrySelect">Country:</label></td>
+          <td><select name="country" id="countrySelect" v-model="countrySelect">
+          <option value="">-- Please choose an country --</option>
             <option value="AFG">Afghanistan</option>
             <option value="ALA">Åland Islands</option>
             <option value="ALB">Albania</option>
@@ -361,22 +362,26 @@
             <option value="YEM">Yemen</option>
             <option value="ZMB">Zambia</option>
             <option value="ZWE">Zimbabwe</option>
-          </select>
+          </select></td>
+          </tr>
 
-          <p>Facility Type:
-          <select v-model="private">
+          <tr>
+          <td>Facility Type:</td>
+          <td><select v-model="private">
 			  <option value="false">Public</option>
 			  <option value="true">Private</option>
-			</select>
-			</p>
+			</select></td>
+      </tr>
 
-          <p>Description:</p>
-          <textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here" required v-model="description"></textarea>
-
+        <tr>
+          <td>Description:</td>
+          <td><textarea rows="3" cols="30" maxlength="288" placeholder="Enter Description Here" required v-model="description"></textarea></td>
+        
           <!-- submit -->
-          <button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button>
+          <td><button @click.prevent="submitInfo()" id="submitButton" class=button>Submit</button></td>
+          </tr>
         </form>
-
+</table class> 
         {% include 'footer.html' %}
 
     </div>
