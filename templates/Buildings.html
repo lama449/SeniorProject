@@ -34,10 +34,11 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 
-			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>	
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>
             <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
+						<div class="button" style="text-align: center; margin: 0 auto;">Go Back</div>
 
-		</div>    
+		</div>
 
 		<!-- Table for Building & Calendar -->
 		<div class="secondary-content container">
@@ -127,12 +128,12 @@
             <option value="VIR">Virgin Islands, U.S.</option><option value="WLF">Wallis and Futuna</option><option value="ESH">Western Sahara</option><option value="YEM">Yemen</option><option value="ZMB">Zambia</option><option value="ZWE">Zimbabwe</option></select> </td>
 			<td><label for="zip">Building Zip Code:</label></td>
                         <td><input type="text" name="buidlingZip" id="zip" v-bind:disabled="isDisabled" v-model="building.address.zip"></td></tr>
-		</table>            
+		</table>
 		{% if admin %}
 		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Building Information </button>
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="display:none;"> Save Building Information </button>
 		{% endif %}
-		
+
 		<div id="calendar">
 			{% if admin %}
 			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
@@ -143,14 +144,14 @@
 			<h6 style="text-align: center;">Please sign in to select a time slot. </h6>
 			{% endif %}
 		</div>
-		
-            </div>				
+
+            </div>
 		</div>
-		
-	</div>	
+
+	</div>
 
     {% include 'footer.html' %}
-       
+
     <script>
 
 	var vc = new Vue({
@@ -165,11 +166,11 @@
                  axios
 			.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id )
 	  	        .then(res => { this.building = res.data })
-	                .catch(error => console.log(error))                        
+	                .catch(error => console.log(error))
             },
             delimiters: ["[[", "]]"],
             methods: {
-			editBtn: function() {		    
+			editBtn: function() {
 		  		document.getElementById("savebtn").style.display = "inline";
 	                	document.getElementById("editbtn").style.display = "none";
 		    		this.isDisabled = false;
@@ -198,7 +199,7 @@
 			},
 			getRoomCreationURL: function() {
 				 location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
-		  	         return	
+		  	         return
 			},
 			submitReservation: function() {
 				//console.log(start);
@@ -210,11 +211,11 @@
 					})
 					//.then(res => console.log(res.data._id))
 					.then(res => location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id)
-					.catch(err => console.log(err))				
-			}			
+					.catch(err => console.log(err))
+			}
 		}
-	}); 
-	   
+	});
+
 	   var f_id = {{ f_id | tojson }};
 	   var b_id = {{ b_id | tojson }};
 	   var calendarE1;
@@ -223,7 +224,7 @@
 	   var end;
 	   var reservations;
 	   var room_id;
-	   
+
 	   axios
 		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
 		   .then(res => {
@@ -237,11 +238,11 @@
 				room['name'] = room['name'] + " " + room['number'];
 				if(room['attributes'].length == 0) {
 				    room['attributes'] = "No Features Found";
-				}				
+				}
 				if(room['reservations'].length > 0){
                                     reservations[i] = room['reservations'];
 				    j = 0;
-				    reservations[i].forEach( r => { 			
+				    reservations[i].forEach( r => {
                                     	reservations[i][j]['resourceId'] = (room['_id']);
 	                                reservations[i][j]['title'] = "Reserved";
 					j++;
@@ -249,24 +250,24 @@
 				    i++;
 				}
 			   });
-			
+
 			   str = JSON.stringify(rooms);
 			   str = str.replace(/\"_id\":/g, "\"id\":");
 			   str = str.replace(/\"name\":/g, "\"title\":");
 			   str = str.replace(/\"attributes":/g, "\"features\":");
 			   rooms = JSON.parse(str);
-			   
-			   str2 = JSON.stringify(reservations);		   
+
+			   str2 = JSON.stringify(reservations);
 			   str2 = str2.replace(/\"start_time":/g, "\"start\":");
 			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
 			   str2 = str2.replace(/\"_id":/g, "\"id\":");
 			   reservations = JSON.parse(str2);
 			   //console.log(rooms);
 			   console.log(reservations);
-			   
-   
+
+
 		   calendarEl = document.getElementById('calendar');
-   
+
 		   calendar = new FullCalendar.Calendar(calendarEl, {
 			   plugins: [ 'resourceTimeline', 'interaction' ],
 			   header: {
@@ -279,28 +280,28 @@
 			   selectable: true,
 			   height: 450,
 			   timeZone: 'GMT',
-			   resources: rooms,			   
+			   resources: rooms,
 			   //events: reservations,
 			   eventSources: reservations,
 			   //events: [{"id":"5de42ba621871123555d397d", "title":"Reserved","resourceId":"5ddd9b0508472f8282ac14ac", "end":"2019-12-01T12:30:00","start":"2019-12-01T10:00:00","userID":"5ddc051884f0db0daa9172ce"}],
 			   eventBackgroundColor: 'red',
-			   
+
 			   titleFormat: {
 				   year: 'numeric',
 				   month: 'short',
 				   day: 'numeric',
 				   weekday: 'long'
 			   },
-			   businessHours: [            
+			   businessHours: [
 				   {
 					   daysOfWeek: [1,2,3,4,5],
 					   startTime: '7:30',
-					   endTime: '23:30'  
+					   endTime: '23:30'
 				   },
 				   {
 					   daysOfWeek: [6,0],
 					   startTime: '8:00',
-					   endTime: '17:00'           
+					   endTime: '17:00'
 				   }
 			   ],
 			   slotLabelFormat: { hour:'numeric', minute:'numeric'},
@@ -315,10 +316,10 @@
 			   select: function(info) {
      				 start = info.startStr;
 				 end = info.endStr;
-				 room_id = info.resource.id;	 
-			   },				  
+				 room_id = info.resource.id;
+			   },
 			   resourceRender: function(info) {
-				  			   
+
 				   var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
 						  title: "Features: " + info.resource.extendedProps.features,
 						  placement: 'top',
@@ -328,7 +329,7 @@
 				   {% if admin %}
 				   var roomUpdatebtn = document.createElement("BUTTON");
 				   roomUpdatebtn.textContent = "Edit Room";
-				   roomUpdatebtn.className = "updateroombtn";				   
+				   roomUpdatebtn.className = "updateroombtn";
 				   roomUpdatebtn.onclick = function(){
 					rooms.forEach(room => {
 						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
@@ -356,7 +357,7 @@
 								.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
 								.then(location.reload())
 								.catch(error => console.log(error));
-							}else{ return false;}	
+							}else{ return false;}
 						}
 					})
 				   }
@@ -368,11 +369,11 @@
 				  title: "Click here to cancel this reservation",
 				  placement: 'top',
 				  trigger: 'hover',
-				  container: 'body'})			
+				  container: 'body'})
 			       {% endif %}
 			   },
-			   eventClick: function(info) {										   				   
-				{% if admin %}				
+			   eventClick: function(info) {
+				{% if admin %}
 				reservations.forEach( resv => {
 					resv.forEach( r => {
 					  if(info.event.id == r.id) {
@@ -381,19 +382,19 @@
 					  	  axios
 						    .delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
 						    .then(location.reload())
-						    .catch( error => console.log(error));						
-						} else {return false;} 
+						    .catch( error => console.log(error));
+						} else {return false;}
 					  return
-			   		  }			   
+			   		  }
 		   			})
 				})
 				{% endif %}
 			    }
-			});		
-			calendar.render();						
+			});
+			calendar.render();
 	   }).catch(err => console.log(err))
-	   
-   
+
+
     </script>
 </body>
 </html>
