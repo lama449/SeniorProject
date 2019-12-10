@@ -278,7 +278,7 @@
 			   defaultView: 'resourceTimelineDay',
 			   selectable: true,
 			   height: 450,
-			   timeZone: 'UTC',
+			   timeZone: 'GMT',
 			   resources: rooms,			   
 			   //events: reservations,
 			   eventSources: reservations,
@@ -354,9 +354,7 @@
 							if(a == true){
 				    				axios
 								.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
-								.then( function(b_name){
-									location.reload();
-								})
+								.then(location.reload())
 								.catch(error => console.log(error));
 							}else{ return false;}	
 						}
@@ -382,7 +380,7 @@
 						if(a == true) {
 					  	  axios
 						    .delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
-						    .then()
+						    .then(location.reload())
 						    .catch( error => console.log(error));						
 						} else {return false;} 
 					  return

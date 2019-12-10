@@ -32,10 +32,10 @@
 			            <th>Room Name </th>
 			            <th>Building Name </th>
 			            <th>Facility Name </th>
-                        <th>Maintenance Request</th>
+                        <th>Maintenance Request</th>			
                     </tr>
                     <tr v-for="resv in ures">
-                        <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
+                        <td style="text-align:center"><a v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)">[[ resv.reservations.start_time ]]</a></td>
                         <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
 			            <td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
 			            <td style="text-align:center"><a v-bind:href="getBuildingURL(resv.facility._id, resv.building._id)">[[ resv.building.name ]]</a></td>
@@ -54,6 +54,7 @@
                                 </form>
                             </div>
                         </td>
+			<td><button v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)" >More Information</button></td>
                     </tr>
                 </table>
             </div>	
@@ -83,7 +84,8 @@
 					this.ures.forEach( resv => {
 						resv.reservations.start_time = new Date(resv.reservations.start_time);
 						resv.reservations.end_time = new Date(resv.reservations.end_time);
-					});
+					})
+					this.r_id = res.data._id
                         })
                         .catch(err => console.log(err))                        
                 },
@@ -104,6 +106,9 @@
 			   },
 			   getFacilityURL: function(f_id) {
 				  return "/facility/" + f_id;
+			   },
+			   getReservationURL: function(f_id, b_id, r_id, res_id) {
+				return "/facility/" + f_id + "/building/" + b_id + "/room/" + r_id + "/reservation/" + res_id;				
 			   }
                 }
             })
