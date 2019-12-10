@@ -12,7 +12,7 @@
     {% include 'header.html' %}
     <div class = "content" id="app">
         <center><h1>Update Groups for Facility</h1></center>
-	    <div class="errorbox" v-for="e in error">[[e]]</div>
+        <div class="errorbox" v-for="e in error">[[e]]</div>
 
         <table>
             <tr>
@@ -81,7 +81,7 @@
             delimiters: ["[[", "]]"],
             mounted: function() {
                 this.getGroups()
-	        },
+            },
             methods: {
                 getGroups: function() {
                     this.groups = []
