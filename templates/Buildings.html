@@ -33,11 +33,9 @@
 
 		<!-- Center Text -->
 		<div class="primary-content container">
-
+			<a class="button" id="gbBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goBackBtn()">Go Back</a>
 			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page: </h1>
             <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
-						<a class="button" id="gbBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goBackBtn()">Go Back</a>
-
 		</div>
 
 		<!-- Table for Building & Calendar -->
@@ -268,10 +266,10 @@
 			   str2 = str2.replace(/\"_id":/g, "\"id\":");
 			   reservations = JSON.parse(str2);
 			   //console.log(rooms);
-			   //console.log(reservations);		   
-			
+			   //console.log(reservations);
+
 			   calendarEl = document.getElementById('calendar');
-   
+
    			   calendar = new FullCalendar.Calendar(calendarEl, {
 	      		plugins: [ 'resourceTimeline', 'interaction' ],
 	   			header: {
@@ -284,7 +282,7 @@
 	   			selectable: true,
 	   			height: 450,
 				timeZone: 'GMT',
-	   			resources: rooms,			   
+	   			resources: rooms,
 	   			eventSources: reservations,
 	 			eventBackgroundColor: 'red',
 
@@ -294,16 +292,16 @@
 		   			day: 'numeric',
 		   			weekday: 'long'
 	   			},
-	   			businessHours: [            
+	   			businessHours: [
 	   			{
 		   			daysOfWeek: [1,2,3,4,5],
 		   			startTime: '7:30',
-		   			endTime: '23:30'  
+		   			endTime: '23:30'
 	   			},
 	   			{
 		   			daysOfWeek: [6,0],
 		   			startTime: '8:00',
-		   			endTime: '17:00'           
+		   			endTime: '17:00'
 	   			}],
 	   			slotLabelFormat: { hour:'numeric', minute:'numeric'},
 	   			minTime: '6:00',
@@ -317,8 +315,8 @@
 	   			select: function(info) {
 		  			start = info.startStr;
 		 			end = info.endStr;
-		 			room_id = info.resource.id;	 
-	   			},				  
+		 			room_id = info.resource.id;
+	   			},
 	   			resourceRender: function(info) {
 
 		   			var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
@@ -330,7 +328,7 @@
 		   			{% if admin %}
 		   			var roomUpdatebtn = document.createElement("BUTTON");
 			   			roomUpdatebtn.textContent = "Edit Room";
-			   			roomUpdatebtn.className = "updateroombtn";				   
+			   			roomUpdatebtn.className = "updateroombtn";
 			   			roomUpdatebtn.onclick = function(){
 						rooms.forEach(room => {
 							if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
@@ -358,8 +356,8 @@
 									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
 									.then(location.reload())
 									.catch(error => console.log(error));
-							} else { 
-								return false;}	
+							} else {
+								return false;}
 						}
 					  })
 		   			}
@@ -370,11 +368,11 @@
 			  			title: "Click here to cancel this reservation",
 			  			placement: 'top',
 			  			trigger: 'hover',
-			  			container: 'body'})			
+			  			container: 'body'})
 			   			{% endif %}
 				},
-	   			eventClick: function(info) {										   				   
-					{% if admin %}				
+	   			eventClick: function(info) {
+					{% if admin %}
 					reservations.forEach( resv => {
 					  resv.forEach( r => {
 				  		if(info.event.id == r.id) {
@@ -383,20 +381,20 @@
 								axios
 									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
 									.then(location.reload())
-									.catch( error => console.log(error));						
-							} else {	
-								return false;} 
+									.catch( error => console.log(error));
+							} else {
+								return false;}
 						return
-						}			   
+						}
 			   		  })
 					})
 					{% endif %}
 				}
-			});		
-			calendar.render();				
+			});
+			calendar.render();
 	   		})
-	   		.catch(err => console.log(err))		
-   
+	   		.catch(err => console.log(err))
+
     	</script>
 	</body>
 </html>
