@@ -30,7 +30,9 @@
         <p v-if="building.address.address_L2 != ''" style="padding: 15px 20px 0">Address: [[building.address.address_L1]] [[building.address.address_L2]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
 
 	<p v-else style="padding:15px 20px 0"> Address: [[building.address.address_L1]], [[building.address.city]] [[building.address.state]] [[building.address.zip]]</p>
-        <p style="padding: 15px 20px 0">Date: [[reserve.start_time]] to [[reserve.end_time]] </p>
+        <p style="padding: 15px 20px 0"> Start Time: [[reserve.start_time]] </p>
+	
+	<p style="padding: 15px 20px 0"> End Time: [[reserve.end_time]] </p>
 
         <p style="padding: 15px 20px 0">Facility: [[facility.name]]</p>
 
@@ -86,8 +88,8 @@
 
         axios.all([requestReservationEnd, requestRoomsEnd, requestBuildingEnd, requestFacilityEnd])
         .then(axios.spread((res1, res2, res3, res4) => {
-          res1.data.start_time = res1.data.start_time.split("T")[0];
-	  res1.data.end_time = res1.data.end_time.split("T")[0];
+          res1.data.start_time = new Date(res1.data.start_time);
+	  res1.data.end_time = new Date(res1.data.end_time);
 	  this.reserve = res1.data;
           this.room = res2.data;
           this.building = res3.data;

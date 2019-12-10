@@ -234,14 +234,18 @@
 			   var j = 0;
 			   rooms = res.data;
 			   rooms.forEach( room => {
-				room['name'] = room['name'] + " " + room['number'];				
+				room['name'] = room['name'] + " " + room['number'];
+				if(room['attributes'].length == 0) {
+				    room['attributes'] = "No Features Found";
+				}				
 				if(room['reservations'].length > 0){
                                     reservations[i] = room['reservations'];
 				    j = 0;
 				    reservations[i].forEach( r => { 			
                                     	reservations[i][j]['resourceId'] = (room['_id']);
 	                                reservations[i][j]['title'] = "Reserved";
-					j++;});
+					j++;
+				    });
 				    i++;
 				}
 			   });
@@ -300,13 +304,13 @@
 				   }
 			   ],
 			   slotLabelFormat: { hour:'numeric', minute:'numeric'},
-			   minTime: '6:30',
-			   maxTime: '24:30',
+			   minTime: '6:00',
+			   maxTime: '25:00',
 			   slotDuration: '00:30:00',
 			   selectOverlap: false,
 			   selectConstraint: 'businessHours',
 			   nowIndicator: true,
-			   resourceLabelText: 'Rooms',
+			   resourceColumns: [{ labelText: 'Rooms', field: 'title'}, { labelText: 'Occupancy', field: 'capacity'}],
 			   aspectRatio: 1.5,
 			   select: function(info) {
      				 start = info.startStr;
@@ -314,14 +318,9 @@
 				 room_id = info.resource.id;	 
 			   },				  
 			   resourceRender: function(info) {
-				   var questionMark = document.createElement('strong');
-				   questionMark.innerText = ' (?) ';
-   
-				   info.el.querySelector('.fc-cell-text')
-					  .appendChild(questionMark);
-				   
-				   var tooltip = new Tooltip(questionMark, {
-						  title: info.resource.extendedProps.features,
+				  			   
+				   var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
+						  title: "Features: " + info.resource.extendedProps.features,
 						  placement: 'top',
 						  trigger: 'hover',
 						  container: 'body',
@@ -365,20 +364,37 @@
 				   }
 				   {% endif %}
 			   },
-   
-			   eventRender: function(info) {					
-				
-				   var tooltip = new Tooltip(info.el, {
-						 title: "",
-						 placement: 'top',
-						 trigger: 'hover',
-						 container: 'body'
-				   });
-			   }
-			   
-		   });		
-				calendar.render();				
+   			   eventRender: function(info) {
+			       {% if admin %}
+			       var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
+				  title: "Click here to cancel this reservation",
+				  placement: 'top',
+				  trigger: 'hover',
+				  container: 'body'})			
+			       {% endif %}
+			   },
+			   eventClick: function(info) {										   				   
+				{% if admin %}				
+				reservations.forEach( resv => {
+					resv.forEach( r => {
+					  if(info.event.id == r.id) {
+						var a = confirm("Press okay to delete this reservation for this reservation.")
+						if(a == true) {
+					  	  axios
+						    .delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
+						    .then()
+						    .catch( error => console.log(error));						
+						} else {return false;} 
+					  return
+			   		  }			   
+		   			})
+				})
+				{% endif %}
+			    }
+			});		
+			calendar.render();						
 	   }).catch(err => console.log(err))
+	   
    
     </script>
 </body>

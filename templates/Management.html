@@ -32,6 +32,7 @@
                     <th>Description</th> 
                     <th>Phone Number</th>
 		    <th>Access Code</th>
+		    <th>Building Privacy</th>
                     {% if admin %}
                     <th>Delete?</th>
                     {% endif %}
@@ -43,8 +44,10 @@
                         <td v-else><a v-bind:href="getFacilityURL(f._id)">[[ f.address.address_L1 ]], [[ f.address.city ]], [[ f.address.state ]], [[ f.address.zip ]] </a></td>
                         <td><a v-bind:href="getFacilityURL(f._id)">[[ f.description ]] </a></td>
                         <td><a v-bind:href="getTelephone(f.phone)">[[ f.phone ]]</a></td>
-			<td v-if="f.access_code != ''"><a v-bind:href="getFacilityURL(f._id)">[[ f.access_code ]]</a></td>
+			<td v-if="f.access_code != ''">[[ f.access_code ]]</td>
 			<td v-else>N/A</td>
+			<td v-if="f.private == true"> Private</td>
+			<td v-else> Public </td>
                         {% if admin %}
                         <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="facilityToBeDeleted = f"></td>
                         {% endif %}
@@ -69,6 +72,7 @@
                     <th>Location</th>
                     <th>Description</th> 
                     <th>Phone Number</th>
+		    <th>Building Privacy</th>
                     {% if admin %}
                     <th>Delete?</th>
                     {% endif %}
@@ -78,6 +82,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+		    <td></td>
                     {% if admin %}
                     <td></td>
                     {% endif %}
