@@ -222,12 +222,13 @@
 	   var start;
 	   var end;
 	   var reservations;
+	   var rooms;
 	   var room_id;
 	   
 	   axios
 		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
 		   .then(res => {
-			   var rooms = [];
+			   rooms = [];
 			   reservations = [];
 			   var temp;
 			   var i = 0;
@@ -262,138 +263,135 @@
 			   str2 = str2.replace(/\"_id":/g, "\"id\":");
 			   reservations = JSON.parse(str2);
 			   //console.log(rooms);
-			   console.log(reservations);
-			   
+			   //console.log(reservations);     
+	   		})
+	   		.catch(err => console.log(err))
+			
+			calendarEl = document.getElementById('calendar');
    
-		   calendarEl = document.getElementById('calendar');
-   
-		   calendar = new FullCalendar.Calendar(calendarEl, {
-			   plugins: [ 'resourceTimeline', 'interaction' ],
-			   header: {
-			   left: 'today prev,next',
-				   center: 'title',
-				   right: ''
-			   },
-			   schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-			   defaultView: 'resourceTimelineDay',
-			   selectable: true,
-			   height: 450,
-			   timeZone: 'GMT',
-			   resources: rooms,			   
-			   //events: reservations,
-			   eventSources: reservations,
-			   //events: [{"id":"5de42ba621871123555d397d", "title":"Reserved","resourceId":"5ddd9b0508472f8282ac14ac", "end":"2019-12-01T12:30:00","start":"2019-12-01T10:00:00","userID":"5ddc051884f0db0daa9172ce"}],
-			   eventBackgroundColor: 'red',
-			   
-			   titleFormat: {
-				   year: 'numeric',
-				   month: 'short',
-				   day: 'numeric',
-				   weekday: 'long'
-			   },
-			   businessHours: [            
-				   {
-					   daysOfWeek: [1,2,3,4,5],
-					   startTime: '7:30',
-					   endTime: '23:30'  
-				   },
-				   {
-					   daysOfWeek: [6,0],
-					   startTime: '8:00',
-					   endTime: '17:00'           
-				   }
-			   ],
-			   slotLabelFormat: { hour:'numeric', minute:'numeric'},
-			   minTime: '6:00',
-			   maxTime: '25:00',
-			   slotDuration: '00:30:00',
-			   selectOverlap: false,
-			   selectConstraint: 'businessHours',
-			   nowIndicator: true,
-			   resourceColumns: [{ labelText: 'Rooms', field: 'title'}, { labelText: 'Occupancy', field: 'capacity'}],
-			   aspectRatio: 1.5,
-			   select: function(info) {
-     				 start = info.startStr;
-				 end = info.endStr;
-				 room_id = info.resource.id;	 
-			   },				  
-			   resourceRender: function(info) {
-				  			   
-				   var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
-						  title: "Features: " + info.resource.extendedProps.features,
-						  placement: 'top',
-						  trigger: 'hover',
-						  container: 'body',
-				   });
-				   {% if admin %}
-				   var roomUpdatebtn = document.createElement("BUTTON");
-				   roomUpdatebtn.textContent = "Edit Room";
-				   roomUpdatebtn.className = "updateroombtn";				   
-				   roomUpdatebtn.onclick = function(){
-					rooms.forEach(room => {
-						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
-							location.href="/facility/" + f_id + "/building/" + b_id + "/room/" + room.id;
-						}
+   			calendar = new FullCalendar.Calendar(calendarEl, {
+	   			plugins: [ 'resourceTimeline', 'interaction' ],
+	   			header: {
+	   				left: 'today prev,next',
+		   			center: 'title',
+		   			right: ''
+	   			},
+	   			schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+	   			defaultView: 'resourceTimelineDay',
+	   			selectable: true,
+	   			height: 450,
+	   			timeZone: 'GMT',
+	   			resources: rooms,			   
+	   			eventSources: reservations,
+	 			eventBackgroundColor: 'red',
+	   
+			   	titleFormat: {
+		   			year: 'numeric',
+		   			month: 'short',
+		   			day: 'numeric',
+		   			weekday: 'long'
+			   	},
+	   			businessHours: [            
+		   		{
+			   		daysOfWeek: [1,2,3,4,5],
+			   		startTime: '7:30',
+			   		endTime: '23:30'  
+		   		},
+		   		{
+			   		daysOfWeek: [6,0],
+			   		startTime: '8:00',
+			   		endTime: '17:00'           
+		   		}],
+	   			slotLabelFormat: { hour:'numeric', minute:'numeric'},
+	   			minTime: '6:00',
+	   			maxTime: '25:00',
+	   			slotDuration: '00:30:00',
+	   			selectOverlap: false,
+	   			selectConstraint: 'businessHours',
+	   			nowIndicator: true,
+	   			resourceColumns: [{ labelText: 'Rooms', field: 'title'}, { labelText: 'Occupancy', field: 'capacity'}],
+	   			aspectRatio: 1.5,
+	   			select: function(info) {
+			  		start = info.startStr;
+		 			end = info.endStr;
+		 			room_id = info.resource.id;	 
+	   			},				  
+	   			resourceRender: function(info) {
+						 
+		   			var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
+				  		title: "Features: " + info.resource.extendedProps.features,
+				  		placement: 'top',
+				  		trigger: 'hover',
+				  		container: 'body',
+		   			});
+		   			{% if admin %}
+		   			var roomUpdatebtn = document.createElement("BUTTON");
+		   				roomUpdatebtn.textContent = "Edit Room";
+		   				roomUpdatebtn.className = "updateroombtn";				   
+		   				roomUpdatebtn.onclick = function(){
+							rooms.forEach(room => {
+								if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
+									location.href="/facility/" + f_id + "/building/" + b_id + "/room/" + room.id;
+								}
+							})
+		   				}
+		   			var br = document.createElement("br");
+		   			info.el.querySelector('.fc-cell-text')
+			  			.appendChild(br);
+		   			info.el.querySelector('.fc-cell-text')
+			  			.appendChild(roomUpdatebtn);
+		   			var roomDeletebtn = document.createElement("BUTTON");
+		   				roomDeletebtn.textContent = "Delete Room";
+		   				roomDeletebtn.className = "updateroombtn";
+		   			info.el.querySelector('.fc-cell-text')
+						.appendChild(roomDeletebtn);
+		   			roomDeletebtn.onclick = function() {
+					//var room_name = this.buildingToBeDeleted.name;
+			 			rooms.forEach(room => {
+							if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
+								var a = confirm("Press okay to delete room: " + room.title + ". Press Cancel to close the window.");
+								if(a == true){
+									axios
+										.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
+										.then(location.reload())
+										.catch(error => console.log(error));
+								} else { 
+									return false;}	
+							}
+						})
+		   			}
+		   			{% endif %} },
+		  		eventRender: function(info) {
+		   			{% if admin %}
+		   			var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
+		  				title: "Click here to cancel this reservation",
+		  				placement: 'top',
+		  				trigger: 'hover',
+		  				container: 'body'})			
+		   				{% endif %}
+	   			},
+	   			eventClick: function(info) {										   				   
+					{% if admin %}				
+					reservations.forEach( resv => {
+						resv.forEach( r => {
+			  				if(info.event.id == r.id) {
+								var a = confirm("Press okay to delete this reservation for this reservation.")
+								if(a == true) {
+									axios
+										.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
+										.then(location.reload())
+										.catch( error => console.log(error));						
+								} else {	
+									return false;} 
+							return
+							}			   
+			   			})
 					})
-				   }
-				   var br = document.createElement("br");
-				   info.el.querySelector('.fc-cell-text')
-					  .appendChild(br);
-				   info.el.querySelector('.fc-cell-text')
-					  .appendChild(roomUpdatebtn);
-				   var roomDeletebtn = document.createElement("BUTTON");
-				   roomDeletebtn.textContent = "Delete Room";
-				   roomDeletebtn.className = "updateroombtn";
-				   info.el.querySelector('.fc-cell-text')
-					.appendChild(roomDeletebtn);
-				   roomDeletebtn.onclick = function() {
-					 //var room_name = this.buildingToBeDeleted.name;
-					 rooms.forEach(room => {
-						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
-							var a = confirm("Press okay to delete room: " + room.title + ". Press Cancel to close the window.");
-							if(a == true){
-				    				axios
-								.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
-								.then(location.reload())
-								.catch(error => console.log(error));
-							}else{ return false;}	
-						}
-					})
-				   }
-				   {% endif %}
-			   },
-   			   eventRender: function(info) {
-			       {% if admin %}
-			       var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
-				  title: "Click here to cancel this reservation",
-				  placement: 'top',
-				  trigger: 'hover',
-				  container: 'body'})			
-			       {% endif %}
-			   },
-			   eventClick: function(info) {										   				   
-				{% if admin %}				
-				reservations.forEach( resv => {
-					resv.forEach( r => {
-					  if(info.event.id == r.id) {
-						var a = confirm("Press okay to delete this reservation for this reservation.")
-						if(a == true) {
-					  	  axios
-						    .delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
-						    .then(location.reload())
-						    .catch( error => console.log(error));						
-						} else {return false;} 
-					  return
-			   		  }			   
-		   			})
-				})
-				{% endif %}
-			    }
+					{% endif %}
+				}
 			});		
 			calendar.render();						
-	   }).catch(err => console.log(err))
-	   
    
-    </script>
-</body>
+    	</script>
+	</body>
 </html>
