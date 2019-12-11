@@ -91,6 +91,7 @@ class Facility(Resource):
             return jsonify(res)
 
         admin_group_id = ObjectId()
+        default_group_id = ObjectId()
 
         takeID = facilities.insert_one({
         'name': data.get('name'),
@@ -110,12 +111,16 @@ class Facility(Resource):
         'attributes': [],
         'maintenance': [],
         'groups': [{
-            '_id': admin_group_id,
-            'name': 'admin'
+                '_id': admin_group_id,
+                'name': 'admin'
+            },
+            {
+                '_id': default_group_id,
+                'name': 'default'
             }]
         })
         users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
-                         {'$push': {'groupID': admin_group_id}})
+                         {'$push': {'groupID': { "$each": [admin_group_id, default_group_id]}}})
         return jsonify({'_id': takeID.inserted_id})
 
     def put(self, f_id):
