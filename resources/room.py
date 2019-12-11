@@ -4,6 +4,7 @@ import bcrypt
 from bson.objectid import ObjectId
 from SeniorProject import database
 from SeniorProject.resources.maintenance import Maintenance
+from SeniorProject.user_check import *
 
 db = database.conn_DB()
 
@@ -22,6 +23,9 @@ class Room(Resource):
                 current_rooms = rooms.find({'buildingID': current_building.get('_id')})
                 # convert the Cursor object to a dictionary so that it is JSON serializable
                 current_rooms = [room for room in current_rooms]
+
+                # filter to only include rooms the user has access to
+                current_rooms = [room for room in current_rooms if check_group(room.get("groupID"))] 
                 return jsonify(current_rooms)
             else:  # specific room
                 current_room = validation[1]

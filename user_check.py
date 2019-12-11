@@ -29,3 +29,25 @@ def check_admin(f_id):
         return False
     else:
         return True
+
+# check if the logged-in user is in one of the specified groups (g_ids is a list)
+# returns True if the user is in one of the groups, False otherwise
+def check_group(g_ids):
+    users = db.users
+
+    if session.get('user') is None:
+        return False
+
+    current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
+    user_groups = [str(g) for g in current_user.get('groupID')]
+
+    g_ids = [str(g) for g in g_ids]
+
+    print("user_groups:")
+    print(user_groups)
+    print("g_ids:")
+    print(g_ids)
+
+    check_group = any(g in user_groups for g in g_ids)
+    print(check_group)
+    return check_group
