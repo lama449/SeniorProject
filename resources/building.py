@@ -139,6 +139,11 @@ class Building(Resource):
         facilities = db.facilities
         buildings = db.buildings
         rooms = db.rooms
+
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to create a new building.')
+            return jsonify(res)
+
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             current_building = buildings.find_one({'_id': ObjectId(b_id)})
