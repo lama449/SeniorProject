@@ -14,6 +14,7 @@ from SeniorProject.resources.group import Group
 from SeniorProject.resources.userGroup import UserGroup
 from SeniorProject.user_check import *
 from SeniorProject.resources.userFacility import UserFacility
+from SeniorProject.resources.userMaintenance import UserMaintenance
 
 app = Flask(__name__)
 api = Api(app)
@@ -70,7 +71,43 @@ def register():
 
 @app.route("/facility/<f_id>", methods=['GET'])
 def facility_page(f_id):
-    return render_template("Facility.html", f_id=f_id, admin=check_admin(f_id)) #allows us to use f_id in the html template
+    users = db.users
+    facilities = db.facilities
+    current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+    if current_facility is None:
+        return render_template("Facility.html", f_id=f_id, admin=check_admin(f_id), privateNonMember=False, noFacility=True)
+
+    private = current_facility.get('private')
+    groups = current_facility.get('groups')
+    member = check_group(groups)
+    privateNonMember = False
+
+    if not member:
+        if private:
+            # ask to join facility, show page
+            privateNonMember = True
+        else:
+            # add to group, show the page
+            defaultGroup = next((g for g in groups if g.get('name') == 'default'), None)
+            if defaultGroup:
+                defaultGroupID = defaultGroup.get('_id')
+                print("adding user to group: " + str(defaultGroupID))
+                if session.get('user'):
+                    current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
+                    if current_user:
+                        users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
+                                         {'$push': {'groupID': ObjectId(defaultGroupID)}})
+                        print('User has been added to the group.')
+                    else:
+                        print("no current user")
+                else:
+                    print("session.get('user') doesn't exist")
+            else:
+                print("no defaultGroup")
+    
+    # if member, just show the page
+    return render_template("Facility.html", f_id=f_id, admin=check_admin(f_id), privateNonMember=privateNonMember, noFacility=False)
+    
 
 @app.route('/management', methods=['GET'])
 def management_page():
@@ -211,6 +248,7 @@ api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id>
 api.add_resource(UserReservations, '/api/user/reservations', endpoint='user reservations')
 api.add_resource(UserGroup, '/api/facilities/<f_id>/users/<u_id>/groups/<g_id>', '/api/facilities/<f_id>/users/groups/<g_id>', endpoint='user group')
 api.add_resource(UserFacility, '/api/users/facilities', endpoint='user facility')
+api.add_resource(UserMaintenance, '/api/maintenance/users/<u_id>', endpoint='user maintenance')
 
 if __name__ == '__main__':
     app.run()
