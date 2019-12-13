@@ -101,8 +101,10 @@ class Group(Resource):
         }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
-            group = facilities.find_one({'groups': {'_id': ObjectId(g_id)}, 'groups.name': 1})
-            if group.get('name') != 'admin' or group.get('name') != 'default':
+            groups = current_facility.get('groups')
+            admin_id = next(g for g in groups if g['name'] == 'admin')['_id']
+            default_id = next(d for d in groups if d['name'] == 'default')['_id']
+            if (ObjectId(g_id) != admin_id) and (ObjectId(g_id) != default_id):
                 facilities.update({'_id': ObjectId(f_id)},
                                   {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
                 users.update({'groupID': ObjectId(g_id)},
@@ -110,7 +112,7 @@ class Group(Resource):
                 res['msg'].append('Delete successful')
                 return jsonify(res)
             else:
-                res['msg'].append('Cannot delete admin group.')
+                res['msg'].append('Cannot delete admin or default group.')
         else:
             res['err'].append('Invalid facility')
             return jsonify(res)
