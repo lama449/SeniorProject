@@ -169,6 +169,11 @@ class Facility(Resource):
             'msg': [],
             'err': []
         }
+
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to edit this facility.')
+            return jsonify(res)
+
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
             dbuildings = buildings.find({'facilityID': ObjectId(f_id)})
