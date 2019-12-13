@@ -17,8 +17,7 @@
         <div class="errorbox" v-for="e in error">[[e]]</div>
         <p>New user? Just fill out a quick form to create an account.</p>
         <hr>
-
-        <form>
+	 <form>
             <label for="fname"><b>First Name</b></label>
             <input type="text" placeholder="First Name" name="fname" class="full-width" required v-model="fname">
 
@@ -51,7 +50,7 @@
             <label for="answer"><b>Answer</b></label>
             <input type="text" placeholder="Enter Security Answer" name="answer" class="full-width" required v-model="answer">
 			
-            <button class="button" @click.prevent="submitReg()">Register</button>
+            <button class="btn" style="width: 18%;"  @click.prevent="submitReg()">Register</button>
 			
         </form>
     </div>
