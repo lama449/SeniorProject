@@ -91,6 +91,7 @@ class Group(Resource):
             res['err'].append('Invalid facility ID')
             return jsonify(res)
 
+
     def delete(self, f_id, g_id):
         facilities = db.facilities
         users = db.users
@@ -100,12 +101,57 @@ class Group(Resource):
         }
         current_facility = facilities.find_one({'_id': ObjectId(f_id)})
         if current_facility:
+            group = facilities.find_one({'groups': {'_id': ObjectId(g_id)}, 'groups.name': 1})
+            if group.get('name') != 'admin' or group.get('name') != 'default':
+                facilities.update({'_id': ObjectId(f_id)},
+                                  {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
+                users.update({'groupID': ObjectId(g_id)},
+                             {'$pull': {'groupID': ObjectId(g_id)}})
+                res['msg'].append('Delete successful')
+                return jsonify(res)
+            else:
+                res['msg'].append('Cannot delete admin group.')
+        else:
+            res['err'].append('Invalid facility')
+            return jsonify(res)
+
+    def obliterate(self, f_id, g_id):
+        facilities = db.facilities
+        users = db.users
+        res = {
+            'msg': [],
+            'err': []
+        }
+        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+        if current_facility:
+            group = facilities.find_one({'groups': {'_id': ObjectId(g_id)}, 'groups.name': 1})
             facilities.update({'_id': ObjectId(f_id)},
-                              {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
+                                  {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
             users.update({'groupID': ObjectId(g_id)},
-                         {'$pull': {'groupID':  ObjectId(g_id)}})
+                             {'$pull': {'groupID': ObjectId(g_id)}})
             res['msg'].append('Delete successful')
             return jsonify(res)
         else:
             res['err'].append('Invalid facility')
             return jsonify(res)
+
+
+
+#    def delete(self, f_id, g_id):
+#        facilities = db.facilities
+#        users = db.users
+#        res = {
+#            'msg': [],
+#            'err': []
+#        }
+#        current_facility = facilities.find_one({'_id': ObjectId(f_id)})
+#        if current_facility:
+#            facilities.update({'_id': ObjectId(f_id)},
+#                              {'$pull': {'groups': {'_id': ObjectId(g_id)}}})
+#            users.update({'groupID': ObjectId(g_id)},
+#                         {'$pull': {'groupID':  ObjectId(g_id)}})
+#            res['msg'].append('Delete successful')
+#            return jsonify(res)
+#        else:
+#            res['err'].append('Invalid facility')
+#            return jsonify(res)
