@@ -157,6 +157,14 @@ def profile():
     else:
         return redirect(url_for('home'))
 
+@app.route('/maintenance', methods=['GET'])
+def maintenance_submissions():
+    if check_logged_in():
+        return render_template('User_Maintenance_Request_Overview_Page.html')
+    else:
+        return redirect(url_for('home'))
+    
+
 @app.route('/facility_creation', methods=['GET'])
 def facility_creation():
     if check_logged_in():
@@ -248,7 +256,7 @@ api.add_resource(Group, '/api/facilities/<f_id>/groups', '/api/facilities/<f_id>
 api.add_resource(UserReservations, '/api/user/reservations', endpoint='user reservations')
 api.add_resource(UserGroup, '/api/facilities/<f_id>/users/<u_id>/groups/<g_id>', '/api/facilities/<f_id>/users/groups/<g_id>', endpoint='user group')
 api.add_resource(UserFacility, '/api/users/facilities', endpoint='user facility')
-api.add_resource(UserMaintenance, '/api/maintenance/users/<u_id>', endpoint='user maintenance')
+api.add_resource(UserMaintenance, '/api/maintenance/users', endpoint='user maintenance')
 
 if __name__ == '__main__':
     app.run()

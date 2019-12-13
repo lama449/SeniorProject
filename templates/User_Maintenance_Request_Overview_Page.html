@@ -30,11 +30,11 @@
             </tr>
 
             <tr v-for="RequestInfo in maintenanceRequest">
-              <td style="text-align: center">[[RequestInfo.date]]</td>
-              <td style="text-align: center">[[RequestInfo.name]]: [[RequestInfo.buildingName]]</td>
-              <td style="text-align: center">[[RequestInfo.roomNum]]</td>
-              <td style="text-align: center">[RequestInfo.description]]</td>
-              <td style="text-align: center">[[RequestInfo.Status]]</td>
+              <td style="text-align: center">[[RequestInfo.maintenance.date]]</td>
+              <td style="text-align: center">[[RequestInfo.name]]: [[RequestInfo.maintenance.buildingName]]</td>
+              <td style="text-align: center">[[RequestInfo.maintenance.roomNum]]</td>
+              <td style="text-align: center">[[RequestInfo.maintenance.description]]</td>
+              <td style="text-align: center">[[RequestInfo.maintenance.status]]</td>
             </tr>
           </table>
 	       </div>
@@ -46,22 +46,22 @@
 
        el: "#app",
        data: {
-         u_id: {{u_id | tojson}},
          maintenanceRequest: []
        },
 
        mounted(){
-         axios.get("/api/maintenance/users/" + this.u_id);
+         axios.get("/api/maintenance/users")
            .then(res1 => {
              this.maintenanceRequest = res1.data;
 
              this.maintenanceRequest.forEach( mr => {
-                mr.date = new Date(mr.date);
+                mr.maintenance.date = new Date(mr.maintenance.date);
 
-             })});
+             });
+            })
                .catch(error => console.log(error))
       },
-       delimiters: ["[[", "]]"],
+       delimiters: ["[[", "]]"]
    })
 </script>
 
