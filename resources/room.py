@@ -25,7 +25,12 @@ class Room(Resource):
                 current_rooms = [room for room in current_rooms]
 
                 # filter to only include rooms the user has access to
-                current_rooms = [room for room in current_rooms if check_group(room.get("groupID"))] 
+                # current_rooms = [room for room in current_rooms if check_group(room.get("groupID"))] 
+                for room in current_rooms:
+                    if check_group(room.get("groupID")):
+                        room['reservationStatus'] = True
+                    else:
+                        room['reservationStatus'] = False
                 return jsonify(current_rooms)
             else:  # specific room
                 current_room = validation[1]
@@ -44,6 +49,10 @@ class Room(Resource):
                 'msg': [],
                 'err': []
                 }
+        
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to create a room in this facility.')
+            return jsonify(res)
               
         data = request.json
         if not data.get('name'):
@@ -62,6 +71,7 @@ class Room(Resource):
         validation = validate_room(f_id, b_id)
         if validation[0] is True:
             rooms = db.rooms
+            #facilities = db.facilities
             current_building = validation[1]
                                
             takeID = rooms.insert_one({
@@ -91,7 +101,11 @@ class Room(Resource):
                 'msg': [],
                 'err': []
                 }
-              
+
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to edit this room.')
+            return jsonify(res)
+      
         data = request.json
         rooms = db.rooms
         
@@ -136,6 +150,10 @@ class Room(Resource):
                 'msg': [],
                 'err': []
                 }
+
+        if not check_admin(f_id):
+            res['err'].append('You do not have the permissions to delete this room.')
+            return jsonify(res)
               
         validation = validate_room(f_id, b_id, r_id)
         if validation[0] is True:
