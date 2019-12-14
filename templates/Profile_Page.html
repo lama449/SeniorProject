@@ -15,16 +15,16 @@
         {% if session.get('user') %}
         <h4 style="padding-left: 5em">Profile</h4>
         <div class="errorbox" v-for="e in error">[[e]]</div>
-        <div style="padding-left: 10em">
+        <div style="padding-left: 10em; padding-bottom: 5px;">
             <br>
             <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"></h6>
             <h6><b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"></h6>
             <h6><b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"></h6>
-            <h6><b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button style="margin-left: 5em" type="submit" class="button" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button></h6>
+            <h6><b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button></h6>
             <div id = "modalwrapper" class = "modal">
                 <form class="modal-content animate">
                     <div class="container" style="background-color: white">
-                        <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                        <span onclick="document.getElementById('modalwrapper').style.display='none'; error:[];" class="close" title="Close Popup">&times;</span>
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
                     </div>
                     <div class="container" style="background-color: white">
@@ -32,15 +32,15 @@
                         <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "opsw">
                         <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "npsw">
                         <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "cpsw">
-                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="checkPassword()">Change Password</button>
+                        <button type="submit"  class="btn" style="margin:0 auto; display: block; width: 40%" @click.prevent="checkPassword()">Change Password</button>
                     </div>
                 </form>
             </div>
-            <h6><b><label for="question" style="display: inline-block; width: 200px">Security Question: </label></b><button style="margin-left: 5em" type="submit" class="button" onclick="document.getElementById('modalwrapper2').style.display='block'" id="question">Click here to change security details</button></h6>
+            <h6><b><label for="question" style="adisplay: inline-block; width: 200px">Security Question: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper2').style.display='block';" id="question">Click here to change security details</button></h6>
             <div id = "modalwrapper2" class = "modal">
                 <form class="modal-content animate">
                     <div class="container" style="background-color: white">
-                        <span onclick="document.getElementById('modalwrapper2').style.display='none'" class="close" title="Close Popup">&times;</span>
+                        <span onclick="document.getElementById('modalwrapper2').style.display='none'; error: [];" class="close" title="Close Popup">&times;</span>
                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Security Details</h1>
                     </div>
                     <div class="container" style="background-color: white">
@@ -59,20 +59,20 @@
                         </select>
                         <input type="password" class ="full-width" name="answer" id="oanswer" placeholder="Enter old answer" v-model="oanswer">
                         <input type="password" class ="full-width" name="answer" id="nanswer" placeholder="Enter new answer"v-model="nanswer">
-                        <button type="submit" class="button" style="margin: 0 auto; display: block" @click.prevent="checkAnswer()">Confirm Changes</button>
+                        <button type="submit" class="btn" style="margin:0 auto; display: block; width: 40%" @click.prevent="checkAnswer()">Confirm Changes</button>
                     </div>
                 </form>
                 </div><p></p>
-                <button type="submit" class="button" style="display: inline-block; width: 200px" @click.prevent="putDetails()">Save changes</button>
-                <button style="margin-left: 5em; background-color: red; width: 200px" type="submit" class="button" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button></h6>
+                <button type="submit" class="btn" style="padding: 10px; margin-left: 20%; width: 20%" @click.prevent="putDetails()">Save changes</button>
+                <button style="padding: 10px; margin-left: 5%; width: 20%" type="submit" class="dbtn" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button>
                 <div id = "modalwrapper3" class = "modal">
                     <form class="modal-content animate">
                         <div class="container" style="background-color: white">
-                            <span onclick="document.getElementById('modalwrapper3').style.display='none'" class="close" title="Close Popup">&times;</span>
+                            <span onclick="document.getElementById('modalwrapper3').style.display='none'; error:[];" class="close" title="Close Popup">&times;</span>
                             <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Account?</h1>
                             <h6><center>Once you delete your account, all of your information will be removed from the Penguin's Building Management servers. All account data and information will no longer be available after deletion.</center></h6>
                             <h6><center>Are you sure you would like to delete your account?</center></h6>
-                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteAccount()">Permanently Delete Account</button>
+                            <button type="submit"  class="dbtn" style="margin: 0px auto; display: block; padding: 10px; width: 40%" @click.prevent="deleteAccount()">Permanently Delete Account</button>
                         </div>
                     </form>
                 </div>
