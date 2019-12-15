@@ -36,6 +36,7 @@ def check_group(g_ids):
     users = db.users
 
     if session.get('user') is None:
+        print("no logged in user")
         return False
 
     current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
@@ -49,5 +50,6 @@ def check_group(g_ids):
     print(g_ids)
 
     check_group = any(g in user_groups for g in g_ids)
+    print("check_group")
     print(check_group)
     return check_group

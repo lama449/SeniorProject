@@ -79,7 +79,7 @@ def facility_page(f_id):
 
     private = current_facility.get('private')
     groups = current_facility.get('groups')
-    member = check_group(groups)
+    member = check_group([ g.get('_id') for g in current_facility.get('groups') ])
 
     # ask to join facility, show page
     privateNonMember = (not member) and private
