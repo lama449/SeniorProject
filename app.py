@@ -80,30 +80,27 @@ def facility_page(f_id):
     private = current_facility.get('private')
     groups = current_facility.get('groups')
     member = check_group(groups)
-    privateNonMember = False
 
-    if not member:
-        if private:
-            # ask to join facility, show page
-            privateNonMember = True
-        else:
-            # add to group, show the page
-            defaultGroup = next((g for g in groups if g.get('name') == 'default'), None)
-            if defaultGroup:
-                defaultGroupID = defaultGroup.get('_id')
-                print("adding user to group: " + str(defaultGroupID))
-                if session.get('user'):
-                    current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
-                    if current_user:
-                        users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
-                                         {'$push': {'groupID': ObjectId(defaultGroupID)}})
-                        print('User has been added to the group.')
-                    else:
-                        print("no current user")
-                else:
-                    print("session.get('user') doesn't exist")
+    # ask to join facility, show page
+    privateNonMember = (not member) and private
+
+    # make sure the user is in the default group, show the page
+    defaultGroup = next((g for g in groups if g.get('name') == 'default'), None)
+    if defaultGroup:
+        defaultGroupID = defaultGroup.get('_id')
+        print("adding user to group: " + str(defaultGroupID))
+        if session.get('user'):
+            current_user = users.find_one({'_id': ObjectId(session.get('user').get('_id'))})
+            if current_user:
+                users.update_one({'_id': ObjectId(session.get('user').get('_id'))},
+                                 {'$addToSet': {'groupID': ObjectId(defaultGroupID)}})
+                print('User has been added to the group.')
             else:
-                print("no defaultGroup")
+                print("no current user")
+        else:
+            print("session.get('user') doesn't exist")
+    else:
+        print("no defaultGroup")
     
     # if member, just show the page
     return render_template("Facility.html", f_id=f_id, admin=check_admin(f_id), privateNonMember=privateNonMember, noFacility=False)
