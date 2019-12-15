@@ -11,6 +11,7 @@
 	{% include 'header.html' %}
 	<div class="content" id="app">
 		<div class="primary-content center-text container">
+			<div class="errorbox" v-for="e in error">[[e]]</div>
 			<h1 class="">Search for a Facility</h1>
 			<form>
 				<div class="form-group">
@@ -59,7 +60,8 @@
 				zip_code: "",
 				access_code: "",
 				facilities: [],
-				facility:{}
+				facility: {},
+				error: []
 			},
 			delimiters: ["[[", "]]"],
 			methods: {
@@ -68,10 +70,13 @@
 						.get("{{ url_for('facility') }}", {
 							params: {
 								q: this.query,
-								zip: this.zip_code,
+								zip: this.zip_code
 							}
 						})
-						.then(res => { this.facilities = res.data })
+						.then(res => {
+							this.facilities = res.data
+							this.error = []
+						})
 						.catch(error => console.log(error))
 				},
 				getFacilityURL: function(facility_id) {
@@ -81,10 +86,14 @@
 					axios
 							.post("{{ url_for('facility') }}", {
 								access_code: this.access_code
-
 							})
 							.then(res => { this.facility = res.data
-								location.href = ("/facility/" + this.facility._id);
+								if ("err" in res.data && res.data.err.length) {
+									this.error = res.data.err
+								} else {
+									this.error = []
+									location.href = ("/facility/" + this.facility._id);
+								}
 							})
 							.catch(error => console.log(error))
 				}

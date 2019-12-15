@@ -61,7 +61,12 @@ class Facility(Resource):
 
         # searching by access code
         if data.get('access_code'):
-            return jsonify(facilities.find_one({'access_code': data.get('access_code')}))
+            f = facilities.find_one({'access_code': data.get('access_code')})
+            if f:
+                return jsonify(f)
+            else:
+                res['err'].append("Invalid access code")
+                return jsonify(res)
 
         # generate new access code for new facility
         while True:
