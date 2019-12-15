@@ -20,10 +20,10 @@
         <div class="errorbox" v-for="e in error">[[e]]</div>
         <div style="padding-left: 10em; padding-bottom: 5px;">
             <br>
-            <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name">
-            <b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name">
-            <b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email">
-            <b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button>
+            <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"><br>
+            <b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"><br>
+            <b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"><br>
+            <b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button><br>
             <div id = "modalwrapper" class = "modal">
                 <form class="modal-content animate">
                     <div class="container" style="background-color: white">
@@ -39,7 +39,7 @@
                     </div>
                 </form>
             </div>
-            <b><label for="question" style="adisplay: inline-block; width: 200px">Security Question: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper2').style.display='block';" id="question">Click here to change security details</button></h6>
+            <b><label for="question" style="adisplay: inline-block; width: 200px">Security Question: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 30%" onclick="document.getElementById('modalwrapper2').style.display='block';" id="question">Click here to change security details</button><br></h6>
             <div id = "modalwrapper2" class = "modal">
                 <form class="modal-content animate">
                     <div class="container" style="background-color: white">
