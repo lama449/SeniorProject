@@ -14,12 +14,43 @@
         <center><h1>Update Groups for Facility</h1></center>
         <div class="errorbox" v-for="e in error">[[e]]</div>
 
+        <p>
+            Select a group to see a list of users who are in that group.
+        </p>
+        <p>
+            Select a group then click "Remove Group" to delete that group, which will remove all users from that group.
+        </p>
+        <p>
+            Type in a name for a group, then click "Add Group" to create a group with that name.
+        </p>
+        <p>
+            Select a user, then click "Remove User" to remove that user from the group that is selected.
+        </p>
+        <p>
+            Type in a user's email address, then click "Add User" to add that user to the selected.
+        </p>
         <table>
             <tr>
                 <td>
-                    <label for="groupSelect">Select a group:</label>
+                    <input type="text" name="group" id="groupInput" v-model="groupInput" class="full-width" placeholder="Name for a new group">
                 </td>
                 <td>
+                    <input type="text" name="users" id="group" v-model="userInput" class="full-width" placeholder="User's email address">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="addGroup()">Add Group</button>
+                </td>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="addUser()">Add User</button>
+                </td>
+            </tr>
+            <tr>
+                <td style="min-width:400px; padding-top: 2.5em">
+                    <label for="groupSelect">Select a group:</label>
+                </td>
+                <td style="min-width:400px; padding-top: 2.5em">
                     <label for="userSelect">Users:</label>
                 </td>
             </tr>
@@ -39,26 +70,10 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="group" id="groupInput" v-model="groupInput" class="full-width">
+                    <button type="button" class="btn full-width" @click.prevent="removeGroup()">Remove Group</button>
                 </td>
                 <td>
-                    <input type="text" name="users" id="group" v-model="userInput" class="full-width">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="button" class="button full-width" @click.prevent="addGroup()">Add Group</button>
-                </td>
-                <td>
-                    <button type="button" class="button full-width" @click.prevent="addUser()">Add User</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="button" class="button full-width" @click.prevent="removeGroup()">Remove Group</button>
-                </td>
-                <td>
-                    <button type="button" class="button full-width" @click.prevent="removeUser()">Remove User</button>
+                    <button type="button" class="btn full-width" @click.prevent="removeUser()">Remove User</button>
                 </td>
             </tr>
         </table>
