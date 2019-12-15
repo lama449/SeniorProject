@@ -29,13 +29,14 @@
                     <tr>
                         <th>Start Date</th>
                         <th>End Date </th>
-			            <th>Room Name </th>
-			            <th>Building Name </th>
-			            <th>Facility Name </th>
+                        <th>Room Name </th>
+                        <th>Building Name </th>
+                        <th>Facility Name </th>
                         <th>Maintenance Request</th>			
+                        <th>More Information</th>
                     </tr>
                     <tr v-for="resv in ures">
-                        <td style="text-align:center"><a v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)">[[ resv.reservations.start_time ]]</a></td>
+                        <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
                         <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
 			            <td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
 			            <td style="text-align:center"><a v-bind:href="getBuildingURL(resv.facility._id, resv.building._id)">[[ resv.building.name ]]</a></td>
@@ -49,12 +50,12 @@
                                     </div>
                                     <div class="container" style="background-color: white">
                                         <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "description">
-                                        <button type="submit"  class="button" style="margin: 0 auto; display: block" @click.prevent="submitRequest()">Submit Request</button>
+                                        <button type="submit"  class="btn" style="margin: 0 auto; width: 40%" @click.prevent="submitRequest()">Submit Request</button>
                                     </div>
                                 </form>
                             </div>
                         </td>
-			<td><button v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)" >More Information</button></td>
+			<td><a style="margin: auto" class="btn" v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)" >More Information</a></td>
                     </tr>
                 </table>
             </div>	
