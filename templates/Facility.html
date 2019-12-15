@@ -164,7 +164,8 @@
                         </div>
                     </form>
                 </div>
-            </div>
+		 
+           </div>
             <div v-else>
                 <table class="table">
                     <tr>
@@ -196,6 +197,8 @@
 		        isDisabled: true,
                 facility: [],
                 buildings:[],
+		privateNonMember: {{ privateNonMember | tojson }},
+		noFacility: {{ noFacility | tojson }},
                 buildingToBeDeleted: {}
             },
             mounted(){
@@ -204,7 +207,8 @@
 
                 axios.all([requestBuildingURL, requestFacilityURL])
 	  	            .then(axios.spread((res1, res2) => {
-                       	    this.buildings = res1.data;
+                       	    console.log(this.privateNonMember + " " + this.noFacility);
+			    this.buildings = res1.data;
 		            this.facility = res2.data;
 			    this.facility.private = this.facility.private.toString();
                     }))
@@ -212,22 +216,26 @@
             },
             delimiters: ["[[", "]]"],
             methods: {
+		goToHomePage: function() {
+		    location.href="/home/"
+		    return
+		},
                 getBuildingURL: function(b_id) {
-                    return ("/facility/" + this.f_id + "/building/" + b_id)
+                    return "/facility/" + this.f_id + "/building/" + b_id		    
                 },
 		getMaintenanceURL: function(){
-		    location.replace="/facility/" + this.f_id + "/maintenance"
+		    location.href="/facility/" + this.f_id + "/maintenance"
 		    return
 		},
 		getGroupsURL: function(){
-		    location.replace="/facility/" + this.f_id + "/groups"
+		    location.href="/facility/" + this.f_id + "/groups"
 		    return
 		},
 		getTelephone: function(phone) {
 		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
 		},
 		getBuildingCreationURL: function() {
-		    location.replace="/facility/" + this.f_id + "/building_creation"
+		    location.href="/facility/" + this.f_id + "/building_creation"
 		    return
 		},
 		editBtn: function() {
