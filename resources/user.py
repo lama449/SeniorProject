@@ -43,11 +43,11 @@ class User(Resource):
         
 
         if '@' not in email:
-            res['err'].append('Invalid email.')
+            res['err'].append('Invalid email')
         if not password:
             res['err'].append('No password')
         if password != password_confirm:
-            res['err'].append('Passwords do not match.')
+            res['err'].append('Passwords do not match')
         if not f_name:
             res['err'].append('No first name')
         if not l_name:
@@ -63,7 +63,7 @@ class User(Resource):
         # check if email is associated with another user
         existing_email = users.find_one({'email': email})
         if existing_email:
-            res['err'].append('That email already exists.')
+            res['err'].append('That email already exists')
             return jsonify(res)
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
