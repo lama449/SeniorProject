@@ -107,7 +107,6 @@ class Facility(Resource):
             },
         'phone': data.get('phone'),
         'description': data.get('description'),
-        'presets': {},
         'attributes': [],
         'maintenance': [],
         'groups': [{
