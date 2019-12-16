@@ -242,49 +242,49 @@
 	   var resourceIds;
 	   var room_id;
 
-	   axios
-		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
-		   .then(res => {
-			   rooms = [];
-			   reservations = [];
-			   resourceIds = [];
-			   var temp;
-			   var i = 0;
-			   var j = 0;
-			   rooms = res.data;
-			   rooms.forEach( room => {
-				room['name'] = room['name'] + " " + room['number'];
-				if(room['attributes'].length == 0) {
-				    room['attributes'] = "No Features Found";
-				}
-				if(room['reservationStatus'] == false) {
-				    resourceIds[i] = room['_id'];
-				    console.log(resourceIds[i]);
-				}
-				if(room['reservations'].length > 0){
-                                    reservations[i] = room['reservations'];
-				    j = 0;
-				    reservations[i].forEach( r => {
-                                    	reservations[i][j]['resourceId'] = (room['_id']);
-	                                reservations[i][j]['title'] = "Reserved";
-					j++;
-				    });
-				    i++;
-				}
-			   });
+	    // axios
+		//    .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
+		//    .then(res => {
+		// 	   rooms = [];
+		// 	   reservations = [];
+		// 	   resourceIds = [];
+		// 	   var temp;
+		// 	   var i = 0;
+		// 	   var j = 0;
+		// 	   rooms = res.data;
+		// 	   rooms.forEach( room => {
+		// 		room['name'] = room['name'] + " " + room['number'];
+		// 		if(room['attributes'].length == 0) {
+		// 		    room['attributes'] = "No Features Found";
+		// 		}
+		// 		if(room['reservationStatus'] == false) {
+		// 		    resourceIds[i] = room['_id'];
+		// 		    console.log(resourceIds[i]);
+		// 		}
+		// 		if(room['reservations'].length > 0){
+        //                             reservations[i] = room['reservations'];
+		// 		    j = 0;
+		// 		    reservations[i].forEach( r => {
+        //                             	reservations[i][j]['resourceId'] = (room['_id']);
+	    //                             reservations[i][j]['title'] = "Reserved";
+		// 			j++;
+		// 		    });
+		// 		    i++;
+		// 		}
+		// 	   });
 
-			   str = JSON.stringify(rooms);
-			   str = str.replace(/\"_id\":/g, "\"id\":");
-			   str = str.replace(/\"name\":/g, "\"title\":");
-			   str = str.replace(/\"attributes":/g, "\"features\":");
-			   rooms = JSON.parse(str);
+		// 	   str = JSON.stringify(rooms);
+		// 	   str = str.replace(/\"_id\":/g, "\"id\":");
+		// 	   str = str.replace(/\"name\":/g, "\"title\":");
+		// 	   str = str.replace(/\"attributes":/g, "\"features\":");
+		// 	   rooms = JSON.parse(str);
 
-			   str2 = JSON.stringify(reservations);
-			   str2 = str2.replace(/\"start_time":/g, "\"start\":");
-			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
-			   str2 = str2.replace(/\"_id":/g, "\"id\":");
-			   reservations = JSON.parse(str2);
-			   //console.log(rooms);
+		// 	   str2 = JSON.stringify(reservations);
+		// 	   str2 = str2.replace(/\"start_time":/g, "\"start\":");
+		// 	   str2 = str2.replace(/\"end_time":/g, "\"end\":");
+		// 	   str2 = str2.replace(/\"_id":/g, "\"id\":");
+		// 	   reservations = JSON.parse(str2);
+		// 	   //console.log(rooms);
 			   //console.log(reservations);
 			   
                            
@@ -302,7 +302,42 @@
 	   			selectable: true,
 	   			height: 450,
 				timeZone: 'GMT',
-	   			resources: rooms,
+	   			resources: function(){
+					axios
+					   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
+					    .then(res => {
+		 	   				rooms = [];
+								var i = 0;
+			   					var j = 0;
+			   					rooms = res.data;
+			   					rooms.forEach( room => {
+									room['name'] = room['name'] + " " + room['number'];
+									if(room['attributes'].length == 0) {
+				    					room['attributes'] = "No Features Found";
+									}
+									if(room['reservationStatus'] == false) {
+				    					resourceIds[i] = room['_id'];
+				    					//console.log(resourceIds[i]);
+									}
+									if(room['reservations'].length > 0){
+                                    	reservations[i] = room['reservations'];
+				    					j = 0;
+				    					reservations[i].forEach( r => {
+                                    		reservations[i][j]['resourceId'] = (room['_id']);
+	                                		reservations[i][j]['title'] = "Reserved";
+											j++;
+										});
+				    					i++;
+									}
+			   					});
+
+								str = JSON.stringify(rooms);
+			   					str = str.replace(/\"_id\":/g, "\"id\":");
+			   					str = str.replace(/\"name\":/g, "\"title\":");
+			   					str = str.replace(/\"attributes":/g, "\"features\":");
+								rooms = JSON.parse(str);)
+						.catch(err => console.log(err))								   
+				},
 	   			eventSources: reservations,
 	 			eventBackgroundColor: 'red',
 
