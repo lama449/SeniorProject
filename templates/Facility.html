@@ -153,20 +153,8 @@
 			{% endif %}
                     </tr>
                 </table>
-                <div id = "modalwrapper" class = "modal">
-                    <form class="modal-content animate">
-                        <div class="container" style="background-color: white">
-                            <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
-                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Building?</h1>
-                            <h6><center>All data related to this building will be removed after deletion.</center></h6>
-                            <h6><center>Are you sure you would like to delete this building?</center></h6>
-                            <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteBuilding()">Delete Building</button>
-                        </div>
-                    </form>
-                </div>
-		 
-           </div>
-            <div v-else>
+	    </div>
+	    <div v-else>
                 <table class="table">
                     <tr>
                         <th>Building</th>
@@ -180,6 +168,28 @@
                     </tr>
                 </table>
             </div>
+            <div id ="modalwrapper" class = "modal">
+                 <form class="modal-content animate">
+                     <div class="container" style="background-color: white">
+                         <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Building?</h1>
+                         <h6><center>All data related to this building will be removed after deletion.</center></h6>
+                         <h6><center>Are you sure you would like to delete this building?</center></h6>
+                         <button type="submit"  class="button" style="margin: 0 auto; display: block; background-color: red" @click.prevent="deleteBuilding()">Delete Building</button>
+                     </div>
+                 </form>
+             </div>
+		<div v-if="privateNonMember == true" id ="modalwrapper2" class = "modal" style="display: block; overflow: hidden;" >
+		    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                           <span @click.prevent="goToHomePage()" class="close" title="Close Popup">&times;</span>
+                           <h1 style="text-align: center; background-color: white; padding-top: 25px">Unauthorized Access</h1>
+		   	   <h6><center> You do not have the permission to <br> view this facility. </center></h6>
+                           <h6><center> Please click the button below to request access to this page. </center></h6>
+                           <button type="submit" class="dbtn" style="margin: 0 auto; display: block; padding: 10px; width: 40%" @click.prevent="goToHomePage()"> Request Access </button>
+                    </form>
+		</div>		
+           </div>        
 	{% if admin %}
 	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
 	{% endif %}
@@ -217,7 +227,7 @@
             delimiters: ["[[", "]]"],
             methods: {
 		goToHomePage: function() {
-		    location.href="/home/"
+		    location.href="/home"
 		    return
 		},
                 getBuildingURL: function(b_id) {

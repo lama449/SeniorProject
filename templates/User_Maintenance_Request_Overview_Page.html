@@ -37,7 +37,25 @@
               <td style="text-align: center">[[RequestInfo.maintenance.status]]</td>
             </tr>
           </table>
-	       </div>
+	</div>
+	<div v-else>
+	  <table class="table">
+	    <tr>
+	       <th>Date Submitted</th>
+	       <th>Facility and Building Name</th>
+	       <th> Room Number </th>
+	       <th> Description </th>
+	       <th> Status </th>
+	    </tr>
+	    <tr>
+	       <td></td>
+	       <td></td>
+	       <td></td>
+	       <td></td>
+	       <td></td>
+	    </tr>
+	  </table> 
+	</div>
       </div>
   {% include 'footer.html' %}
 

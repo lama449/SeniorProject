@@ -135,16 +135,18 @@
 
 		<div class="errorbox" v-for="e in error">[[e]]</div>
 
+		{% if session.get('user') %}
 		<div id="calendar">
 			{% if admin %}
 			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
 			{% endif %}
-			{% if session.get('user') %}
 			<button class="submitbtn" v-on:click="submitReservation()"> Submit Time Slot </button>
-			{% else %}
-			<h6 style="text-align: center;">Please sign in to select a time slot. </h6>
-			{% endif %}
 		</div>
+		{% else %}
+		<div>
+			<h6 style="text-align: center;"> Please sign in to select a time slot and view the calendar. </h6>
+		</div>
+		{% endif %}
 
             </div>
 		</div>
@@ -221,6 +223,7 @@
 						    this.error = res.data.err;
                         			} else if("_id" in res.data){
 			                            location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;
+						    this.error = [];
 			                        }
 			                 })
 					.catch(err => console.log(err))
@@ -236,6 +239,7 @@
 	   var end;
 	   var reservations;
 	   var rooms;
+	   var resourceIds;
 	   var room_id;
 
 	   axios
@@ -243,6 +247,7 @@
 		   .then(res => {
 			   rooms = [];
 			   reservations = [];
+			   resourceIds = [];
 			   var temp;
 			   var i = 0;
 			   var j = 0;
@@ -251,6 +256,10 @@
 				room['name'] = room['name'] + " " + room['number'];
 				if(room['attributes'].length == 0) {
 				    room['attributes'] = "No Features Found";
+				}
+				if(room['reservationStatus'] == false) {
+				    resourceIds[i] = room['_id'];
+				    console.log(resourceIds[i]);
 				}
 				if(room['reservations'].length > 0){
                                     reservations[i] = room['reservations'];
@@ -277,7 +286,8 @@
 			   reservations = JSON.parse(str2);
 			   //console.log(rooms);
 			   //console.log(reservations);
-
+			   
+                           
 			   calendarEl = document.getElementById('calendar');
 
    			   calendar = new FullCalendar.Calendar(calendarEl, {
@@ -317,16 +327,16 @@
 	   			minTime: '6:00',
 	   			maxTime: '25:00',
 	   			slotDuration: '00:30:00',
-	   			selectOverlap: false,
+	   			selectOverlap: false,				
 	   			selectConstraint: 'businessHours',
 	   			nowIndicator: true,
 	   			resourceColumns: [{ labelText: 'Rooms', field: 'title'}, { labelText: 'Occupancy', field: 'capacity'}],
 	   			aspectRatio: 1.5,
 	   			select: function(info) {
-		  			start = info.startStr;
+					start = info.startStr;
 		 			end = info.endStr;
-		 			room_id = info.resource.id;
-	   			},
+					room_id = info.resource.id;
+			  	},
 	   			resourceRender: function(info) {
 
 		   			var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
@@ -335,6 +345,12 @@
 			  			trigger: 'hover',
 			  			container: 'body',
 		   			});
+					
+					rooms.forEach( room => {
+						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue) {
+							
+						}
+					 
 		   			{% if admin %}
 		   			var roomUpdatebtn = document.createElement("BUTTON");
 			   			roomUpdatebtn.textContent = "Edit Room";
@@ -374,6 +390,7 @@
 		   			{% endif %} },
 	  			eventRender: function(info) {
 		   			{% if admin %}
+					info.el.querySelector('.fc-title.fc-sticky').style = "cursor: pointer;";
 		   			var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
 			  			title: "Click here to cancel this reservation",
 			  			placement: 'top',
@@ -390,7 +407,7 @@
 							if(a == true) {
 								axios
 									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
-									.then(location.reload())
+									.then()
 									.catch( error => console.log(error));
 							} else {
 								return false;}
@@ -400,7 +417,7 @@
 					})
 					{% endif %}
 				}
-			});
+			});}
 			calendar.render();
 	   		})
 	   		.catch(err => console.log(err))
