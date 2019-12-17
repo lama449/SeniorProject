@@ -40,6 +40,24 @@
           <button class="submitbtn" @click.prevent="submitUpdate()">Submit Update</button>
         
 	</div>
+	<div class="secondary-content container" v-else>
+          <table class="table">
+            <tr>
+              <th>Date Submitted</th>
+              <th>Building Name</th>
+              <th>Room Name and Number</th>
+              <th>Description</th>
+              <th>Status</th>
+            </tr>
+	    <tr>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+	      <td></td>
+	    </tr>
+	  </table>
+	</div>
       </div>
   {% include 'footer.html' %}
   <script>

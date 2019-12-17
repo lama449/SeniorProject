@@ -51,7 +51,7 @@
           </select></td>
           <!-- Add Features -->
           <td><input type="text" name="newFeature" id="feature" value="TV"></td>
-          <td><button type="button" class="button" onclick="addFeature()">Add Feature</button></td>
+          <td><button type="button" class="btn" style="padding: 10px; width: 100%" onclick="addFeature()">Add Feature</button></td>
           </tr>
 
           <tr><td colspan="2">
@@ -59,7 +59,7 @@
             <option v-for="group in f_groups" v-bind:value="group._id">[[ group.name ]]</option>
           </select></td>
           
-          <td><button @click.prevent="submitInfo()" id="submitButton" class="button">Submit</button></td>
+          <td><button @click.prevent="submitInfo()" id="submitButton" class="btn" style="padding: 10px; width: 100%">Submit</button></td>
           </tr>
         </table class> 
         </form>

@@ -34,7 +34,7 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 			<br>
-			<a class="button" id="gbBtn" style="text-align: center; margin: 0 auto;" v-bind:href="goBackBtn()">Go Back</a>
+			<a class="btn" id="gbBtn" style="text-align: center; margin: 0 auto; padding: 10px; width: 8%;" v-bind:href="goBackBtn()">Go Back</a>
 			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page</h1>
             <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
 		</div>
@@ -133,7 +133,7 @@
 		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="display:none;"> Save Building Information </button>
 		{% endif %}
 
-		<div class="errorbox" v-for="e in error">[[e]]</div>
+		<div class="errorbox" style="width:80%; margin: auto;" v-for="e in error">[[e]]</div>
 
 		{% if session.get('user') %}
 		<div id="calendar">
@@ -220,7 +220,10 @@
 					//.then(res => console.log(res.data._id))
 					.then(res => {
 						if ("err" in res.data) {
-						    this.error = res.data.err;
+						    this.error = res.data.err ;
+						    if(this.error[0] == "You do not have the permissions to create a reservation.") {
+							    this.error[1] = "Please contact this facility's admin to get permission to reserve this room.";
+						    }
                         			} else if("_id" in res.data){
 			                            location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;
 						    this.error = [];
@@ -239,7 +242,7 @@
 	   var end;
 	   var reservations;
 	   var rooms;
-	   var resourceIds;
+	   var notPublic;
 	   var room_id;
 
 	    axios
@@ -247,7 +250,7 @@
 		   .then(res => {
 			   rooms = [];
 			   reservations = [];
-			   resourceIds = [];
+			   notPublic = [];
 			   var temp;
 			   var i = 0;
 			   var j = 0;
@@ -258,8 +261,8 @@
 				    room['attributes'] = "No Features Found";
 				}
 				if(room['reservationStatus'] == false) {
-				    resourceIds[i] = room['_id'];
-				    console.log(resourceIds[i]);
+				    notPublic[i] = room['_id'];
+				    //console.log(resourceIds[i]);
 				}
 				if(room['reservations'].length > 0){
                                     reservations[i] = room['reservations'];
@@ -287,7 +290,23 @@
 			   //console.log(rooms);
 			   //console.log(reservations);
 			   
-               document.addEventListener.('DOMContentLoaded', function(){            
+//                           reservations.forEach( r => {
+//				notPublic.forEach( np => {
+//					console.log(r[0].resourceId);
+//					console.log(np);
+//					if(r[0].resourceId == np)
+//					{
+//						str3 = JSON.stringify(reservations);
+//						str3[reservations.length].id = reservations.length;
+//						str3[reservations.length].resourceId = r.resourceId;
+//						console.log(str3[reservations.length]);		
+//						str3.title = "Cannot Reserve";
+//						str3.start = "1999-12-30";
+//						reservations[reservations.length] = JSON.parse(str3);
+//							 
+//					}
+//				});
+//			   });
 			   calendarEl = document.getElementById('calendar');
 
    			   calendar = new FullCalendar.Calendar(calendarEl, {
@@ -383,14 +402,15 @@
 					  })
 		   			}
 		   			{% endif %} },
-	  			eventRender: function(info) {
-		   			{% if admin %}
+	  			eventRender: function(info) {					
+					{% if admin %}
 					info.el.querySelector('.fc-title.fc-sticky').style = "cursor: pointer;";
 		   			var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
 			  			title: "Click here to cancel this reservation",
 			  			placement: 'top',
 			  			trigger: 'hover',
-			  			container: 'body'})
+			  			container: 'body'
+					})
 			   			{% endif %}
 				},
 	   			eventClick: function(info) {
@@ -402,7 +422,7 @@
 							if(a == true) {
 								axios
 									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
-									.then()
+									.then(location.reload())
 									.catch( error => console.log(error));
 							} else {
 								return false;}
@@ -412,7 +432,7 @@
 					})
 					{% endif %}
 				}
-			}); })
+			}); 
 			calendar.render();
 	   		})
 	   		.catch(err => console.log(err))

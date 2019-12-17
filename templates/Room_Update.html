@@ -16,34 +16,62 @@
         <form>
             <center><h1>Update Rooms</h1></center>
 
+
+          <table class = "table class">
+          <tr> </tr>
+
+
           <!--Room Information -->
-          <label for="name">Room Name (Optional):</label>
-          <input type="text" name="roomName" id ="name" v-model="roomName">
+          <tr>
+          <td><label for="name">Room Name (Optional):</label></td>
+          <td><input type="text" name="roomName" id ="name" v-model="roomName" class="full-width"></td>
+          </tr>
 
-          <label for="roomNum">Room Number:</label>
-          <input type="text" name="roomNumber" id ="roomNum" v-model="roomNum" required>
+          <tr>
+          <td> <label for="roomNum">Room Number:</label></td>
+          <td><input type="text" name="roomNumber" id ="roomNum" v-model="roomNum" required class="full-width"></td>
+          </tr>
 
-          <label for="roomCap">Room Capacity:</label>
-          <input type="number" name="Room Capacity" id ="roomCap" v-model="roomCap" required>
+          <tr>
+          <td><label for="roomCap">Room Capacity:</label> </td>
+          <td><input type="number" name="Room Capacity" id ="roomCap" v-model="roomCap" required class="full-width"></td>
+          </tr>
 
-          <p>Click the button to add an option at the end of the list.
-            <br>  Control+click (command on mac) to select multiple features.
-          </p>
-          <label for="atSelect">Attributes:</label>
+        </table class>
+
+          <table class = "table class">
+
+          <tr>
+          <td colspan="3">
+            <p>Click the button to add an option at the end of the list.
+              <br>  Control+click (command on mac) to select multiple features.
+            </p></td>
+          </tr>
+          
+          <tr>
+
+          <td><p>Which attributes does this room have:</p>
           <select id="atSelect" size="8" multiple v-model="atSelect">
               <option v-for="attribute in f_attributes" v-bind:value="attribute">[[attribute]]</option>
-          </select>
+          </select> </td>
 
-          <input type="text" name="newFeature" id="feature">
+          <td colspan="2">
+            <input type="text" name="newFeature" id="feature" class="full-width">
 
-          <button type="button" class="button" onclick="addFeature()">Add Attribute</button>
+            <button type="button" class="btn full-width" onclick="addFeature()">Add Attribute</button>
+          </td>
+          </tr>
 
-          <label for="groupSelect">Groups:</label>
-          <select id="groupSelect" size="8" multiple v-model="groupSelect">
-            <option v-for="group in f_groups" v-bind:value="group._id">[[group.name]]</option>
-          </select>
+          <tr>
+            <td><p>Which groups have access to this room?</p><select id="groupSelect" size="8" multiple v-model="groupSelect">
+                <option v-for="group in f_groups" v-bind:value="group._id">[[group.name]]</option>
+              </select>
+            </td>
 
-          <input id="button1" type="submit" class="button" @click.prevent="submitInfo()">
+          <td><input id="button1" type="submit" class="btn full-width" @click.prevent="submitInfo()"></td>
+          </tr>
+
+          </table class>
 
         </form>
     </div>

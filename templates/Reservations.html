@@ -58,7 +58,29 @@
 			<td><a style="margin: auto" class="btn" v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)" >More Information</a></td>
                     </tr>
                 </table>
-            </div>	
+            </div>
+	    <div v-else>
+		<table class="table">
+		    <tr>		
+                       <th>Start Date</th>
+                       <th>End Date </th>
+                       <th>Room Name </th>
+                       <th>Building Name </th>
+                       <th>Facility Name </th>
+                       <th>Maintenance Request</th>			
+                       <th>More Information</th>
+		    </tr>
+		    <tr>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		    </tr>
+		</table>
+	    </div>	
 	</div>	
 
     {% include 'footer.html' %}
