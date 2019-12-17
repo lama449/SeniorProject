@@ -1,22 +1,104 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Penguin's Building Management</title>
+	<meta charset="utf-8">
+	<title>Penguin's Building Management</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
 </head>
 
 <body>
 	{% include 'header.html' %}
-	<div class="content">
-		<div class="center-text">
-			<h1>Building Scheduler 'Prototype'</h1>
-			<p>Click the Schedule button at the top left to get started!</p>
-			<p>OR</p>
-			<p>Click the Login button at the top right to login to an account!</p>
+	<div class="content" id="app">
+		<div class="primary-content center-text container">
+			<div class="errorbox" v-for="e in error">[[e]]</div>
+			<h1 class="">Search for a Facility</h1>
+			<form>
+				<div class="form-group">
+					<label for="name">Search for a Facility by name</label>
+					<input type="text" name="q" id="homepage--facility-query" class="full-width" placeholder="Search for a Facility" v-model="query">
+				</div>
+				<div class="form-group">
+					<label for="zip">Zip Code</label>
+					<input type="text" name="zip" id="homepage--facility-zip" class="full-width" placeholder="Zip Code" v-model="zip_code">
+				</div>
+				<button @click.prevent="getFacilityList()" style="display: block; width: 18%" class="btn">Submit</button>
+			</form>
+		</div>
+		{% if session.get('user') %}
+		<h6><center>OR</center></h6>
+		<div class="center-text container">
+			<div class="form-group">
+				<label for="code">Search for a Facility by Access Code</label>
+				<input type="text" name="code" style="margin: 0 auto" id="homepage--access-code" class="full-width" placeholder="##########" v-model="access_code">
+			</div>
+			<button @click.prevent="getFacilityCode()" style="display: block; width: 18%" class="btn">Submit</button>
+		</div>
+		{% endif %}
+		<div v-if="facilities.length" class="secondary-content container">
+			<table class="table">
+				<tr>
+					<th>Facility</th>
+					<th>Location</th>
+				</tr>
+				<tr v-for="facility in facilities">
+					<td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.name ]]</a></td>
+					<td><a v-bind:href="getFacilityURL(facility._id)">[[ facility.address.city ]], [[ facility.address.state ]] </a></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	{% include 'footer.html' %}
+	
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+	<script>
+		var vm = new Vue({
+			el: "#app",
+			data: {
+				query: "",
+				zip_code: "",
+				access_code: "",
+				facilities: [],
+				facility: {},
+				error: []
+			},
+			delimiters: ["[[", "]]"],
+			methods: {
+				getFacilityList: function() {
+					axios
+						.get("{{ url_for('facility') }}", {
+							params: {
+								q: this.query,
+								zip: this.zip_code
+							}
+						})
+						.then(res => {
+							this.facilities = res.data
+							this.error = []
+						})
+						.catch(error => console.log(error))
+				},
+				getFacilityURL: function(facility_id) {
+					return "/facility/" + facility_id
+				},
+				getFacilityCode: function() {
+					axios
+							.post("{{ url_for('facility') }}", {
+								access_code: this.access_code
+							})
+							.then(res => { this.facility = res.data
+								if ("err" in res.data && res.data.err.length) {
+									this.error = res.data.err
+								} else {
+									this.error = []
+									location.href = ("/facility/" + this.facility._id);
+								}
+							})
+							.catch(error => console.log(error))
+				}
+			}
+		})
+	</script>
 </body>
 </html>

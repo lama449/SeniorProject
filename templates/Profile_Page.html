@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="content" id="app">
+        {% if session.get('user') %}
+        <div class="primary-content container">
+    			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Profile</h1>
+    			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">View, make changes, or delete your profile.</h6>
+    		</div>
+        <div class="errorbox" v-for="e in error">[[e]]</div>
+        <div style="padding-left: 10em; padding-bottom: 5px;">
+            <br>
+            <h6><b><label for="fname" style="display: inline-block; width: 200px">First Name:</label></b><input type="text" style="margin-left: 5em" name="first_name" id="fname" v-model:placeholder="first_name"><br>
+            <b><label for="lname" style="display: inline-block; width: 200px">Last Name:</label></b><input type="text" style="margin-left: 5em" name="last_name" id="lname" v-model:placeholder="last_name"><br>
+            <b><label for="email" style="display: inline-block; width: 200px">Email:</label></b><input type="email" style="margin-left: 5em" name="email" id="email" v-model:placeholder="email"><br>
+            <b><label for="password" style="display: inline-block; width: 200px">Password: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 25%" onclick="document.getElementById('modalwrapper').style.display='block'" id="password">Click here to change password</button><br>
+            <div id = "modalwrapper" class = "modal">
+                <form class="modal-content animate">
+                    <div class="container" style="background-color: white">
+                        <span onclick="document.getElementById('modalwrapper').style.display='none'; error:[];" class="close" title="Close Popup">&times;</span>
+                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Password</h1>
+                    </div>
+                    <div class="container" style="background-color: white">
+                        <div class="errorbox" v-for="e2 in error2">[[e2]]</div>
+                        <input type="password" class = "full-width" placeholder="Enter Old Password" name = "opsw" maxlength="240" v-model = "opsw">
+                        <input type="password" class = "full-width" placeholder="Enter New Password" name = "npsw" maxlength="240" v-model = "npsw">
+                        <input type="password" class = "full-width" placeholder="Confirm New Password" name = "cpsw" maxlength="240" v-model = "cpsw">
+                        <button type="submit"  class="btn" style="margin:0 auto; display: block; width: 40%" @click.prevent="checkPassword()">Change Password</button>
+                    </div>
+                </form>
+            </div>
+            <b><label for="question" style="adisplay: inline-block; width: 200px">Security Question: </label></b><button type="submit" class="btn" style="padding: 12px; margin-left: 5em; width: 25%" onclick="document.getElementById('modalwrapper2').style.display='block';" id="question">Click here to change security details</button><br></h6>
+            <div id = "modalwrapper2" class = "modal">
+                <form class="modal-content animate">
+                    <div class="container" style="background-color: white">
+                        <span onclick="document.getElementById('modalwrapper2').style.display='none'; error: [];" class="close" title="Close Popup">&times;</span>
+                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Change Security Details</h1>
+                    </div>
+                    <div class="container" style="background-color: white">
+                        <div class="errorbox" v-for="e3 in error3">[[e3]]</div>
+                        <select class="full-width" v-model="question">
+                            <option value="What is your favorite book?">What is your favorite book?</option>
+                            <option value="What is the name of the road you grew up on?">What is the name of the road you grew up on?</option>
+                            <option value="What is your mother’s maiden name?">What is your mother’s maiden name?</option>
+                            <option value="What was the name of your first/current/favorite pet?">What was the name of your first/current/favorite pet?</option>
+                            <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
+                            <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                            <option value="Where did you go to high school/college?">Where did you go to high school/college?</option>
+                            <option value="What is your favorite food?">What is your favorite food?</option>
+                            <option value="What city were you born in?">What city were you born in?</option>
+                            <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
+                        </select>
+                        <input type="password" class ="full-width" name="answer" id="oanswer" placeholder="Enter old answer" v-model="oanswer">
+                        <input type="password" class ="full-width" name="answer" id="nanswer" placeholder="Enter new answer"v-model="nanswer">
+                        <button type="submit" class="btn" style="margin:0 auto; display: block; width: 40%" @click.prevent="checkAnswer()">Confirm Changes</button>
+                    </div>
+                </form>
+                </div><p></p>
+                <button type="submit" class="btn" style="padding: 10px; margin-left: 20%; width: 20%" @click.prevent="putDetails()">Save changes</button>
+                <button style="padding: 10px; margin-left: 5%; width: 20%" type="submit" class="dbtn" onclick="document.getElementById('modalwrapper3').style.display='block'" id="delete">Delete Account</button>
+                <div id = "modalwrapper3" class = "modal">
+                    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                            <span onclick="document.getElementById('modalwrapper3').style.display='none'; error:[];" class="close" title="Close Popup">&times;</span>
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Account?</h1>
+                            <h6><center>Once you delete your account, all of your information will be removed from the Penguin's Building Management servers. All account data and information will no longer be available after deletion.</center></h6>
+                            <h6><center>Are you sure you would like to delete your account?</center></h6>
+                            <button type="submit"  class="dbtn" style="margin: 0px auto; display: block; padding: 10px; width: 40%" @click.prevent="deleteAccount()">Permanently Delete Account</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+        {% else %}
+        <div class="container center-text">
+            <h4>Unable to view content</h4>
+            <h6>Please log in to view contents on this page</h6>
+        </div>
+        {% endif %}
+    </div>
+    {% include 'footer.html' %}
+
+</body>
+
+<script>
+    var vc = new Vue({
+        el: "#app",
+        data: {
+            first_name: "",
+            last_name: "",
+            email: "",
+            opsw: "",
+            npsw: "",
+            cpsw: "",
+            question: "",
+            oanswer: "",
+            nanswer: '',
+            error: [],
+            error2: [],
+            error3: []
+
+        },
+        mounted(){
+            axios
+                .get("/api/users")
+                .then(res => {
+                    this.first_name = res.data.first_name
+                    this.last_name = res.data.last_name
+                    this.email = res.data.email
+                    this.question = res.data.question
+                })
+                .catch(error => console.log(error))
+        },
+        delimiters: ["[[", "]]"],
+        methods: {
+            putDetails: function () {
+                axios
+                    .put("{{ url_for('user') }}", {
+                        first_name: this.first_name,
+                        last_name: this.last_name,
+                        email: this.email,
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            checkPassword: function () {
+                axios
+                    .put("{{ url_for('user') }}", {
+                        opsw: this.opsw,
+                        npsw: this.npsw,
+                        cpsw: this.cpsw
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error2 = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            checkAnswer: function () {
+                axios
+                    .put("{{ url_for('user') }}", {
+                        question: this.question,
+                        oanswer: this.oanswer,
+                        nanswer: this.nanswer
+                    })
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            window.location.reload(false);
+                        } else {
+                            this.error3 = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            },
+            deleteAccount: function () {
+                axios
+                    .delete("/api/users")
+                    .then(res => {
+                        if ("msg" in res.data && res.data.msg.length) {
+                            location.href = ("{{ url_for('home')}}")
+                        } else {
+                            this.error = res.data.err;
+                        }
+                    })
+                    .catch(error => console.log(error))
+            }
+        }
+    })
+
+</script>
+</html>

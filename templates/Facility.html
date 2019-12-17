@@ -6,22 +6,8 @@
 	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
 	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
 
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
-
-
-	<link href="{{url_for('static', filename='js/fullcalendar/core/main.css')}}" rel='stylesheet' />
-	<link href="{{url_for('static', filename='js/fullcalendar/timeline/main.css')}}" rel='stylesheet' />
-	<link href="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.css')}}" rel='stylesheet' />
-
-	<script src="{{url_for('static', filename='js/fullcalendar/core/main.js')}}"></script>
-	<script src="{{url_for('static', filename='js/fullcalendar/timeline/main.js')}}"></script>
-	<script src="{{url_for('static', filename='js/fullcalendar/resource-common/main.js')}}"></script>
-	<script src="{{url_for('static', filename='js/fullcalendar/resource-timeline/main.js')}}"></script>
-	<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
-
-	<script src="{{url_for('static', filename='js/popper/dist/umd/popper.min.js')}}"></script>
-	<script src="{{url_for('static', filename='js/tooltip/dist/umd/tooltip.min.js')}}"></script>
 
 </head>
 
@@ -34,33 +20,30 @@
 		<!-- Center Text -->
 		<div class="primary-content container">
 			<br>
-			<a class="btn" id="gbBtn" style="text-align: center; margin: 0 auto; padding: 10px; width: 8%;" v-bind:href="goBackBtn()">Go Back</a>
-			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Buildings Page</h1>
-            <h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;">Select the timeslot below (by clicking and dragging) and click the submit button to create a reservation for that time slot.</h6>
+			<a class="btn" id="gbBtn" style="text-align: center; margin: 0 auto; width: 8%; padding: 10px;" v-bind:href="goBackBtn()">Go Back</a>
+
+            <h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Facility Page</h1>
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the building that you would like to view in the table below. If you would like to add a building to this facility please click the add button. If you would like to edit this facility please click the edit button and save the changes.</h6>
 		</div>
 
-		<!-- Table for Building & Calendar -->
-		<div class="secondary-content container">
-
-	        <div style="text-align: center">
+        <!-- Table -->
+        <div class="secondary-content container">
+            <div style="text-align: center">
 		<table style="margin:auto">
- 		<tr>
-			<td><label for="name">Building Name:</label></td>
-			<td><input type="text" name="buildingName" id="name" v-bind:disabled="isDisabled"  v-model="building.name"></td>
-		    	<td><label for="phone">Building Phone Number:</label></td>
-			<td><input type="text" name="buildingPhone" id="phone" v-bind:disabled="isDisabled" v-model="building.phone"></td>
-			<td><label for="descrip">Building Description:</label></td>
-			<td><input type="text" name="buildingDescrip" id="descrip" v-bind:disabled="isDisabled" v-model="building.description"></td></tr>
+    	    	<tr>
+			<td><label for="name">Facility Name:</label></td>
+			<td><input type="text" name="facilityName" id="name" v-bind:disabled="isDisabled"  v-model="facility.name"></td>
+		    	<td><label for="phone">Facility Phone Number:</label></td>
+			<td><input type="text" name="facilityPhone" id="phone" v-bind:disabled="isDisabled" v-model="facility.phone"></td>
+			<td><label for="descrip">Facility Description:</label></td>
+			<td><input type="text" name="facilityDescrip" id="descrip" v-bind:disabled="isDisabled" v-model="facility.description"></td></tr>
 		<tr>
-			<td><label for="addressL1">Building Address Line 1:</label></td>
-			<td><input type="text" name="buildingAddressL1" id="addressL1" v-bind:disabled="isDisabled" v-model="building.address.address_L1"></td>
-			<td><label for="addressL2">Building Address Line 2:</label></td>
-			<td><input type="text" name="buildingAddressL2" id="addressL2" v-bind:disabled="isDisabled" v-model="building.address.address_L2"></td>
-			<td><label for="addressCity">Building Address City:</label></td>
-			<td><input type="text" name="buildingAddressCity" id="addressCity" v-bind:disabled="isDisabled" v-model="building.address.city"></td></tr>
-		<tr>
-			<td><label for="addressState">Building Address State:</label></td>
-			<td><select name= "state" id="stateSelect" required v-bind:disabled="isDisabled" v-model="building.address.state">
+			<td><label for="addressL1">Facility Address Line 1:</label></td>
+			<td><input type="text" name="facilityAddressL1" id="addressL1" v-bind:disabled="isDisabled" v-model="facility.address.address_L1"></td>
+			<td><label for="addressL2">Facility Address Line 2:</label></td>
+			<td><input type="text" name="facilityAddressL2" id="addressL2" v-bind:disabled="isDisabled" v-model="facility.address.address_L2"></td>
+			<td><label for="addressState">Facility Address State:</label></td>
+			<td><select name= "state" id="stateSelect" required v-bind:disabled="isDisabled" v-model="facility.address.state">
 		            <option disabled selected value="">--Please choose an option--</option>
 		            <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option>
 		            <option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option>
@@ -75,9 +58,11 @@
 			   <option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option>
 
 	                   <option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
-	                   <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></td>
-			<td><label for="addressCountry">Building Country:</label></td>
-			<td><select name="country" id="countrySelect" required v-bind:disabled="isDisabled" v-model="building.address.country">
+	                   <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></td></tr>
+
+		<tr>
+			<td><label for="addressCountry">Facility Country:</label></td>
+			<td><select name="country" id="countrySelect" required v-bind:disabled="isDisabled" v-model="facility.address.country">
             <option value="">--Please choose an option--</option><option value="AFG">Afghanistan</option><option value="ALA">Åland Islands</option><option value="ALB">Albania</option>
             <option value="DZA">Algeria</option><option value="ASM">American Samoa</option><option value="AND">Andorra</option><option value="AGO">Angola</option>
             <option value="AIA">Anguilla</option><option value="ATA">Antarctica</option><option value="ATG">Antigua and Barbuda</option><option value="ARG">Argentina</option>
@@ -125,33 +110,91 @@
             <option value="TTO">Trinidad and Tobago</option><option value="TUN">Tunisia</option><option value="TUR">Turkey</option><option value="TKM">Turkmenistan</option><option value="TCA">Turks and Caicos Islands</option><option value="TUV">Tuvalu</option><option value="UGA">Uganda</option><option value="UKR">Ukraine</option><option value="ARE">United Arab Emirates</option>
             <option value="GBR">United Kingdom</option><option value="USA">United States</option><option value="UMI">United States Minor Outlying Islands</option><option value="URY">Uruguay</option><option value="UZB">Uzbekistan</option><option value="VUT">Vanuatu</option><option value="VEN">Venezuela, Bolivarian Republic of</option><option value="VNM">Viet Nam</option><option value="VGB">Virgin Islands, British</option>
             <option value="VIR">Virgin Islands, U.S.</option><option value="WLF">Wallis and Futuna</option><option value="ESH">Western Sahara</option><option value="YEM">Yemen</option><option value="ZMB">Zambia</option><option value="ZWE">Zimbabwe</option></select> </td>
-			<td><label for="zip">Building Zip Code:</label></td>
-                        <td><input type="text" name="buidlingZip" id="zip" v-bind:disabled="isDisabled" v-model="building.address.zip"></td></tr>
+			<td><label for="zip">Facility Zip Code:</label></td>
+                        <td><input type="text" name="facilityZip" id="zip" v-bind:disabled="isDisabled" v-model="facility.address.zip"></td>
+			<td><label for="private">Facility Private:</label></td>
+			<td><select name="private" id="privateSelect" required v-bind:disabled="isDisabled" v-model="facility.private">
+				<option disabled selectedvalue=""> --Please choose an option-- </option>
+				<option value="true">Private</option>
+				<option value="false">Public</option></select></td>
+		   <tr>
+			<td></td>
+			<td></td>
+			<td><label for="accessCode">Facility Access Code:</label></td>
+		       	<td><input type="text" name="facilityAccess" id="accessCode" disabled="true" v-model="facility.access_code"></td>
+			<td></td></tr>
 		</table>
-		{% if admin %}
-		<button class="submitbtn" id="editbtn" v-on:click="editBtn()"> Edit Building Information </button>
-		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="display:none;"> Save Building Information </button>
-		{% endif %}
-
-		<div class="errorbox" style="width:80%; margin: auto;" v-for="e in error">[[e]]</div>
-
-		{% if session.get('user') %}
-		<div id="calendar">
+        {% if admin %}
+		<button class="submitbtn" id="editbtn" v-on:click="editBtn()" style="display:inline-block;"> Edit Facility Information </button>
+		<button class="submitbtn" id="savebtn" v-on:click="saveBtn()" style="cursor: default; display:none;"> Save Facility Information </button>
+		<button class="submitbtn" style="display:inline-block;" @click.prevent="getMaintenanceURL()"> Go to Maintenance Page </button>
+		<button class="submitbtn" style="display:inline-block;" @click.prevent="getGroupsURL()"> Edit Groups </button>
+	{% endif %}
+        </div>
+            <div v-if="buildings.length">
+			    <table class="table">
+                    <tr>
+                        <th>Building</th>
+                        <th>Location</th>
+                        <th>Phone Number</th>
 			{% if admin %}
-			<button class="newroombtn" v-on:click="getRoomCreationURL()"> Add New Room </button>
+			<th>Delete?</th>
 			{% endif %}
-			<button class="submitbtn" v-on:click="submitReservation()"> Submit Time Slot </button>
-		</div>
-		{% else %}
-		<div>
-			<h6 style="text-align: center;"> Please sign in to select a time slot and view the calendar. </h6>
-		</div>
-		{% endif %}
+                    </tr>
+                    <tr v-for="building in buildings">
+                        <td><a v-bind:href="getBuildingURL(building._id)">[[ building.name ]]</a></td>
+                        <td v-if="building.address.address_L2 != ''"><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]] [[ building.address.address_L2]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
+			<td v-else><a v-bind:href="getBuildingURL(building._id)">[[ building.address.address_L1]], [[ building.address.city ]], [[ building.address.state ]] </a></td>
 
+                        <td style="text-align: center"><a v-bind:href="getTelephone(building.phone)">[[ building.phone ]]</a></td>
+			{% if admin %}
+                        <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="buildingToBeDeleted = building"></td>
+
+			{% endif %}
+                    </tr>
+                </table>
+	    </div>
+	    <div v-else>
+                <table class="table">
+                    <tr>
+                        <th>Building</th>
+                        <th>Location</th>
+                        <th>Phone Number</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
             </div>
-		</div>
-
-	</div>
+            <div id ="modalwrapper" class = "modal">
+                 <form class="modal-content animate">
+                     <div class="container" style="background-color: white">
+                         <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                         <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Building?</h1>
+                         <h6><center>All data related to this building will be removed after deletion.</center></h6>
+                         <h6><center>Are you sure you would like to delete this building?</center></h6>
+                         <button type="submit"  class="dbtn" style="display: block; margin: 0 auto; width: 30%; padding: 10px;" @click.prevent="deleteBuilding()">Delete Building</button>
+                     </div>
+                 </form>
+             </div>
+		<div v-if="privateNonMember == true" id ="modalwrapper2" class = "modal" style="display: block; overflow: hidden;" >
+		    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                           <span @click.prevent="goToHomePage()" class="close" title="Close Popup">&times;</span>
+                           <h1 style="text-align: center; background-color: white; padding-top: 25px">Unauthorized Access</h1>
+		   	   <h6><center> You do not have the permission to <br> view this facility. </center></h6>
+                           <h6><center> Please click the button below to request access to this page. </center></h6>
+                           <button type="submit" class="dbtn" style="margin: 0 auto; display: block; padding: 10px; width: 40%" @click.prevent="goToHomePage()"> Request Access </button>
+                    </form>
+		</div>		
+           </div>        
+	{% if admin %}
+	<button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Create A New Building </button>
+	{% endif %}
+        </div>
+    </div>
 
     {% include 'footer.html' %}
 
@@ -160,283 +203,97 @@
 	var vc = new Vue({
             el: "#app",
             data: {
-                isDisabled: true,
-				b_id: {{ b_id | tojson }},
-				f_id: {{ f_id | tojson }},
-                building: [],
-		error: []
+                f_id: {{ f_id | tojson }},
+		        isDisabled: true,
+                facility: [],
+                buildings:[],
+		privateNonMember: {{ privateNonMember | tojson }},
+		noFacility: {{ noFacility | tojson }},
+                buildingToBeDeleted: {}
             },
             mounted(){
-                 axios
-			.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id )
-	  	        .then(res => { this.building = res.data })
-	                .catch(error => console.log(error))
+                const requestBuildingURL = axios.get("/api/facilities/" + this.f_id + "/buildings");
+                const requestFacilityURL = axios.get("/api/facilities/" + this.f_id);
+
+                axios.all([requestBuildingURL, requestFacilityURL])
+	  	            .then(axios.spread((res1, res2) => {
+                       	    console.log(this.privateNonMember + " " + this.noFacility);
+			    this.buildings = res1.data;
+		            this.facility = res2.data;
+			    this.facility.private = this.facility.private.toString();
+                    }))
+                    .catch(error => console.log(error))
             },
             delimiters: ["[[", "]]"],
             methods: {
-			editBtn: function() {
-		  		document.getElementById("savebtn").style.display = "inline";
-	                	document.getElementById("editbtn").style.display = "none";
-		    		this.isDisabled = false;
-		    		return
-			},
-			saveBtn: function() {
-	 	    		document.getElementById("savebtn").style.display = "none";
-		                document.getElementById("editbtn").style.display = "inline";
-	 	    		this.isDisabled = true;
+		goToHomePage: function() {
+		    location.href="/home"
+		    return
+		},
+                getBuildingURL: function(b_id) {
+                    return "/facility/" + this.f_id + "/building/" + b_id		    
+                },
+		getMaintenanceURL: function(){
+		    location.href="/facility/" + this.f_id + "/maintenance"
+		    return
+		},
+		getGroupsURL: function(){
+		    location.href="/facility/" + this.f_id + "/groups"
+		    return
+		},
+		getTelephone: function(phone) {
+		    return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
+		},
+		getBuildingCreationURL: function() {
+		    location.href="/facility/" + this.f_id + "/building_creation"
+		    return
+		},
+		editBtn: function() {
+		    document.getElementById("savebtn").style.display = "inline-block";
+                    document.getElementById("editbtn").style.display = "none";
+		    this.isDisabled = false;
+		    return
+		},
+		goBackBtn: function(){
+				return "/home";
+		},
+		saveBtn: function() {
+	 	    document.getElementById("savebtn").style.display = "none";
+                    document.getElementById("editbtn").style.display = "inline-block";
+	 	    this.isDisabled = true;
 
-  		    		axios
-					.put("/api/facilities/" + this.f_id + "/buildings/" + this.b_id, {
-						name: this.building.name,
-						phone: this.building.phone,
-						description: this.building.description,
-						zip: this.building.zip,
-						address_L1: this.building.address.address_L1,
-						address_L2: this.building.address.address_L2,
-						city: this.building.address.city,
-						state: this.building.address.state,
-						country: this.building.address.country
-					})
-					.then( alert("Successfully updated building."))
-					.catch(error => console.log(error))
-		    		return
-			},
-			goBackBtn: function(){
-					return "/facility/" + this.f_id;
+  		    axios
+			.put("/api/facilities/" + this.f_id + "", {
+				name: this.facility.name,
+				phone: this.facility.phone,
+				description: this.facility.description,
+				zip: this.facility.address.zip,
+				address_L1: this.facility.address.address_L1,
+				address_L2: this.facility.address.address_L2,
+				city: this.facility.address.city,
+				state: this.facility.address.state,
+				country: this.facility.address.country,
+				private: this.facility.private
+			})
+			.then( alert("Successfully updated facility"))
+			.catch(error => console.log(error))
+		    return
+		},
+		deleteBuilding: function() {
 
-			},
-			getRoomCreationURL: function() {
-				 location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room_creation";
-		  	         return
-			},
-			submitReservation: function() {
-				//console.log(start);
-				//console.log(end);
-				axios
-					.post("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + room_id + "/reservations",{
-						start_time: start,
-						end_time: end
-					})
-					//.then(res => console.log(res.data._id))
-					.then(res => {
-						if ("err" in res.data) {
-						    this.error = res.data.err ;
-						    if(this.error[0] == "You do not have the permissions to create a reservation.") {
-							    this.error[1] = "Please contact this facility's admin to get permission to reserve this room.";
-						    }
-                        			} else if("_id" in res.data){
-			                            location.href="/facility/" + this.f_id + "/building/" + this.b_id + "/room/" + room_id + "/reservation/" + res.data._id;
-						    this.error = [];
-			                        }
-			                 })
-					.catch(err => console.log(err))
-			}
+            var b_name = this.buildingToBeDeleted.name
+            var b_id = this.buildingToBeDeleted._id
+		    	axios
+				.delete("/api/facilities/" + this.f_id + "/buildings/" + b_id)
+				.then( function(b_name){
+					location.reload();
+				})
+				.catch(error => console.log(error))
 		}
-	});
+	    }
+        })
+    </script>
 
-	   var f_id = {{ f_id | tojson }};
-	   var b_id = {{ b_id | tojson }};
-	   var calendarE1;
-	   var calendar;
-	   var start;
-	   var end;
-	   var reservations;
-	   var rooms;
-	   var notPublic;
-	   var room_id;
 
-	    axios
-		   .get("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms")
-		   .then(res => {
-			   rooms = [];
-			   reservations = [];
-			   notPublic = [];
-			   var temp;
-			   var i = 0;
-			   var j = 0;
-			   rooms = res.data;
-			   rooms.forEach( room => {
-				room['name'] = room['name'] + " " + room['number'];
-				if(room['attributes'].length == 0) {
-				    room['attributes'] = "No Features Found";
-				}
-				if(room['reservationStatus'] == false) {
-				    notPublic[i] = room['_id'];
-				    //console.log(resourceIds[i]);
-				}
-				if(room['reservations'].length > 0){
-                                    reservations[i] = room['reservations'];
-				    j = 0;
-				    reservations[i].forEach( r => {
-                                    	reservations[i][j]['resourceId'] = (room['_id']);
-	                                reservations[i][j]['title'] = "Reserved";
-					j++;
-				    });
-				    i++;
-				}
-			   });
-
-			   str = JSON.stringify(rooms);
-			   str = str.replace(/\"_id\":/g, "\"id\":");
-			   str = str.replace(/\"name\":/g, "\"title\":");
-			   str = str.replace(/\"attributes":/g, "\"features\":");
-			   rooms = JSON.parse(str);
-
-			   str2 = JSON.stringify(reservations);
-			   str2 = str2.replace(/\"start_time":/g, "\"start\":");
-			   str2 = str2.replace(/\"end_time":/g, "\"end\":");
-			   str2 = str2.replace(/\"_id":/g, "\"id\":");
-			   reservations = JSON.parse(str2);
-			   //console.log(rooms);
-			   //console.log(reservations);
-			   
-//                           reservations.forEach( r => {
-//				notPublic.forEach( np => {
-//					console.log(r[0].resourceId);
-//					console.log(np);
-//					if(r[0].resourceId == np)
-//					{
-//						str3 = JSON.stringify(reservations);
-//						str3[reservations.length].id = reservations.length;
-//						str3[reservations.length].resourceId = r.resourceId;
-//						console.log(str3[reservations.length]);		
-//						str3.title = "Cannot Reserve";
-//						str3.start = "1999-12-30";
-//						reservations[reservations.length] = JSON.parse(str3);
-//							 
-//					}
-//				});
-//			   });
-			   calendarEl = document.getElementById('calendar');
-
-   			   calendar = new FullCalendar.Calendar(calendarEl, {
-	      		plugins: [ 'resourceTimeline', 'interaction' ],
-	   			header: {
-		   			left: 'today prev,next',
-		   			center: 'title',
-		   			right: ''
-	   			},
-	   			schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-	   			defaultView: 'resourceTimelineDay',
-	   			selectable: true,
-	   			height: 450,
-				timeZone: 'GMT',
-	   			resources: rooms,
-	   			eventSources: reservations,
-	 			eventBackgroundColor: 'red',
-
-	   			titleFormat: {
-		   			year: 'numeric',
-		   			month: 'short',
-		   			day: 'numeric',
-		   			weekday: 'long'
-	   			},
-	   			businessHours: [
-	   			{
-		   			daysOfWeek: [1,2,3,4,5],
-		   			startTime: '7:30',
-		   			endTime: '23:30'
-	   			},
-	   			{
-		   			daysOfWeek: [6,0],
-		   			startTime: '8:00',
-		   			endTime: '17:00'
-	   			}],
-	   			slotLabelFormat: { hour:'numeric', minute:'numeric'},
-	   			minTime: '6:00',
-	   			maxTime: '25:00',
-	   			slotDuration: '00:30:00',
-	   			selectOverlap: false,				
-	   			selectConstraint: 'businessHours',
-	   			nowIndicator: true,
-	   			resourceColumns: [{ labelText: 'Rooms', field: 'title'}, { labelText: 'Occupancy', field: 'capacity'}],
-	   			aspectRatio: 1.5,
-	   			select: function(info) {
-					start = info.startStr;
-		 			end = info.endStr;
-					room_id = info.resource.id;
-			  	},
-	   			resourceRender: function(info) {
-
-		   			var tooltip = new Tooltip(info.el.querySelector('.fc-cell-text'), {
-			  			title: "Features: " + info.resource.extendedProps.features,
-			  			placement: 'top',
-			  			trigger: 'hover',
-			  			container: 'body',
-		   			});
-										 
-		   			{% if admin %}
-		   			var roomUpdatebtn = document.createElement("BUTTON");
-			   			roomUpdatebtn.textContent = "Edit Room";
-			   			roomUpdatebtn.className = "updateroombtn";
-			   			roomUpdatebtn.onclick = function(){
-						rooms.forEach(room => {
-							if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
-								location.href="/facility/" + f_id + "/building/" + b_id + "/room/" + room.id;
-							}
-						})
-			   		}
-		   			var br = document.createElement("br");
-					info.el.querySelector('.fc-cell-text')
-			  			.appendChild(br);
-		   			info.el.querySelector('.fc-cell-text')
-			  			.appendChild(roomUpdatebtn);
-		   			var roomDeletebtn = document.createElement("BUTTON");
-			   			roomDeletebtn.textContent = "Delete Room";
-			   			roomDeletebtn.className = "updateroombtn";
-		   			info.el.querySelector('.fc-cell-text')
-						.appendChild(roomDeletebtn);
-		   			roomDeletebtn.onclick = function() {
-					//var room_name = this.buildingToBeDeleted.name;
-					  rooms.forEach(room => {
-						if(room.title == info.el.querySelector(".fc-cell-text").firstChild.nodeValue){
-							var a = confirm("Press okay to delete room: " + room.title + ". Press Cancel to close the window.");
-							if(a == true){
-								axios
-									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + room.id)
-									.then(location.reload())
-									.catch(error => console.log(error));
-							} else {
-								return false;}
-						}
-					  })
-		   			}
-		   			{% endif %} },
-	  			eventRender: function(info) {					
-					{% if admin %}
-					info.el.querySelector('.fc-title.fc-sticky').style = "cursor: pointer;";
-		   			var tooltip = new Tooltip(info.el.querySelector('.fc-title.fc-sticky'), {
-			  			title: "Click here to cancel this reservation",
-			  			placement: 'top',
-			  			trigger: 'hover',
-			  			container: 'body'
-					})
-			   			{% endif %}
-				},
-	   			eventClick: function(info) {
-					{% if admin %}
-					reservations.forEach( resv => {
-					  resv.forEach( r => {
-				  		if(info.event.id == r.id) {
-							var a = confirm("Press okay to delete this reservation for this reservation.")
-							if(a == true) {
-								axios
-									.delete("/api/facilities/" + f_id + "/buildings/" + b_id + "/rooms/" + r.resourceId + "/reservations/" + info.event.id)
-									.then(location.reload())
-									.catch( error => console.log(error));
-							} else {
-								return false;}
-						return
-						}
-			   		  })
-					})
-					{% endif %}
-				}
-			}); 
-			calendar.render();
-	   		})
-	   		.catch(err => console.log(err))
-
-    	</script>
-	</body>
+</body>
 </html>

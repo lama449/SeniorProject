@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Groups</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+    <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content" id="app">
+        <center><h1>Update Groups for Facility</h1></center>
+        <div class="errorbox" v-for="e in error">[[e]]</div>
+
+        <p>
+            Select a group to see a list of users who are in that group.
+        </p>
+        <p>
+            Select a group then click "Remove Group" to delete that group, which will remove all users from that group.
+        </p>
+        <p>
+            Type in a name for a group, then click "Add Group" to create a group with that name.
+        </p>
+        <p>
+            Select a user, then click "Remove User" to remove that user from the group that is selected.
+        </p>
+        <p>
+            Type in a user's email address, then click "Add User" to add that user to the selected.
+        </p>
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="group" id="groupInput" v-model="groupInput" class="full-width" placeholder="Name for a new group">
+                </td>
+                <td>
+                    <input type="text" name="users" id="group" v-model="userInput" class="full-width" placeholder="User's email address">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="addGroup()">Add Group</button>
+                </td>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="addUser()">Add User</button>
+                </td>
+            </tr>
+            <tr>
+                <td style="min-width:400px; padding-top: 2.5em">
+                    <label for="groupSelect">Select a group:</label>
+                </td>
+                <td style="min-width:400px; padding-top: 2.5em">
+                    <label for="userSelect">Users:</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <!--Group List and Options-->
+                    <select id="groupSelect" class="full-width" size="8" v-model="groupSelect" @change="getUsers()">
+                        <option v-for="group in groups" v-bind:value="group._id">[[ group.name ]]</option>
+                    </select>
+                </td>
+                <td>
+                    <!--User List and Options-->
+                    <select id="userSelect" class="full-width" size="8" v-model="userSelect">
+                        <option v-for="user in users" v-bind:value="user._id">[[ user.first_name ]] [[ user.last_name ]] ([[ user.email ]])</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="removeGroup()">Remove Group</button>
+                </td>
+                <td>
+                    <button type="button" class="btn full-width" @click.prevent="removeUser()">Remove User</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% include 'footer.html' %}
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                f_id: {{ f_id | tojson }},
+                groupSelect: "",
+                userSelect: "",
+                groups: [],
+                users: [],
+                groupInput: "",
+                userInput: "",
+                error: []
+            },
+            delimiters: ["[[", "]]"],
+            mounted: function() {
+                this.getGroups()
+            },
+            methods: {
+                getGroups: function() {
+                    this.groups = []
+                    this.groupSelect = []
+                    this.users = []
+                    this.userSelect = ""
+                    axios.get("/api/facilities/" + this.f_id)
+                        .then(res => {
+                            if ("err" in res.data && res.data.err.length) {
+                                this.error = res.data.err
+                            } else {
+                                this.error = []
+                                this.groups = res.data.groups
+                            }
+                        })
+                        .catch(error => console.log(error))
+                },
+                getUsers: function() {
+                    if (this.groupSelect != "") {
+                        this.users = []
+                        this.userSelect = ""
+                        axios.get("/api/facilities/" + this.f_id + "/users/groups/" + this.groupSelect)
+                            .then(res => {
+                                if ("err" in res.data && res.data.err.length) {
+                                    this.error = res.data.err
+                                } else {
+                                    this.error = []
+                                    this.users = res.data
+                                }
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+                addGroup: function() {
+                    if (this.groupInput != "") {
+                        axios.post("/api/facilities/" + this.f_id + "/groups", {
+                            "name": this.groupInput
+                        })
+                            .then(res => {
+                                if ("err" in res.data && res.data.err.length) {
+                                    this.error = res.data.err
+                                } else {
+                                    this.error = []
+                                    this.groupInput = ""
+                                    this.getGroups()
+                                }
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+                removeGroup: function() {
+                    if (this.groupSelect != "") {
+                        axios.delete("/api/facilities/" + this.f_id + "/groups/" + this.groupSelect)
+                            .then(res => {
+                                if ("err" in res.data && res.data.err.length) {
+                                    this.error = res.data.err
+                                } else {
+                                    this.error = []
+                                    this.groupSelect = ""
+                                    this.getGroups()
+                                }
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+                addUser: function() {
+                    if (this.userInput != "" && this.groupSelect != "") {
+                        axios.post("/api/facilities/" + this.f_id + "/users/groups/" + this.groupSelect, {
+                            "email": this.userInput
+                        })
+                            .then(res => {
+                                if ("err" in res.data && res.data.err.length) {
+                                    this.error = res.data.err
+                                } else {
+                                    this.error = []
+                                    this.userInput = ""
+                                    this.getUsers()
+                                }
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+                removeUser: function() {
+                    if (this.userSelect != "" && this.groupSelect != "") {
+                        axios.delete("/api/facilities/" + this.f_id + "/users/" + this.userSelect + "/groups/" + this.groupSelect)
+                            .then(res => {
+                                if ("err" in res.data && res.data.err.length) {
+                                    this.error = res.data.err
+                                } else {
+                                    this.error = []
+                                    this.userSelect = ""
+                                    this.getUsers()
+                                }
+                            })
+                            .catch(error => console.log(error))
+                    }
+                }
+            }
+	})
+    </script>
+</body>
+</html>

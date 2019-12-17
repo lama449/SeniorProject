@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+  <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content" id="app">
+
+        <!-- Room Creation Form -->
+        <form>
+            <center><h1>Update Rooms</h1></center>
+
+
+          <table class = "table class">
+          <tr> </tr>
+
+
+          <!--Room Information -->
+          <tr>
+          <td><label for="name">Room Name (Optional):</label></td>
+          <td><input type="text" name="roomName" id ="name" v-model="roomName" class="full-width"></td>
+          </tr>
+
+          <tr>
+          <td> <label for="roomNum">Room Number:</label></td>
+          <td><input type="text" name="roomNumber" id ="roomNum" v-model="roomNum" required class="full-width"></td>
+          </tr>
+
+          <tr>
+          <td><label for="roomCap">Room Capacity:</label> </td>
+          <td><input type="number" name="Room Capacity" id ="roomCap" v-model="roomCap" required class="full-width"></td>
+          </tr>
+
+        </table class>
+
+          <table class = "table class">
+
+          <tr>
+          <td colspan="3">
+            <p>Click the button to add an option at the end of the list.
+              <br>  Control+click (command on mac) to select multiple features.
+            </p></td>
+          </tr>
+          
+          <tr>
+
+          <td><p>Which attributes does this room have:</p>
+          <select id="atSelect" size="8" multiple v-model="atSelect">
+              <option v-for="attribute in f_attributes" v-bind:value="attribute">[[attribute]]</option>
+          </select> </td>
+
+          <td colspan="2">
+            <input type="text" name="newFeature" id="feature" class="full-width">
+
+            <button type="button" class="btn full-width" onclick="addFeature()">Add Attribute</button>
+          </td>
+          </tr>
+
+          <tr>
+            <td><p>Which groups have access to this room?</p><select id="groupSelect" size="8" multiple v-model="groupSelect">
+                <option v-for="group in f_groups" v-bind:value="group._id">[[group.name]]</option>
+              </select>
+            </td>
+
+          <td><input id="button1" type="submit" class="btn full-width" @click.prevent="submitInfo()"></td>
+          </tr>
+
+          </table class>
+
+        </form>
+    </div>
+    {% include 'footer.html' %}
+
+    <script>
+      function addFeature() {
+        var selectList = document.getElementById("atSelect");
+        var option = document.createElement("option");
+        option.text = document.getElementById('feature').value;
+        selectList.add(option);
+      }
+    </script>
+
+      <script>
+      var vc = new Vue({
+        el: "#app",
+          data: {
+            f_id: {{ f_id | tojson }},
+            b_id: {{ b_id | tojson}},
+            room_id: {{ r_id | tojson}},
+            roomName: "",
+            roomNum: "",
+            roomCap: "",
+            atSelect: [],
+            groupSelect: [],
+            error: [],
+            f_attributes: [],
+            f_groups: []
+          },
+
+          mounted(){
+            axios.get("/api/facilities/" + this.f_id)
+            .then(res => {
+              this.f_attributes = res.data.attributes
+              this.f_groups = res.data.groups
+              this.getRoom()
+            })
+          },
+          delimiters: ["[[", "]]"],
+          methods: {
+            getRoom: function() {
+              axios.get("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.room_id)
+              .then(res => {
+                this.roomName = res.data.name
+                this.roomNum = res.data.number
+                this.roomCap = res.data.capacity
+                this.atSelect = res.data.attributes
+                this.groupSelect = res.data.groupID
+              })
+              .catch(error => console.log(error))
+            },
+
+            submitInfo: function() {
+              axios.put("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.room_id, {
+                name: this.roomName,
+                number: this.roomNum,
+                capacity: this.roomCap,
+                attributes: this.atSelect,
+                groupID: this.groupSelect
+              })
+              .then(res => {
+                if ("err" in res.data && res.data.err.length) {
+                  this.error = res.data.err
+                } else {
+                  location.href = ("/facility/" + this.f_id + "/building/" + this.b_id)
+                }
+              })
+              .catch(error => console.log(error))
+            }
+          }
+        })
+    </script>
+
+</body>
+</html>

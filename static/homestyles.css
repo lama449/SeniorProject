@@ -2,20 +2,60 @@
 /* CSS Document */
 
 body, html{
-	height: 100%;
-	width: 100%;
-	margin: auto;
-	font-family: Arial;
-	background-image: -webkit-linear-gradient(rgba(0,0,0,.25),white), url("Buildings.jpg");
-	background-image: linear-gradient(rgba(0, 0, 0, .25), white), url("Buildings.jpg");
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    font-family: Arial;
+    background-image: -webkit-linear-gradient(rgba(0,0,0,.25),white), url("Buildings.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+}
+
+html {
+    font-size: 16px;
+    min-height: 100%;
 }
 
 body {
-	display: flex;
-	flex-direction: column;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2.5rem; }
+h3 { font-size: 2.25rem; }
+h4 { font-size: 2rem; }
+h5 { font-size: 1.75rem; }
+h6 { font-size: 1.375rem; }
+
+p { font-size: 1rem; }
+
+/* Add a blue text color to links */
+a {
+    color: dodgerblue;
+}
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+.errorbox{
+    color: red;
+    background-color: white;
+    font-family: Verdana;
+    border-color: red;
+    border-style: solid;
+    border-width: medium;
+    text-align: center;
+    padding: 10px;
+}
+
+.center-text {
+    text-align: center;
 }
 
 
@@ -25,116 +65,247 @@ body {
 
 /* Header */
 .nav {
-	display: flex;
-	flex-direction: row;
-	margin: 0;
-	padding: 0;
-	background-color: #242424;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    background-color: #242424;
 }
 
 .nav--item {
-	display: inline-block;
-	padding: .5rem .5rem;
-	border-left: 1px solid white;
-
-	color: #EFEFEF;
-	text-align: center;
-	text-decoration: none;
+    display: inline-block;
+    padding: .5rem;
+    color: #EFEFEF;
+    text-align: center;
+    text-decoration: none;
 }
 
 
 a.nav--item:hover {
-	color: #03122D;
-	background-color: #B5B5B5;
-}
-
-.nav--item:nth-child(1) {
-	border: none;
+    color: #03122D;
+    background-color: #B5B5B5;
+    cursor: pointer;
 }
 
 .nav--welcome {
-	flex-grow: 1; /* take up the extra space */
+    flex-grow: 1; /* take up the extra space */
+}
+
+@media screen and (max-width: 50rem) {
+    .nav--welcome {
+        display: none;
+    }
 }
 
 .nav--login, .nav--logout {
-	margin-left: auto /* push this button all the way right */
+    margin-left: auto /* push this button all the way right */
 }
-
-/*
-ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #242424; 
-}
-
-li{
-	float: left
-}
-
-li a{
-	display:block;
-	color: #EFEFEF;
-	text-align: center;
-	padding: 10px 15px;
-	text-decoration: none;
-}
-
-li a:hover{
-	color: #03122D;
-	background-color: #B5B5B5;
-	text-decoration: underline;
-}
-
-
-.login a{
-	position:absolute;
-   	top:0;
-   	right:0;
-	display:block;
-	color: #EFEFEF;
-	text-align: center;
-	padding: 10px 15px;
-	text-decoration: none;
-}
-
-.login a:hover{
-	color: #03122D;
-	background-color: #B5B5B5;
-	text-decoration: underline;
-}
-*/
 
 /* Page Content Wrapper */
 .content {
-	flex: 1 0 auto;
+    flex: 1 0 auto;
 }
 
 /* Footer */
 .footer {
-	flex-shrink: 0;
-	display: block;
-	padding-bottom: 15px;
-	padding-top: 15px;
-	font-size: 12px;
-	text-align: center;
-	width: 100%;
-	color: #EFEFEF;
-	background-color: #242424;
+    flex-shrink: 0;
+    display: block;
+    margin: 0;
+    padding-bottom: 0.9375rem;
+    padding-top: 0.9375rem;
+    font-size: 0.75rem;
+    text-align: center;
+    width: 100%;
+    color: #EFEFEF;
+    background-color: #242424;
 }
 
 /*
- * Other General Styles
+ * Containers
  */
 
-.back{
-	/* TODO: make this button look pretty */
-	text-align: center
+.container {
+    padding: 16px;
 }
 
-.center-text {
-	text-align: center;
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+    background-color: #f1f1f1;
+    text-align: center;
+    font-family: verdana;
+    text-decoration: none;
+    font-size: 12px
+}
+
+
+/*
+ * Forms
+ */
+
+
+/* Text input fields */
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea,
+select {
+    border-radius: 15px;
+    padding: 12px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, "sans-serif"
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus{
+    background-color: #ddd;
+    outline: none;
+}
+
+
+
+/* Full-width input fields */
+.full-width {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.form-group {
+    display: inline-block;
+    width: 500px;
+}
+
+.form-group label {
+    display: block;
+    text-align: left;
+    padding: 0 0.9375rem;
+    font-weight: bold;
+}
+
+
+/*
+ * Buttons
+ */
+
+.btn {
+    display: inline-block;
+    line-height: 1.5;
+    margin: 10px auto 5px auto; 
+    background-color: #2c3e50; 
+    color: #fff; 
+    font-family: Arial;
+    font-size: 16px; 
+    border-radius: 4px;  
+    border: 1px solid transparent; 
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    text-decoration: none;
+}
+
+.btn:hover{
+    cursor: pointer;
+    background-color: #212529;
+}
+
+.dbtn {
+    display: inline-block;
+    line-height: 1.5;
+    margin: 10px auto 5px auto; 
+    background-color: red; 
+    color: #fff; 
+    font-family: Arial;
+    font-size: 16px; 
+    border-radius: 4px;  
+    border: 1px solid transparent; 
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    text-decoration: none;
+}
+
+.dbtn:hover{
+    cursor: pointer;
+    background-color: maroon;
+}
+
+.button {
+    font-size: 1rem;
+    border-radius: 9999px;
+    background-color: #03122D;
+    color: white;
+    padding: 1em 2.5em;
+    border: none;
+    cursor: pointer;
+    opacity: 0.95;
+}
+
+.button:hover {
+    opacity: .65;
+}
+
+.back{
+    /* TODO: make this button look pretty */
+    text-align: center
+}
+
+
+/*
+ * Table Styles
+ */
+
+ .table, .table th, .table td {
+    border-collapse: collapse;
+    border: 1px solid #03122D;
+}
+
+.table {     
+    margin: 1rem auto;
+    max-width: 900px;
+    width: 80%;
+}
+
+.table tr {
+    background-color: #EFEFEF;
+    color: #03122D;
+}
+
+/* header row */
+.table tr:nth-child(1) {
+    background-color: #03122D;
+    color: #EFEFEF;
+}
+
+.table th, .table td {
+    padding: .4rem;
+}
+
+.table th {
+
+}
+
+.table td {
+
 }
 
 
@@ -145,56 +316,82 @@ li a:hover{
 /* Calendar Settings */
 #calendar
 {
-	/*max-width: 950px;*/
-	width: 80%;
-	max-height: 900px;
-	margin: 25px auto;
-	background-color: white;
-	padding: 20px;
-	border: 1px solid transparent;
-	border-radius: 5px;
+    /*max-width: 950px;*/
+    width: 80%;
+    max-height: 900px;
+    margin: 25px auto;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid transparent;
+    border-radius: 5px;
 }
 
 /* Submit Button for calendar */
 .submitbtn {
-	display: block;
-	line-height: 1.5;
-	margin: 10px auto 5px auto; 
-	background-color: #2c3e50; 
-	color: #fff; 
-	font-family: Arial;
-	font-size: 16px; 
-	border-radius: 4px; 
-	border: 1px solid; 
-	padding: 6.4px 10.4px;
-	-webkit-transition-duration: .2s;
-	transition-duration: .2s;
+    display: block;
+    line-height: 1.5;
+    margin: 10px auto 5px auto; 
+    background-color: #2c3e50; 
+    color: #fff; 
+    font-family: Arial;
+    font-size: 16px; 
+    border: 1px solid transparent;
+    border-radius: 4px;  
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    text-decoration: none;
 }
 
 .submitbtn:hover{
-	cursor: pointer;
-	background-color: #212529;
+    cursor: pointer;
+    background-color: #212529;
 }
 
-.gobackbtn {
-	display: block;
-	line-height: 1.5;
-	margin: -10px auto auto 0px; 
-	background-color: #2c3e50; 
-	color: #fff; 
-	font-family: Arial;
-	font-size: 16px; 
-	border-radius: 4px; 
-	border: 1px solid; 
-	padding: 6.4px 10.4px;
-	-webkit-transition-duration: .2s;
-	transition-duration: .2s;
+
+
+.newroombtn{
+    display: block;
+    line-height: 1.5;
+    margin: 5px auto 0px 0px;
+    background-color: #2c3e50;
+    color: #fff;
+    font-family: Arial;
+    font-size: 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
 }
 
-.gobackbtn:hover{
-	cursor: pointer;
-	background-color: #212529;
+.newroombtn:hover{
+    cursor: pointer;
+    background-color: #212529;
 }
+
+
+.updateroombtn{
+    display: inline-block;
+    line-height: 1;
+    margin: auto;
+    background-color: #2c3e50;
+    color: #fff;
+    font-family: Arial;
+    font-size: 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 6.4px 10.4px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+}
+
+.updateroombtn:hover{
+    cursor: pointer;
+    background-color: #212529;
+}
+
+
 /* Tooltip for Calendar */
 .popper,
 .tooltip {
@@ -291,4 +488,57 @@ li a:hover{
   top: calc(50% - 5px);
   margin-left: 0;
   margin-right: 0;
+}
+
+
+
+.imgcontainer{
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+    background-color: white;
+}
+
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content{
+    background-color: white;
+    margin: 4% auto 10% auto;
+    width: 40%;
+    padding-bottom: 30px;
+    position: relative;
+}
+
+.close{
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    background-color: white;
+}
+
+.close:hover,.close:focus{
+    color: red;
+    cursor: pointer;
+}
+
+@keyframes zoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+.animate{
+    animation: zoom 0.4s;
 }

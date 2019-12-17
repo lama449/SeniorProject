@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content" id="app">
+
+		<!-- Center Text -->
+		<div class="primary-content container">
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Management Page</h1>	
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select the facility you would like to view more information about below or click the add button to add a new facility.</h6>
+		</div>    
+
+        <!-- Table -->
+        <div v-if="facilities.length" class="secondary-content container">
+		    <table class="table">
+                <tr>
+                    <th>Facility</th>
+                    <th>Location</th>
+                    <th>Description</th> 
+                    <th>Phone Number</th>
+		    <th>Access Code</th>
+		    <th>Building Privacy</th>
+                    {% if admin %}
+                    <th>Delete?</th>
+                    {% endif %}
+                </tr>
+                <tr v-for="f in facilities">
+                        <td><a v-bind:href="getFacilityURL(f._id)">[[ f.name ]]</a></td>
+                        <td v-if="f.address.address_L2 != ''"><a v-bind:href="getFacilityURL(f._id)"> 
+                            [[ f.address.address_L1 ]] [[ f.address.address_L2 ]], [[ f.address.city ]], [[ f.address.state ]], [[ f.address.zip ]] </a></td>
+                        <td v-else><a v-bind:href="getFacilityURL(f._id)">[[ f.address.address_L1 ]], [[ f.address.city ]], [[ f.address.state ]], [[ f.address.zip ]] </a></td>
+                        <td><a v-bind:href="getFacilityURL(f._id)">[[ f.description ]] </a></td>
+                        <td><a v-bind:href="getTelephone(f.phone)">[[ f.phone ]]</a></td>
+			<td v-if="f.access_code != ''">[[ f.access_code ]]</td>
+			<td v-else>N/A</td>
+			<td v-if="f.private == true"> Private</td>
+			<td v-else> Public </td>
+                        {% if admin %}
+                        <td style="text-align: center"><img src="{{url_for('static', filename='deleteicon.png')}}" onclick="document.getElementById('modalwrapper').style.display='block'" @click="facilityToBeDeleted = f"></td>
+                        {% endif %}
+                </tr>
+            </table>
+            <div id = "modalwrapper" class = "modal">
+                    <form class="modal-content animate">
+                        <div class="container" style="background-color: white">
+                            <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                            <h1 style="text-align: center; background-color: white; padding-top: 25px">Delete Facility?</h1>
+                            <h6><center>All data related to this facility will be removed after deletion.</center></h6>
+                            <h6><center>Are you sure you would like to delete this facility?</center></h6>
+                            <button type="submit"  class="dbtn" style="margin: 0 auto; display: block; padding: 10px; width: 30%;" @click.prevent="deleteFacility()">Delete Facility</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+        <div v-else class ="secondary-content container">
+            <table class = "table">
+                <tr>
+                    <th>Facility</th>
+                    <th>Location</th>
+                    <th>Description</th> 
+                    <th>Phone Number</th>
+		    <th>Building Privacy</th>
+                    {% if admin %}
+                    <th>Delete?</th>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+		    <td></td>
+                    {% if admin %}
+                    <td></td>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+        
+        <button class="submitbtn" @click.prevent="getBuildingCreationURL()"> Add A New Facility </button>
+        
+        </div>		
+	</div>	
+
+    {% include 'footer.html' %}
+
+    <script>
+
+        var vc = new Vue({
+            el: "#app",
+            data: {
+		buildings: [],
+                facilities: []                
+            },
+            mounted(){
+                axios
+                    .get("/api/users/facilities")               
+                    .then(res => {
+			this.facilities = res.data.facilities
+		    })
+		    .catch(err=>console.log(err))
+            },
+            delimiters: ["[[", "]]"],
+            methods: {
+		        getTelephone: function(phone) {
+		            return "tel:" + phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3")
+		        },
+                getFacilityURL: function(f_id) {
+                    return "/facility/" + f_id
+                },
+		        deleteFacility: function() {
+
+                    var f_id = this.facilityToBeDeleted._id
+		    	    axios
+				        .delete("/api/facilities/" + f_id)
+				        .then( function(){
+					        location.reload();
+				        })
+				        .catch(error => console.log(error))
+                },                
+		        getBuildingCreationURL: function() {
+		            location.href="/facility_creation"
+		            return	    
+		        }
+            }
+        })
+    
+    </script>
+    
+    
+</body>
+</html>

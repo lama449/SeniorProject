@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+  <link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class = "content" id="app">
+
+        <!-- Room Creation Form -->
+        <form>
+            <center><h1> Room Creation </h1></center>
+            <div class="errorbox" v-for="e in error">[[e]]</div>
+
+
+  <table class = "table class"> 
+  <tr> </tr> 
+      <tr> 
+          <!--Room Information -->
+       <td>   <label for="name">Room Name:</label></td>
+       <td><input type="text" name="roomName" id ="name" placeholder="Enter Room Name" required v-model = "roomName"></td>
+       </tr> 
+
+          <tr>
+          <td><label for="roomNum">Room Number:</label></td>
+          <td><input type="text" name="roomNumber" id ="roomNum" placeholder="Enter Room Number" required v-model="roomNum"></td>
+          </tr> 
+
+          <tr>
+          <td><label for="roomCap">Room Capacity:</label></td>
+          <td><input type="number" name="Room Capacity" id ="roomCap" placeholder="Enter Room Capacity" required v-model="roomCap"></td>
+          </tr>
+    </table class>
+    
+    <table class = "table class"> 
+          <!-- Attributes/Features -->
+          <tr><td colspan="3">
+          <p>Click the button to add an option at the end of the list.
+            <br>  Control+click (command on mac) to select multiple features.
+          </p></td>
+          </tr>
+          
+          <tr>
+          <td><select id="atSelect" size="8" multiple v-model="atSelect">
+            <option v-for="attr in f_attributes" v-bind:value="attr">[[ attr ]]</option>
+          </select></td>
+          <!-- Add Features -->
+          <td><input type="text" name="newFeature" id="feature" value="TV"></td>
+          <td><button type="button" class="btn" style="padding: 10px; width: 100%" onclick="addFeature()">Add Feature</button></td>
+          </tr>
+
+          <tr><td colspan="2">
+          <p>Which groups have access to this room?</p><select id="groupSelect" size="8" multiple v-model="groupSelect">
+            <option v-for="group in f_groups" v-bind:value="group._id">[[ group.name ]]</option>
+          </select></td>
+          
+          <td><button @click.prevent="submitInfo()" id="submitButton" class="btn" style="padding: 10px; width: 100%">Submit</button></td>
+          </tr>
+        </table class> 
+        </form>
+    </div>
+    {% include 'footer.html' %}
+
+    <script>
+    function addFeature() {
+      var selectList = document.getElementById("atSelect");
+      var option = document.createElement("option");
+      option.text = document.getElementById('feature').value;
+      selectList.add(option);
+    }
+    </script>
+
+    <script>
+    var vm = new Vue({
+      el: "#app",
+      data: {
+        f_id: {{ f_id | tojson }},
+        b_id: {{ b_id | tojson}},
+        roomName: "",
+        roomNum: "",
+        roomCap: "",
+        atSelect: [],
+        groupSelect: [],
+        description: "",
+        error: [],
+        f_attributes: [],
+        f_groups: []
+      },
+      delimiters: ["[[", "]]"],
+      mounted: function() {
+          axios.get("/api/facilities/" + this.f_id)
+          .then(res => {
+            if ("err" in res.data && res.data.err.length) {
+              this.error = res.data.error
+            } else {
+              this.f_attributes = res.data.attributes
+              this.f_groups = res.data.groups
+            }
+          })
+          .catch(error => console.log(error))
+      },
+      methods: {
+        submitInfo: function() {
+          axios.post("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms", {
+            name: this.roomName,
+            number: this.roomNum,
+            capacity: this.roomCap,
+            attributes: this.atSelect,
+            groupID: this.groupSelect
+          })
+          .then(res => {
+            if ("err" in res.data && res.data.err.length) {
+              this.error = res.data.err
+            } else {
+              location.href = ("/facility/" + this.f_id + "/building/" + this.b_id)
+            }
+          })
+          .catch(error => console.log(error))
+        }
+      }
+    })
+
+    </script>
+</body>
+</html>

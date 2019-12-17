@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Penguin's Building Management</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='homestyles.css')}}">
+	<link rel="icon" href="{{url_for('static', filename='calendar icon.png')}}">
+	
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" crossorigin="anonymous"></script>
+    
+</head>
+
+<body>
+
+	{% include 'header.html' %}
+
+	<div class="content" id="app">
+
+		<!-- Center Text -->
+		<div class="primary-content container">
+			<h1 style="text-align: center; width:80%; margin: 50px auto auto auto;">Reservations Page:</h1>	
+			<h6 style="text-align: center; width:80%; padding-top: 10px; margin: 0px auto auto auto;"> Select reservation to view information about the selected reservation. If you would like to submit a maintenance request please click the icon next to the building of the reservation.</h6>
+		</div>    
+
+        <!-- Table -->
+        <div v-if="ures.length" class="secondary-content container">
+		<table class="table">
+                    <tr>
+                        <th>Start Date</th>
+                        <th>End Date </th>
+                        <th>Room Name </th>
+                        <th>Building Name </th>
+                        <th>Facility Name </th>
+                        <th>Maintenance Request</th>			
+                        <th>More Information</th>
+                    </tr>
+                    <tr v-for="resv in ures">
+                        <td style="text-align:center">[[ resv.reservations.start_time ]]</td>
+                        <td style="text-align:center">[[ resv.reservations.end_time ]]</td>
+			            <td style="text-align:center">[[ resv.name ]] [[ resv.number ]]</td>
+			            <td style="text-align:center"><a v-bind:href="getBuildingURL(resv.facility._id, resv.building._id)">[[ resv.building.name ]]</a></td>
+			            <td style="text-align:center"><a v-bind:href="getFacilityURL(resv.facility._id)">[[ resv.facility.name ]]</a></td>
+                        <td style="text-align:center"><a @click="reservation = resv" onclick="document.getElementById('modalwrapper').style.display='block'"><img style="cursor:pointer" src="{{url_for('static', filename='requesticon.png')}}"></a>
+                            <div id = "modalwrapper" class = "modal">
+                                <form class="modal-content animate">
+                                    <div class="imgcontainer" style="background-color: white">
+                                        <span onclick="document.getElementById('modalwrapper').style.display='none'" class="close" title="Close Popup">&times;</span>
+                                        <h1 style="text-align: center; background-color: white; padding-top: 25px">Maintenance </h1>
+                                    </div>
+                                    <div class="container" style="background-color: white">
+                                        <input type="text" class = "full-width" placeholder="Enter maintenance request" name = "mrqst" maxlength="240" v-model = "description">
+                                        <button type="submit"  class="btn" style="margin: 0 auto; width: 40%" @click.prevent="submitRequest()">Submit Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+			<td><a style="margin: auto" class="btn" v-bind:href="getReservationURL(resv.facility._id, resv.building._id, resv._id, resv.reservations._id)" >More Information</a></td>
+                    </tr>
+                </table>
+            </div>
+	    <div v-else>
+		<table class="table">
+		    <tr>		
+                       <th>Start Date</th>
+                       <th>End Date </th>
+                       <th>Room Name </th>
+                       <th>Building Name </th>
+                       <th>Facility Name </th>
+                       <th>Maintenance Request</th>			
+                       <th>More Information</th>
+		    </tr>
+		    <tr>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		       <td></td>
+		    </tr>
+		</table>
+	    </div>	
+	</div>	
+
+    {% include 'footer.html' %}
+
+        <script>
+
+            var vc = new Vue({
+                el: "#app",
+                data: {
+                    ures:[],
+		    reservation: [],
+		    description:""
+                },
+                mounted(){			
+                    axios
+                        .get("/api/user/reservations")
+                        .then(res => {
+			                this.ures = res.data;
+					//ures.sort(function compare(a,b){
+				//		var dateA = new Date(a.date);
+				//		var dateB = new Date(b.date);
+				//		return dateB - dateA; 
+				//	});
+					this.ures.forEach( resv => {
+						resv.reservations.start_time = new Date(resv.reservations.start_time);
+						resv.reservations.end_time = new Date(resv.reservations.end_time);
+					})
+					this.r_id = res.data._id
+                        })
+                        .catch(err => console.log(err))                        
+                },
+                delimiters: ["[[", "]]"],
+                methods: {
+		            submitRequest: function() {
+				var f_id = this.reservation.facility._id;
+				var r_id = this.reservation._id;				
+			          axios
+			            .post("/api/facilities/" + f_id + "/maintenance/room/" + r_id, {
+				            description: this.description
+			            })
+			            .then(document.getElementById('modalwrapper').style.display='none')
+                        .catch(err => console.log(err))
+		            },
+			    getBuildingURL: function(f_id, b_id) {
+				  return "/facility/" + f_id + "/building/" + b_id;
+			   },
+			   getFacilityURL: function(f_id) {
+				  return "/facility/" + f_id;
+			   },
+			   getReservationURL: function(f_id, b_id, r_id, res_id) {
+				return "/facility/" + f_id + "/building/" + b_id + "/room/" + r_id + "/reservation/" + res_id;				
+			   }
+                }
+            })
+    
+        </script>
+
+        <script>
+            var modal = document.getElementById('modalwrapper');
+            window.onclick= function (event) {
+                if (event.target == modal){
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+    
+</body>
+</html>
