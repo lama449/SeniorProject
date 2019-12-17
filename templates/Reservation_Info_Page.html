@@ -103,7 +103,7 @@
       methods: {
 	deleteReservation: function(){
 		axios
-		   .delete("/api/facility/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
+		   .delete("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
 		   .then( function(){
 		       location.href="/reservations";
 		   })
