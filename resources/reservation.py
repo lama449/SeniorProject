@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 from flask_restful import Resource, request
 import bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser
 from bson.objectid import ObjectId
 from SeniorProject import database
@@ -222,8 +222,9 @@ class UserReservations(Resource):
 
 # validate the time specified
 def validate_time(start):
-    current_time = datetime.utcnow()
-    if current_time < start:
+    current_time = datetime.utcnow()-timedelta(hours=5)
+    print(start, current_time, (current_time-timedelta(hours=5)))
+    if current_time > start:
         return [False, {'err': 'Cannot make a reservation for past timeslot'}]
     else:
         return [True, {'success'}]
