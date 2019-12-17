@@ -76,17 +76,22 @@ class Reservation(Resource):
             start_time = parser.parse(data.get('start_time'))
             end_time = parser.parse(data.get('end_time'))
             time_val = validate_timeslot(start_time, end_time, r_id)
+            curr_time = validate_time(start_time)
             print(time_val)
-            if time_val[0]:    
-                new_reservation = rooms.update_one({'_id': ObjectId(r_id)},
-                                                {'$push': {'reservations': {
-                                                    '_id': reserv_id,
-                                                    'start_time': start_time,
-                                                    'end_time': end_time,
-                                                    'userID': ObjectId(userID)}}})
-                return jsonify({'_id': reserv_id})
+            if curr_time[0]:
+                if time_val[0]:    
+                    new_reservation = rooms.update_one({'_id': ObjectId(r_id)},
+                                                    {'$push': {'reservations': {
+                                                        '_id': reserv_id,
+                                                        'start_time': start_time,
+                                                        'end_time': end_time,
+                                                        'userID': ObjectId(userID)}}})
+                    return jsonify({'_id': reserv_id})
+                else:
+                    res['err'].append(time_val[1]['err'])
+                    return res
             else:
-                res['err'].append(time_val[1]['err'])
+                res['err'].append(curr_time[1]['err'])
                 return res
         else:
             res['err'].append(val[1])
@@ -109,10 +114,15 @@ class Reservation(Resource):
     '''
     
     def delete(self, f_id, b_id, r_id, reserv_id):
+        res = {
+            'msg': [],
+            'err': []
+        }
+
         rooms = db.rooms
         val = validate_room(f_id, b_id, r_id)
         if val[0]:
-            u_id = session.get('user').get('id')
+            u_id = session.get('user').get('_id')
             room_reservations = rooms.aggregate([
                         {
                             '$match': {
@@ -127,11 +137,12 @@ class Reservation(Resource):
                         },
                         {
                             '$match': {
-                                '$reservations._id': ObjectId(reserv_id),
-                                '$reservations.userID': ObjectId(u_id)
-                        }}])
+                                'reservations._id': ObjectId(reserv_id),
+                                'reservations.userID': ObjectId(u_id)
+                        }}
+            ])
             match = [r for r in room_reservations]
-            if not (check_admin(f_id) or len(match)!=0):
+            if not (check_admin(f_id) or len(match)!= 0):
                 res['err'].append('You do not have the permissions to delete this reservation.')
                 return jsonify(res)
 
@@ -211,7 +222,11 @@ class UserReservations(Resource):
 
 # validate the time specified
 def validate_time(start):
-   print("placeholder so there aren't any internal server errors and i get fucking yelled at") 
+    current_time = datetime.utcnow()
+    if current_time < start:
+        return [False, {'err': 'Cannot make a reservation for past timeslot'}]
+    else:
+        return [True, {'success'}]
    
 
 def validate_timeslot(start, end, r_id):
