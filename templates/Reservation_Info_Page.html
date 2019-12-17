@@ -23,7 +23,6 @@
         <br> If for any reason you need to cancel your reservation, please do so on the Reservations page.
       </h6>
 		</div>
-
 		<!-- Confirmation Text -->
 		<div style="background:white; background:white; text-align: justify; width:60%; height:auto; margin: 50px auto 10px auto; padding: 10px;  border: 1px solid transparent; border-radius: 5px;">
 
@@ -77,6 +76,7 @@
 	reserve: [],
         building: [],
         facility: [],
+	error: [],
         room: {}
 
       },
@@ -104,7 +104,7 @@
 	deleteReservation: function(){
 		axios
 		   .delete("/api/facilities/" + this.f_id + "/buildings/" + this.b_id + "/rooms/" + this.r_id + "/reservations/" + this.res_id)
-		   .then( function(){
+		   .then(function() {			
 		       location.href="/reservations";
 		   })
 		   .catch(error => console.log(error))
